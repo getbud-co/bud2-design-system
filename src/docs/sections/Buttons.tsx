@@ -5,7 +5,7 @@ import { Button } from "../../components/Button";
 import btnStyles from "../../components/Button.module.css";
 import s from "./Buttons.module.css";
 
-const usageCode = `import { Button } from "./components/Button";
+const usageCode = `import { Button } from "@mdonangelo/bud-ds";
 import { Plus, ArrowRight } from "@phosphor-icons/react";
 
 <Button variant="primary" size="lg" leftIcon={Plus}>

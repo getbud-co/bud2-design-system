@@ -5,7 +5,7 @@ import { ChoiceBoxGroup, ChoiceBox } from "../../components/ChoiceBox";
 import choiceBoxStyles from "../../components/ChoiceBox.module.css";
 import s from "./ChoiceBoxes.module.css";
 
-const usageCode = `import { ChoiceBoxGroup, ChoiceBox } from "./components/ChoiceBox";
+const usageCode = `import { ChoiceBoxGroup, ChoiceBox } from "@mdonangelo/bud-ds";
 
 // Seleção única (radio)
 const [selected, setSelected] = useState<string | undefined>("starter");

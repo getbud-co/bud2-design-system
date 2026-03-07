@@ -4,8 +4,7 @@ import { toast } from "../../components/Toast";
 import { Button } from "../../components/Button";
 import s from "./Toasts.module.css";
 
-const usageCode = `import { toast } from "./components/Toast";
-import { Toaster } from "./components/Toast";
+const usageCode = `import { toast, Toaster } from "@mdonangelo/bud-ds";
 
 {/* Coloque o Toaster uma vez no root da app */}
 <Toaster />

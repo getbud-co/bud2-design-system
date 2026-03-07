@@ -4,7 +4,7 @@ import { Badge } from "../../components/Badge";
 import { Circle, X, Plus, CheckCircle, WarningCircle, Info } from "@phosphor-icons/react";
 import s from "./Badges.module.css";
 
-const usageCode = `import { Badge } from "./components/Badge";
+const usageCode = `import { Badge } from "@mdonangelo/bud-ds";
 import { Circle, X, Plus } from "@phosphor-icons/react";
 
 {/* Cores semânticas */}

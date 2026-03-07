@@ -4,7 +4,7 @@ import { DatePicker } from "../../components/DatePicker";
 import dpStyles from "../../components/DatePicker.module.css";
 import s from "./DatePickers.module.css";
 
-const usageCode = `import { DatePicker } from "./components/DatePicker";
+const usageCode = `import { DatePicker } from "@mdonangelo/bud-ds";
 
 {/* Data única */}
 <DatePicker

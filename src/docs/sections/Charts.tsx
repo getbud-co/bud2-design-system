@@ -4,7 +4,7 @@ import { CodeSnippet } from "../CodeSnippet";
 import { Chart } from "../../components/Chart";
 import s from "./Charts.module.css";
 
-const usageCode = `import { Chart } from "./components/Chart";
+const usageCode = `import { Chart } from "@mdonangelo/bud-ds";
 
 <Chart value={0} />
 <Chart value={25} />

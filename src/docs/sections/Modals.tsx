@@ -6,14 +6,13 @@ import { Input } from "../../components/Input";
 import { Select } from "../../components/Select";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "../../components/Modal";
 import { AiAssistant, type MissionItem } from "../../components/AiAssistant";
-import { Users, FloppyDisk, ArrowRight, SidebarSimple, Lightning, X } from "@phosphor-icons/react";
+import { Users, FloppyDisk, ArrowRight, SidebarSimple, Lightning } from "@phosphor-icons/react";
 import buttonStyles from "../../components/Button.module.css";
 import s from "./Modals.module.css";
 
 const usageCode = `import {
-  Modal, ModalHeader, ModalBody, ModalFooter
-} from "./components/Modal";
-import { Button } from "./components/Button";
+  Modal, ModalHeader, ModalBody, ModalFooter, Button
+} from "@mdonangelo/bud-ds";
 
 const [open, setOpen] = useState(false);
 

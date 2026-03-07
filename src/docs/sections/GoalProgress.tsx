@@ -4,7 +4,7 @@ import { CodeSnippet } from "../CodeSnippet";
 import { GoalProgressBar, GoalGaugeBar } from "../../components/GoalProgress";
 import s from "./GoalProgress.module.css";
 
-const usageCode = `import { GoalProgressBar, GoalGaugeBar } from "./components/GoalProgress";
+const usageCode = `import { GoalProgressBar, GoalGaugeBar } from "@mdonangelo/bud-ds";
 
 {/* Read-only */}
 <GoalProgressBar

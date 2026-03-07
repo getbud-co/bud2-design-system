@@ -4,7 +4,7 @@ import { Checkbox } from "../../components/Checkbox";
 import cbStyles from "../../components/Checkbox.module.css";
 import s from "./Checkboxes.module.css";
 
-const usageCode = `import { Checkbox } from "./components/Checkbox";
+const usageCode = `import { Checkbox } from "@mdonangelo/bud-ds";
 
 <Checkbox label="Aceito os termos de uso" />
 

@@ -4,7 +4,7 @@ import { CodeSnippet } from "../CodeSnippet";
 import { AiAssistant, type MissionItem } from "../../components/AiAssistant";
 import s from "./AiAssistant.module.css";
 
-const usageCode = `import { AiAssistant } from "./components/AiAssistant";
+const usageCode = `import { AiAssistant } from "@mdonangelo/bud-ds";
 
 {/* Interativo — com resposta da IA */}
 <AiAssistant

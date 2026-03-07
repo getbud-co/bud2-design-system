@@ -14,6 +14,7 @@ import s from "./Popover.module.css";
 interface IconProps {
   size?: number | string;
   weight?: "regular" | "bold" | "duotone" | "fill" | "light" | "thin";
+  className?: string;
 }
 
 export interface PopoverItem {

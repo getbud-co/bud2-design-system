@@ -17,7 +17,7 @@ const hierarchyItems = [
   { label: "Avaliação 360° Q1 2026" },
 ];
 
-const usageCode = `import { Breadcrumb } from "./components/Breadcrumb";
+const usageCode = `import { Breadcrumb } from "@mdonangelo/bud-ds";
 
 {/* Wizard — passo 2 ativo, passos anteriores clicáveis */}
 <Breadcrumb

@@ -4,7 +4,7 @@ import { Textarea } from "../../components/Textarea";
 import textareaStyles from "../../components/Textarea.module.css";
 import s from "./Textareas.module.css";
 
-const usageCode = `import { Textarea } from "./components/Textarea";
+const usageCode = `import { Textarea } from "@mdonangelo/bud-ds";
 
 <Textarea
   label="Descrição"

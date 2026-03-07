@@ -4,7 +4,7 @@ import { Radio } from "../../components/Radio";
 import radioStyles from "../../components/Radio.module.css";
 import s from "./Radios.module.css";
 
-const usageCode = `import { Radio } from "./components/Radio";
+const usageCode = `import { Radio } from "@mdonangelo/bud-ds";
 
 {/* Grupo de radios com mesmo name */}
 <Radio name="frequency" value="weekly" label="Semanal" />

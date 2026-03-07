@@ -5,7 +5,7 @@ import { Input } from "../../components/Input";
 import inputStyles from "../../components/Input.module.css";
 import s from "./Inputs.module.css";
 
-const usageCode = `import { Input } from "./components/Input";
+const usageCode = `import { Input } from "@mdonangelo/bud-ds";
 import { EnvelopeSimple, EyeSlash } from "@phosphor-icons/react";
 
 <Input

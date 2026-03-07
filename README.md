@@ -1,73 +1,237 @@
-# React + TypeScript + Vite
+# Bud Design System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Biblioteca de componentes React do Bud — plataforma de gestão de desempenho para o mercado brasileiro.
 
-Currently, two official plugins are available:
+## Documentação
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Consulte os componentes, tokens e exemplos de uso na docs page:
 
-## React Compiler
+**[https://mdonangelo.github.io/bud-2-design-system/](https://mdonangelo.github.io/bud-2-design-system/)**
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Instalação
 
-## Expanding the ESLint configuration
+### 1. Configurar registry
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Crie ou edite `.npmrc` na raiz do projeto consumidor:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+@mdonangelo:registry=https://npm.pkg.github.com
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Autenticar no GitHub Packages
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Gere um [Personal Access Token](https://github.com/settings/tokens) com permissão `read:packages` e faça login:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm login --scope=@mdonangelo --registry=https://npm.pkg.github.com
+```
+
+### 3. Instalar pacotes
+
+```bash
+npm install @mdonangelo/bud-ds @phosphor-icons/react
+```
+
+### 4. Instalar fonts
+
+```bash
+npm install @fontsource/inter @fontsource/plus-jakarta-sans @fontsource/crimson-pro
+```
+
+## Setup
+
+No entry point da aplicação (ex: `main.tsx`), importe as fonts e os estilos do DS:
+
+```tsx
+// Fonts (obrigatório)
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/plus-jakarta-sans/500.css";
+import "@fontsource/plus-jakarta-sans/600.css";
+import "@fontsource/plus-jakarta-sans/700.css";
+import "@fontsource/crimson-pro/600.css";
+
+// Estilos do DS (obrigatório, uma vez)
+import "@mdonangelo/bud-ds/styles";
+```
+
+## Uso
+
+### Button
+
+```tsx
+import { Button } from "@mdonangelo/bud-ds";
+import { Plus } from "@phosphor-icons/react";
+
+<Button variant="primary" size="md">
+  Salvar
+</Button>
+
+<Button variant="secondary" leftIcon={<Plus />}>
+  Adicionar
+</Button>
+
+<Button variant="tertiary" size="sm">
+  Cancelar
+</Button>
+```
+
+### Input
+
+```tsx
+import { Input } from "@mdonangelo/bud-ds";
+
+<Input
+  label="E-mail"
+  placeholder="nome@empresa.com"
+  messageType="error"
+  message="E-mail inválido"
+/>
+```
+
+### Modal
+
+```tsx
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "@mdonangelo/bud-ds";
+
+<Modal open={isOpen} onClose={() => setIsOpen(false)}>
+  <ModalHeader title="Confirmar ação" onClose={() => setIsOpen(false)} />
+  <ModalBody>
+    <p>Tem certeza que deseja continuar?</p>
+  </ModalBody>
+  <ModalFooter>
+    <Button variant="secondary" onClick={() => setIsOpen(false)}>Cancelar</Button>
+    <Button variant="primary" onClick={handleConfirm}>Confirmar</Button>
+  </ModalFooter>
+</Modal>
+```
+
+### Select
+
+```tsx
+import { Select } from "@mdonangelo/bud-ds";
+
+<Select
+  label="Departamento"
+  options={[
+    { value: "eng", label: "Engenharia" },
+    { value: "design", label: "Design" },
+    { value: "produto", label: "Produto" },
+  ]}
+  value={selected}
+  onChange={setSelected}
+/>
+```
+
+### Checkbox e Toggle
+
+```tsx
+import { Checkbox, Toggle } from "@mdonangelo/bud-ds";
+
+<Checkbox label="Aceito os termos" checked={agreed} onChange={setAgreed} />
+
+<Toggle label="Notificações" checked={enabled} onChange={setEnabled} />
+```
+
+### Toast
+
+```tsx
+import { toast, Toaster } from "@mdonangelo/bud-ds";
+
+// No layout raiz, adicione o Toaster:
+<Toaster />
+
+// Em qualquer lugar da aplicação:
+toast.success("Salvo com sucesso!");
+toast.error("Erro ao salvar.");
+toast.warning("Atenção: dados incompletos.");
+```
+
+### Badge e Avatar
+
+```tsx
+import { Badge, Avatar } from "@mdonangelo/bud-ds";
+
+<Badge color="green">Ativo</Badge>
+<Badge color="red">Bloqueado</Badge>
+
+<Avatar name="Maria Silva" size="md" />
+<Avatar src="/foto.jpg" name="João" size="lg" />
+```
+
+## Componentes disponíveis
+
+| Componente | Descrição |
+|---|---|
+| `AiAssistant` | Copilot de IA |
+| `Avatar` | Foto de perfil com fallback |
+| `AvatarGroup` | Grupo de avatares empilhados |
+| `AvatarLabelGroup` | Avatares com labels |
+| `Badge` | Tag/etiqueta colorida |
+| `Breadcrumb` | Navegação em trilha |
+| `Button` | Botão (primary, secondary, tertiary) |
+| `Chart` | Gráfico de dados |
+| `Checkbox` | Caixa de seleção |
+| `ChoiceBoxGroup` / `ChoiceBox` | Seleção tipo card |
+| `DatePicker` | Seletor de data |
+| `GoalProgressBar` / `GoalGaugeBar` | Progresso de metas |
+| `Input` | Campo de texto |
+| `Modal` / `ModalHeader` / `ModalBody` / `ModalFooter` | Modal composto |
+| `Popover` | Painel flutuante |
+| `Radio` | Botão de rádio |
+| `Select` | Dropdown de seleção |
+| `Textarea` | Campo multilinha |
+| `toast` / `Toaster` | Notificações toast |
+| `Toggle` | Interruptor on/off |
+
+## Ícones
+
+O Bud DS usa [Phosphor Icons](https://phosphoricons.com/) exclusivamente no peso **regular** (outline).
+
+```tsx
+import { MagnifyingGlass, Plus, Trash } from "@phosphor-icons/react";
+
+<MagnifyingGlass size={20} />
+```
+
+Tamanhos recomendados: `14`, `16`, `20`, `24`, `32`.
+
+## Design Tokens
+
+Os tokens CSS ficam disponíveis automaticamente ao importar `@mdonangelo/bud-ds/styles`:
+
+```css
+/* Cores */
+color: var(--color-orange-500);
+background: var(--color-neutral-50);
+
+/* Espaçamento */
+padding: var(--sp-sm);
+gap: var(--sp-2xs);
+
+/* Tipografia */
+font-family: var(--font-body);
+font-size: var(--text-md);
+
+/* Border radius */
+border-radius: var(--radius-sm);
+
+/* Sombras */
+box-shadow: var(--shadow-sm);
+```
+
+## Contribuindo
+
+```bash
+# Clonar e instalar
+git clone https://github.com/mdonangelo/bud-2-design-system.git
+cd bud-2-design-system
+npm install
+
+# Rodar docs page localmente
+npm run dev
+
+# Build da lib
+npm run build:lib
 ```
