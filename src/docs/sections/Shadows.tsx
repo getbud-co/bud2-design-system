@@ -1,4 +1,5 @@
 import { DocSection } from "../DocSection";
+import { getCategoryForPage } from "../nav-data";
 import { CopyButton } from "../CopyButton";
 import { shadowTokens } from "../tokens";
 import s from "./Shadows.module.css";
@@ -9,6 +10,7 @@ export function Shadows() {
       id="sombras"
       title="Sombras"
       description="Dois níveis de elevação para criar profundidade sutil. Use shadow-xs para cards e shadow-sm para elementos flutuantes."
+      category={getCategoryForPage("sombras")}
     >
       <div className={s.showcase}>
         {shadowTokens.map((t) => (

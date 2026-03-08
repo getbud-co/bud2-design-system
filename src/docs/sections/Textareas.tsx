@@ -1,4 +1,6 @@
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Textarea } from "../../components/Textarea";
 import textareaStyles from "../../components/Textarea.module.css";
@@ -40,14 +42,13 @@ export function Textareas() {
       id="textareas"
       title="Textareas"
       description="Campo de texto multilinha com label e mensagem de retorno. Mesma anatomia do Input — borda caramel-300, estados de hover/focus/error, e mensagens de feedback."
+      category={getCategoryForPage("textareas")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Estados</h3>
-        <p className={s.subsectionDescription}>
-          O textarea responde a interações com mudanças na borda. Hover escurece
-          a borda, focus adiciona um anel externo e error altera a cor para
-          vermelho.
-        </p>
+      <SubSection
+        id="estados"
+        title="Estados"
+        description="O textarea responde a interações com mudanças na borda. Hover escurece a borda, focus adiciona um anel externo e error altera a cor para vermelho."
+      >
         <div className={s.statesGrid}>
           {states.map((state) => (
             <div key={state} className={s.stateItem}>
@@ -73,14 +74,13 @@ export function Textareas() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Mensagens de retorno</h3>
-        <p className={s.subsectionDescription}>
-          Três tipos de mensagem: erro (vermelho), atenção (amarelo) e sucesso
-          (verde). O tipo erro também altera a borda do textarea.
-        </p>
+      <SubSection
+        id="mensagens-de-retorno"
+        title="Mensagens de retorno"
+        description="Três tipos de mensagem: erro (vermelho), atenção (amarelo) e sucesso (verde). O tipo erro também altera a borda do textarea."
+      >
         <div className={s.messagesGrid}>
           <div className={s.messageItem}>
             <span className={s.stateLabel}>Error</span>
@@ -113,12 +113,11 @@ export function Textareas() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

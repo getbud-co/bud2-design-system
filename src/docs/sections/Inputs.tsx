@@ -1,5 +1,7 @@
 import { EnvelopeSimple, EyeSlash } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Input } from "../../components/Input";
 import inputStyles from "../../components/Input.module.css";
@@ -45,13 +47,13 @@ export function Inputs() {
       id="inputs"
       title="Inputs"
       description="Campo de entrada com label, ícones opcionais e mensagem de retorno. Suporta estados de erro, atenção e sucesso com feedback visual via borda e mensagem."
+      category={getCategoryForPage("inputs")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Estados</h3>
-        <p className={s.subsectionDescription}>
-          O input responde a interações com mudanças na borda. Hover escurece a
-          borda, focus adiciona um anel externo e error altera a cor para vermelho.
-        </p>
+      <SubSection
+        id="estados"
+        title="Estados"
+        description="O input responde a interações com mudanças na borda. Hover escurece a borda, focus adiciona um anel externo e error altera a cor para vermelho."
+      >
         <div className={s.statesGrid}>
           {states.map((state) => (
             <div key={state} className={s.stateItem}>
@@ -74,14 +76,13 @@ export function Inputs() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Mensagens de retorno</h3>
-        <p className={s.subsectionDescription}>
-          Três tipos de mensagem: erro (vermelho), atenção (amarelo) e sucesso
-          (verde). O tipo erro também altera a borda do input.
-        </p>
+      <SubSection
+        id="mensagens-retorno"
+        title="Mensagens de retorno"
+        description="Três tipos de mensagem: erro (vermelho), atenção (amarelo) e sucesso (verde). O tipo erro também altera a borda do input."
+      >
         <div className={s.messagesGrid}>
           <div className={s.messageItem}>
             <span className={s.stateLabel}>Error</span>
@@ -112,13 +113,13 @@ export function Inputs() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Variações</h3>
-        <p className={s.subsectionDescription}>
-          O input pode ser usado com ou sem ícones, e com ou sem label.
-        </p>
+      <SubSection
+        id="variacoes"
+        title="Variações"
+        description="O input pode ser usado com ou sem ícones, e com ou sem label."
+      >
         <div className={s.variationsGrid}>
           <div className={s.variationItem}>
             <span className={s.stateLabel}>Com ícones</span>
@@ -141,12 +142,11 @@ export function Inputs() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

@@ -1,5 +1,7 @@
 import { Info, WarningCircle, Trash, Plus } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Tooltip } from "../../components/Tooltip";
 import { Button } from "../../components/Button";
@@ -40,13 +42,13 @@ export function Tooltips() {
       id="tooltips"
       title="Tooltips"
       description="Dicas contextuais que aparecem ao passar o mouse ou focar um elemento. Acessíveis via aria-describedby e role='tooltip', com suporte a teclado (ESC para fechar) e reposicionamento automático."
+      category={getCategoryForPage("tooltips")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Posições</h3>
-        <p className={s.subsectionDescription}>
-          Quatro posições disponíveis. O tooltip reposiciona automaticamente se
-          não couber na viewport.
-        </p>
+      <SubSection
+        id="posicoes"
+        title="Posições"
+        description="Quatro posições disponíveis. O tooltip reposiciona automaticamente se não couber na viewport."
+      >
         <div className={s.placementGrid}>
           <Tooltip content="Posição acima do elemento" placement="top">
             <Button variant="secondary" size="sm">
@@ -69,14 +71,13 @@ export function Tooltips() {
             </Button>
           </Tooltip>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Em botões com ícone</h3>
-        <p className={s.subsectionDescription}>
-          Essencial para botões icon-only — o tooltip fornece o label acessível
-          que o ícone sozinho não comunica.
-        </p>
+      <SubSection
+        id="em-botoes-com-icone"
+        title="Em botões com ícone"
+        description="Essencial para botões icon-only — o tooltip fornece o label acessível que o ícone sozinho não comunica."
+      >
         <div className={s.row}>
           <Tooltip content="Adicionar item">
             <Button variant="secondary" size="sm" leftIcon={Plus} aria-label="Adicionar item" />
@@ -88,14 +89,13 @@ export function Tooltips() {
             <Button variant="tertiary" size="sm" leftIcon={Trash} aria-label="Excluir" />
           </Tooltip>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Conteúdo rico</h3>
-        <p className={s.subsectionDescription}>
-          O tooltip aceita ReactNode, permitindo texto formatado. Mantenha o
-          conteúdo curto — para informações longas, use Popover.
-        </p>
+      <SubSection
+        id="conteudo-rico"
+        title="Conteúdo rico"
+        description="O tooltip aceita ReactNode, permitindo texto formatado. Mantenha o conteúdo curto — para informações longas, use Popover."
+      >
         <div className={s.row}>
           <Tooltip
             content={
@@ -116,14 +116,13 @@ export function Tooltips() {
             </Badge>
           </Tooltip>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Com delay</h3>
-        <p className={s.subsectionDescription}>
-          O delay padrão é 200ms. Pode ser ajustado para evitar tooltips
-          acidentais (ex: 500ms) ou para feedback imediato (0ms).
-        </p>
+      <SubSection
+        id="com-delay"
+        title="Com delay"
+        description="O delay padrão é 200ms. Pode ser ajustado para evitar tooltips acidentais (ex: 500ms) ou para feedback imediato (0ms)."
+      >
         <div className={s.row}>
           <Tooltip content="Delay 0ms — imediato" delay={0}>
             <Button variant="secondary" size="sm">
@@ -141,11 +140,10 @@ export function Tooltips() {
             </Button>
           </Tooltip>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Desabilitado</h3>
-        <p className={s.subsectionDescription}>
+      <SubSection id="desabilitado" title="Desabilitado">
+        <p>
           A prop <code>disabled</code> suprime o tooltip sem removê-lo da árvore
           de componentes.
         </p>
@@ -161,11 +159,10 @@ export function Tooltips() {
             </Button>
           </Tooltip>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Acessibilidade</h3>
-        <p className={s.subsectionDescription}>
+      <SubSection id="acessibilidade" title="Acessibilidade">
+        <p>
           O tooltip usa <code>role="tooltip"</code> e{" "}
           <code>aria-describedby</code> no elemento trigger. Pressione{" "}
           <strong>ESC</strong> para fechar. O trigger é focável via Tab,
@@ -178,12 +175,11 @@ export function Tooltips() {
             </button>
           </Tooltip>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

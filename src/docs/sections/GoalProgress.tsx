@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { GoalProgressBar, GoalGaugeBar } from "../../components/GoalProgress";
 import s from "./GoalProgress.module.css";
@@ -62,11 +64,11 @@ export function GoalProgress() {
       id="goal-progress"
       title="Goal Progress"
       description="Barras de visualização para metas e KPIs. GoalProgressBar para metas de progresso (alcançar um alvo) e GoalGaugeBar para metas de controle (manter acima, abaixo ou entre limites). Ambos suportam modo interativo com onChange — ao fazer hover, um thumb aparece para arrastar e ajustar o valor."
+      category={getCategoryForPage("goal-progress")}
     >
       {/* ——— 1. GoalProgressBar: Estados ——— */}
-      <div>
-        <h3 className={s.subsectionTitle}>GoalProgressBar — Estados</h3>
-        <p className={s.subsectionDescription}>
+      <SubSection id="goalprogressbar-estados" title="GoalProgressBar — Estados">
+        <p>
           Três estados semânticos calculados automaticamente com base no
           progresso atual vs. esperado, ou definidos manualmente via prop{" "}
           <code>status</code>.
@@ -99,18 +101,14 @@ export function GoalProgress() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
       {/* ——— 2. GoalProgressBar: Com progresso esperado ——— */}
-      <div>
-        <h3 className={s.subsectionTitle}>
-          GoalProgressBar — Com progresso esperado
-        </h3>
-        <p className={s.subsectionDescription}>
-          A linha tracejada indica o progresso esperado para o momento atual do
-          ciclo. O status é calculado automaticamente comparando o progresso real
-          com o esperado.
-        </p>
+      <SubSection
+        id="goalprogressbar-com-progresso-esperado"
+        title="GoalProgressBar — Com progresso esperado"
+        description="A linha tracejada indica o progresso esperado para o momento atual do ciclo. O status é calculado automaticamente comparando o progresso real com o esperado."
+      >
         <div className={s.statesGrid}>
           <div className={s.stateItem}>
             <span className={s.stateLabel}>acima do esperado</span>
@@ -140,14 +138,11 @@ export function GoalProgress() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
       {/* ——— 3. GoalProgressBar: Hover para ajustar ——— */}
-      <div>
-        <h3 className={s.subsectionTitle}>
-          GoalProgressBar — Hover para ajustar
-        </h3>
-        <p className={s.subsectionDescription}>
+      <SubSection id="goalprogressbar-hover-para-ajustar" title="GoalProgressBar — Hover para ajustar">
+        <p>
           Passe o mouse sobre a barra para ver o thumb. Arraste para ajustar o
           valor — o status é recalculado em tempo real. Ativado pela prop{" "}
           <code>onChange</code>.
@@ -176,15 +171,14 @@ export function GoalProgress() {
             </div>
           </div>
         </div>
-      </div>
+      </SubSection>
 
       {/* ——— 4. GoalGaugeBar: Manter entre ——— */}
-      <div>
-        <h3 className={s.subsectionTitle}>GoalGaugeBar — Manter entre</h3>
-        <p className={s.subsectionDescription}>
-          A zona verde indica o intervalo seguro. O marcador triangular mostra a
-          posição do valor atual.
-        </p>
+      <SubSection
+        id="goalgaugebar-manter-entre"
+        title="GoalGaugeBar — Manter entre"
+        description="A zona verde indica o intervalo seguro. O marcador triangular mostra a posição do valor atual."
+      >
         <div className={s.statesGrid}>
           <div className={s.stateItem}>
             <span className={s.stateLabel}>dentro (65, range 50–90)</span>
@@ -217,17 +211,14 @@ export function GoalProgress() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
       {/* ——— 5. GoalGaugeBar: Manter acima / abaixo ——— */}
-      <div>
-        <h3 className={s.subsectionTitle}>
-          GoalGaugeBar — Manter acima / abaixo
-        </h3>
-        <p className={s.subsectionDescription}>
-          Variantes para metas unilaterais: manter acima de um mínimo ou abaixo
-          de um máximo.
-        </p>
+      <SubSection
+        id="goalgaugebar-manter-acima-abaixo"
+        title="GoalGaugeBar — Manter acima / abaixo"
+        description="Variantes para metas unilaterais: manter acima de um mínimo ou abaixo de um máximo."
+      >
         <div className={s.statesGrid}>
           <div className={s.stateItem}>
             <span className={s.stateLabel}>above — em dia (92%)</span>
@@ -270,17 +261,14 @@ export function GoalProgress() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
       {/* ——— 6. GoalGaugeBar: Hover para ajustar ——— */}
-      <div>
-        <h3 className={s.subsectionTitle}>
-          GoalGaugeBar — Hover para ajustar
-        </h3>
-        <p className={s.subsectionDescription}>
-          Passe o mouse sobre a barra e arraste o thumb para mover o marcador.
-          O triângulo é substituído pelo thumb durante a interação.
-        </p>
+      <SubSection
+        id="goalgaugebar-hover-para-ajustar"
+        title="GoalGaugeBar — Hover para ajustar"
+        description="Passe o mouse sobre a barra e arraste o thumb para mover o marcador. O triângulo é substituído pelo thumb durante a interação."
+      >
         <div className={s.exampleGrid}>
           <div className={s.previewBox}>
             <GoalGaugeBar
@@ -310,13 +298,12 @@ export function GoalProgress() {
             </div>
           </div>
         </div>
-      </div>
+      </SubSection>
 
       {/* ——— 7. Como usar ——— */}
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

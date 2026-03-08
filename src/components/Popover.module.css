@@ -106,3 +106,20 @@
   left: auto;
   right: calc(100% + var(--sp-3xs));
 }
+
+@media (max-width: 640px) {
+  .popover {
+    max-width: calc(100vw - 32px);
+  }
+
+  .submenu {
+    position: static;
+    border: none;
+    box-shadow: none;
+    padding-left: var(--sp-sm);
+  }
+
+  .submenuFlip .submenu {
+    right: auto;
+  }
+}

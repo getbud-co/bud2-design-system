@@ -1,4 +1,6 @@
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Radio } from "../../components/Radio";
 import radioStyles from "../../components/Radio.module.css";
@@ -24,13 +26,13 @@ export function Radios() {
       id="radios"
       title="Radio Buttons"
       description="Dois tamanhos (Small 16px, Medium 20px) com forma circular e indicador de dot. Mesmo padrão de cores e estados do Checkbox. Agrupados pelo atributo name."
+      category={getCategoryForPage("radios")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Estados — Unchecked</h3>
-        <p className={s.subsectionDescription}>
-          Mesma progressão de bordas do Checkbox: caramel-300 (rest), caramel-500
-          (hover), caramel-700 com anel (focus).
-        </p>
+      <SubSection
+        id="estados-unchecked"
+        title="Estados — Unchecked"
+        description="Mesma progressão de bordas do Checkbox: caramel-300 (rest), caramel-500 (hover), caramel-700 com anel (focus)."
+      >
         <div className={s.statesGrid}>
           {states.map((state) => (
             <div key={state} className={s.stateItem}>
@@ -64,14 +66,13 @@ export function Radios() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Estados — Checked</h3>
-        <p className={s.subsectionDescription}>
-          Quando selecionado, o fundo muda para orange-500 com dot branco
-          centralizado.
-        </p>
+      <SubSection
+        id="estados-checked"
+        title="Estados — Checked"
+        description="Quando selecionado, o fundo muda para orange-500 com dot branco centralizado."
+      >
         <div className={s.statesGrid}>
           {states.map((state) => (
             <div key={state} className={s.stateItem}>
@@ -107,13 +108,13 @@ export function Radios() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Com label</h3>
-        <p className={s.subsectionDescription}>
-          Label com título e descrição opcional, alinhado com o centro do radio.
-        </p>
+      <SubSection
+        id="com-label"
+        title="Com label"
+        description="Label com título e descrição opcional, alinhado com o centro do radio."
+      >
         <div className={s.labelsGrid}>
           <div className={s.labelGroup}>
             <Radio
@@ -182,12 +183,11 @@ export function Radios() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

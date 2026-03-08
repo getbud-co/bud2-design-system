@@ -157,3 +157,11 @@
     right: var(--sp-sm);
   }
 }
+
+@media (max-width: 480px) {
+  .toaster {
+    left: var(--sp-2xs);
+    right: var(--sp-2xs);
+    bottom: var(--sp-sm);
+  }
+}

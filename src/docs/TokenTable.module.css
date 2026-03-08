@@ -50,3 +50,18 @@
   font-size: var(--text-xs);
   max-width: 280px;
 }
+
+@media (max-width: 768px) {
+  .table {
+    font-size: var(--text-xs);
+  }
+
+  .table th,
+  .table td {
+    padding: var(--sp-2xs);
+  }
+
+  .usageCell {
+    display: none;
+  }
+}

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Chart } from "../../components/Chart";
 import s from "./Charts.module.css";
@@ -20,13 +22,14 @@ export function Charts() {
       id="charts"
       title="Charts"
       description="Indicador circular compacto de progresso percentual. Exibe o valor no centro com um anel de preenchimento proporcional."
+      category={getCategoryForPage("charts")}
     >
       {/* ——— 1. Valores ——— */}
-      <div>
-        <h3 className={s.subsectionTitle}>Valores</h3>
-        <p className={s.subsectionDescription}>
-          Cinco estados de referência do Figma: 0%, 25%, 50%, 75% e 100%.
-        </p>
+      <SubSection
+        id="valores"
+        title="Valores"
+        description="Cinco estados de referência do Figma: 0%, 25%, 50%, 75% e 100%."
+      >
         <div className={s.statesGrid}>
           <div className={s.stateItem}>
             <Chart value={0} />
@@ -49,14 +52,14 @@ export function Charts() {
             <span className={s.stateLabel}>100%</span>
           </div>
         </div>
-      </div>
+      </SubSection>
 
       {/* ——— 2. Exemplo interativo ——— */}
-      <div>
-        <h3 className={s.subsectionTitle}>Exemplo interativo</h3>
-        <p className={s.subsectionDescription}>
-          Arraste o controle para ver a transição animada do anel.
-        </p>
+      <SubSection
+        id="exemplo-interativo"
+        title="Exemplo interativo"
+        description="Arraste o controle para ver a transição animada do anel."
+      >
         <div className={s.interactiveRow}>
           <div className={s.controls}>
             <div className={s.controlRow}>
@@ -75,13 +78,12 @@ export function Charts() {
             <Chart value={value} />
           </div>
         </div>
-      </div>
+      </SubSection>
 
       {/* ——— 3. Como usar ——— */}
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

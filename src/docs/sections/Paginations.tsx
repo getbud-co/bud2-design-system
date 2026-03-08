@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Pagination } from "../../components/Pagination";
 import s from "./Paginations.module.css";
@@ -67,45 +69,43 @@ export function Paginations() {
       id="pagination"
       title="Pagination"
       description="Componente de navegação entre páginas com suporte a ellipsis, layout responsivo (mobile mostra 'Página X de Y') e acessibilidade completa via aria-label, aria-current e nav semântico."
+      category={getCategoryForPage("pagination")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Padrão — 10 páginas</h3>
-        <p className={s.subsectionDescription}>
-          Navegação completa com botões Anterior/Próximo e números de página.
-          Em telas menores, os números são substituídos por "Página X de Y".
-        </p>
+      <SubSection
+        id="padrao-10-paginas"
+        title="Padrão — 10 páginas"
+        description='Navegação completa com botões Anterior/Próximo e números de página. Em telas menores, os números são substituídos por "Página X de Y".'
+      >
         <BasicDemo />
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Poucas páginas — sem ellipsis</h3>
-        <p className={s.subsectionDescription}>
-          Com 7 páginas ou menos, todos os números são exibidos sem truncar.
-        </p>
+      <SubSection
+        id="poucas-paginas-sem-ellipsis"
+        title="Poucas páginas — sem ellipsis"
+        description="Com 7 páginas ou menos, todos os números são exibidos sem truncar."
+      >
         <FewPagesDemo />
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Muitas páginas — com ellipsis</h3>
-        <p className={s.subsectionDescription}>
-          Com mais de 7 páginas, o componente trunca automaticamente mostrando
-          a primeira, a última e as páginas vizinhas à atual.
-        </p>
+      <SubSection
+        id="muitas-paginas-com-ellipsis"
+        title="Muitas páginas — com ellipsis"
+        description="Com mais de 7 páginas, o componente trunca automaticamente mostrando a primeira, a última e as páginas vizinhas à atual."
+      >
         <ManyPagesDemo />
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Página única</h3>
-        <p className={s.subsectionDescription}>
-          Quando há apenas uma página, ambos os botões ficam desabilitados.
-        </p>
+      <SubSection
+        id="pagina-unica"
+        title="Página única"
+        description="Quando há apenas uma página, ambos os botões ficam desabilitados."
+      >
         <EdgeCaseDemo />
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

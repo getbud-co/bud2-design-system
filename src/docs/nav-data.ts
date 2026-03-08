@@ -8,6 +8,26 @@ export interface NavGroup {
   items: NavItem[];
 }
 
+/** Returns the category label for a given page id */
+export function getCategoryForPage(pageId: string): string | undefined {
+  for (const group of NAV_GROUPS) {
+    if (group.label && group.items.some((item) => item.id === pageId)) {
+      return group.label;
+    }
+  }
+  return undefined;
+}
+
+/** Returns previous/next pages for linear navigation */
+export function getAdjacentPages(currentId: string) {
+  const flat = NAV_GROUPS.flatMap((g) => g.items);
+  const idx = flat.findIndex((p) => p.id === currentId);
+  return {
+    previous: idx > 0 ? flat[idx - 1] : undefined,
+    next: idx < flat.length - 1 ? flat[idx + 1] : undefined,
+  };
+}
+
 export const NAV_GROUPS: NavGroup[] = [
   {
     label: "",

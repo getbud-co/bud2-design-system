@@ -31,13 +31,32 @@
   color: var(--color-neutral-800);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .main {
     margin-left: 0;
-    padding: var(--sp-lg) var(--sp-sm);
+    padding: 72px var(--sp-lg) var(--sp-xl);
   }
 
   .hamburger {
     display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 72px var(--sp-sm) var(--sp-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    padding: 64px var(--sp-xs) var(--sp-sm);
+  }
+
+  .hamburger {
+    top: var(--sp-xs);
+    left: var(--sp-xs);
+    width: 36px;
+    height: 36px;
   }
 }

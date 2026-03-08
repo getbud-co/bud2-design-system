@@ -53,7 +53,7 @@
   position: relative;
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 6px; /* subscript — sem token equivalente */
+  font-size: 7px; /* subscript — sem token equivalente */
   line-height: 1.15;
   color: var(--color-neutral-950);
   white-space: nowrap;

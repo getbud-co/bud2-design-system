@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
@@ -75,9 +77,8 @@ function DoubleDemo() {
   };
 
   return (
-    <div>
-      <h3 className={s.subsectionTitle}>Modal duplo</h3>
-      <p className={s.subsectionDescription}>
+    <SubSection id="modal-duplo" title="Modal duplo">
+      <p>
         Use a prop <code>sidePanel</code> para acoplar um painel lateral ao
         modal. O botão "Assistente" no header alterna a exibição do painel. No
         mobile, empilha verticalmente.
@@ -139,7 +140,7 @@ function DoubleDemo() {
           </Button>
         </ModalFooter>
       </Modal>
-    </div>
+    </SubSection>
   );
 }
 
@@ -155,13 +156,13 @@ export function Modals() {
       id="modals"
       title="Modals"
       description="Diálogo modal com overlay, foco preso, Escape para fechar e composição livre via ModalHeader, ModalBody e ModalFooter. Três tamanhos: Small (480px), Medium (640px) e Large (800px)."
+      category={getCategoryForPage("modals")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Tamanhos</h3>
-        <p className={s.subsectionDescription}>
-          Clique para abrir cada variante. O modal centraliza na tela com
-          overlay escuro. Pressione Escape ou clique fora para fechar.
-        </p>
+      <SubSection
+        id="tamanhos"
+        title="Tamanhos"
+        description="Clique para abrir cada variante. O modal centraliza na tela com overlay escuro. Pressione Escape ou clique fora para fechar."
+      >
         <div className={s.buttonRow}>
           <Button
             variant="secondary"
@@ -274,14 +275,13 @@ export function Modals() {
             </Button>
           </ModalFooter>
         </Modal>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Com formulário</h3>
-        <p className={s.subsectionDescription}>
-          O body aceita qualquer conteúdo React. Inputs, selects e outros
-          componentes do DS funcionam normalmente dentro do modal.
-        </p>
+      <SubSection
+        id="com-formulario"
+        title="Com formulário"
+        description="O body aceita qualquer conteúdo React. Inputs, selects e outros componentes do DS funcionam normalmente dentro do modal."
+      >
         <div className={s.buttonRow}>
           <Button
             variant="secondary"
@@ -322,11 +322,10 @@ export function Modals() {
             </Button>
           </ModalFooter>
         </Modal>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Footer com alinhamento wizard</h3>
-        <p className={s.subsectionDescription}>
+      <SubSection id="footer-com-alinhamento-wizard" title="Footer com alinhamento wizard">
+        <p>
           Use <code>align="between"</code> no ModalFooter para posicionar ações
           secundárias à esquerda e primárias à direita — padrão de modais
           multi-step.
@@ -378,12 +377,11 @@ export function Modals() {
             </div>
           </ModalFooter>
         </Modal>
-      </div>
+      </SubSection>
 
       <DoubleDemo />
 
-      <div>
-        <h3 className={s.subsectionTitle}>Comportamento</h3>
+      <SubSection id="comportamento" title="Comportamento">
         <ul className={s.behaviorList}>
           <li>
             <strong>Overlay:</strong> fundo escuro com opacity 40%, clique fora
@@ -409,12 +407,11 @@ export function Modals() {
             <code>createPortal</code> no document.body
           </li>
         </ul>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

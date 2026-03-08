@@ -7,6 +7,8 @@ import {
   MagnifyingGlass,
 } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Checkbox } from "../../components/Checkbox";
 import { Popover, type PopoverItem } from "../../components/Popover";
@@ -183,29 +185,32 @@ export function Popovers() {
       id="popovers"
       title="Popovers"
       description="Popover flutuante ancorado a um trigger, com suporte a submenu/flyout lateral. Renderizado como portal para evitar clipping."
+      category={getCategoryForPage("popovers")}
     >
       {/* Básico */}
-      <h3 className={s.subsectionTitle}>Básico</h3>
-      <p className={s.subsectionDescription}>
-        Popover com itens simples. Cada item aceita ícone, label e callback.
-        Clicar num item executa o callback e fecha o popover.
-      </p>
-      <div className={s.demoArea}>
-        <BasicDemo />
-      </div>
+      <SubSection
+        id="basico"
+        title="Básico"
+        description="Popover com itens simples. Cada item aceita ícone, label e callback. Clicar num item executa o callback e fecha o popover."
+      >
+        <div className={s.demoArea}>
+          <BasicDemo />
+        </div>
+      </SubSection>
 
       {/* Com submenu */}
-      <h3 className={s.subsectionTitle}>Com submenu</h3>
-      <p className={s.subsectionDescription}>
-        Itens com a prop <code>submenu</code> renderizam um flyout lateral ao
-        passar o mouse. O conteúdo do flyout é livre (ReactNode).
-      </p>
-      <div className={s.demoArea}>
-        <SubmenuDemo />
-      </div>
+      <SubSection id="com-submenu" title="Com submenu">
+        <p>
+          Itens com a prop <code>submenu</code> renderizam um flyout lateral ao
+          passar o mouse. O conteúdo do flyout é livre (ReactNode).
+        </p>
+        <div className={s.demoArea}>
+          <SubmenuDemo />
+        </div>
+      </SubSection>
 
       {/* Anatomia */}
-      <h3 className={s.subsectionTitle}>Anatomia</h3>
+      <SubSection id="anatomia" title="Anatomia">
       <ul className={s.anatomyList}>
         <li className={s.anatomyItem}>
           <span className={s.anatomyCode}>Popover</span> — container flutuante,
@@ -224,9 +229,10 @@ export function Popovers() {
           trigger para posicionamento
         </li>
       </ul>
+      </SubSection>
 
       {/* Acessibilidade */}
-      <h3 className={s.subsectionTitle}>Acessibilidade</h3>
+      <SubSection id="acessibilidade" title="Acessibilidade">
       <ul className={s.a11yList}>
         <li className={s.a11yItem}>
           O container usa <code>role="menu"</code>
@@ -241,10 +247,12 @@ export function Popovers() {
           Clique fora do popover e do anchor fecha o popover
         </li>
       </ul>
+      </SubSection>
 
       {/* Como usar */}
-      <h3 className={s.subsectionTitle}>Como usar</h3>
-      <CodeSnippet code={usageCode} language="tsx" />
+      <SubSection id="como-usar" title="Como usar">
+        <CodeSnippet code={usageCode} language="tsx" />
+      </SubSection>
     </DocSection>
   );
 }

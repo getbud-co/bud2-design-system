@@ -50,16 +50,12 @@
   opacity: 1;
 }
 
-.subsectionTitle {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: var(--text-md);
-  color: var(--color-neutral-800);
-  margin-bottom: var(--sp-sm);
-}
-
 @media (max-width: 768px) {
   .label {
-    min-width: 100px;
+    min-width: 80px;
+  }
+
+  .tokenValue {
+    display: none;
   }
 }

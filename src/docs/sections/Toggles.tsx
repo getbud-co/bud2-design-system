@@ -1,4 +1,6 @@
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Toggle } from "../../components/Toggle";
 import tgStyles from "../../components/Toggle.module.css";
@@ -25,13 +27,13 @@ export function Toggles() {
       id="toggles"
       title="Toggles"
       description="Switch on/off com track de 36×20px e thumb de 16px. Usa role='switch' para acessibilidade. Suporta label com descrição opcional."
+      category={getCategoryForPage("toggles")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Estados — Off</h3>
-        <p className={s.subsectionDescription}>
-          Track com fundo caramel-100 no repouso. Hover escurece para
-          caramel-200, focus adiciona anel caramel-200.
-        </p>
+      <SubSection
+        id="estados-off"
+        title="Estados — Off"
+        description="Track com fundo caramel-100 no repouso. Hover escurece para caramel-200, focus adiciona anel caramel-200."
+      >
         <div className={s.statesGrid}>
           {states.map((state) => (
             <div key={state} className={s.stateItem}>
@@ -49,14 +51,13 @@ export function Toggles() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Estados — On</h3>
-        <p className={s.subsectionDescription}>
-          Quando ativo, o track muda para orange-500. Hover escurece para
-          orange-600, focus adiciona anel orange-200.
-        </p>
+      <SubSection
+        id="estados-on"
+        title="Estados — On"
+        description="Quando ativo, o track muda para orange-500. Hover escurece para orange-600, focus adiciona anel orange-200."
+      >
         <div className={s.statesGrid}>
           {states.map((state) => (
             <div key={state} className={s.stateItem}>
@@ -75,14 +76,13 @@ export function Toggles() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Com label</h3>
-        <p className={s.subsectionDescription}>
-          Label com título e descrição opcional. O título alinha verticalmente
-          com o centro do toggle.
-        </p>
+      <SubSection
+        id="com-label"
+        title="Com label"
+        description="Label com título e descrição opcional. O título alinha verticalmente com o centro do toggle."
+      >
         <div className={s.labelsGrid}>
           <div className={s.labelItem}>
             <Toggle
@@ -116,12 +116,11 @@ export function Toggles() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

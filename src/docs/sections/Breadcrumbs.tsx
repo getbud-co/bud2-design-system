@@ -1,4 +1,6 @@
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Breadcrumb } from "../../components/Breadcrumb";
 import s from "./Breadcrumbs.module.css";
@@ -46,25 +48,24 @@ export function Breadcrumbs() {
       id="breadcrumbs"
       title="Breadcrumbs"
       description="Navegação secundária que mostra a localização do usuário na hierarquia ou o progresso em um fluxo multi-etapas. Itens anteriores ao atual são links clicáveis; o item atual e posteriores não são clicáveis (NNg guidelines)."
+      category={getCategoryForPage("breadcrumbs")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Wizard — progresso de etapas</h3>
-        <p className={s.subsectionDescription}>
-          Indica progresso em fluxos multi-etapas. Etapas completas são links
-          para permitir revisão; a etapa atual e futuras não são clicáveis.
-        </p>
+      <SubSection
+        id="wizard-progresso-de-etapas"
+        title="Wizard — progresso de etapas"
+        description="Indica progresso em fluxos multi-etapas. Etapas completas são links para permitir revisão; a etapa atual e futuras não são clicáveis."
+      >
         <div className={s.demo}>
           <span className={s.demoLabel}>current=1</span>
           <Breadcrumb items={wizardItems} current={1} />
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Progresso por etapa</h3>
-        <p className={s.subsectionDescription}>
-          Comparação visual de cada estado do breadcrumb conforme o usuário
-          avança no fluxo.
-        </p>
+      <SubSection
+        id="progresso-por-etapa"
+        title="Progresso por etapa"
+        description="Comparação visual de cada estado do breadcrumb conforme o usuário avança no fluxo."
+      >
         <div className={s.demo}>
           {wizardItems.map((_, i) => (
             <div key={i}>
@@ -73,24 +74,22 @@ export function Breadcrumbs() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Hierarquia de páginas</h3>
-        <p className={s.subsectionDescription}>
-          Mostra a localização na estrutura de navegação. Cada nível acima é um
-          link; a página atual é apenas texto.
-        </p>
+      <SubSection
+        id="hierarquia-de-paginas"
+        title="Hierarquia de páginas"
+        description="Mostra a localização na estrutura de navegação. Cada nível acima é um link; a página atual é apenas texto."
+      >
         <div className={s.demo}>
           <span className={s.demoLabel}>current=2</span>
           <Breadcrumb items={hierarchyItems} current={2} />
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

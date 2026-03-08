@@ -19,6 +19,12 @@
   gap: var(--sp-2xs);
 }
 
+@media (max-width: 480px) {
+  .groupGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ——— Card ——— */
 .card {
   display: flex;

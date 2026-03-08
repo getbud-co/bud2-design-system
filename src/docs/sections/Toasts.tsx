@@ -1,4 +1,6 @@
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { toast } from "../../components/Toast";
 import { Button } from "../../components/Button";
@@ -39,12 +41,13 @@ export function Toasts() {
       id="toasts"
       title="Toasts"
       description="Notificações temporárias com auto-dismiss, stacking animado e API imperativa. Inspirado no comportamento do Sonner/Geist: hover pausa os timers e expande a stack."
+      category={getCategoryForPage("toasts")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Variantes</h3>
-        <p className={s.subsectionDescription}>
-          Cinco variantes semânticas. Clique para disparar.
-        </p>
+      <SubSection
+        id="variantes"
+        title="Variantes"
+        description="Cinco variantes semânticas. Clique para disparar."
+      >
         <div className={s.buttonRow}>
           <Button
             variant="secondary"
@@ -101,14 +104,13 @@ export function Toasts() {
             Black
           </Button>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Com ação</h3>
-        <p className={s.subsectionDescription}>
-          Botão de ação dentro do toast. Clicar na ação fecha o toast
-          automaticamente.
-        </p>
+      <SubSection
+        id="com-acao"
+        title="Com ação"
+        description="Botão de ação dentro do toast. Clicar na ação fecha o toast automaticamente."
+      >
         <div className={s.buttonRow}>
           <Button
             variant="secondary"
@@ -140,15 +142,13 @@ export function Toasts() {
             Success com ação
           </Button>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Stacking</h3>
-        <p className={s.subsectionDescription}>
-          Até 3 toasts visíveis simultaneamente. Novos empurram os anteriores
-          para trás com scale e opacity reduzidos. Passe o mouse sobre a stack
-          para expandir.
-        </p>
+      <SubSection
+        id="stacking"
+        title="Stacking"
+        description="Até 3 toasts visíveis simultaneamente. Novos empurram os anteriores para trás com scale e opacity reduzidos. Passe o mouse sobre a stack para expandir."
+      >
         <div className={s.buttonRow}>
           <Button
             variant="secondary"
@@ -169,10 +169,9 @@ export function Toasts() {
             Limpar todos
           </Button>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Comportamento</h3>
+      <SubSection id="comportamento" title="Comportamento">
         <ul className={s.behaviorList}>
           <li>
             <strong>Auto-dismiss:</strong> 4 segundos (configurável via{" "}
@@ -197,12 +196,11 @@ export function Toasts() {
             <strong>Animação:</strong> entrada e saída com transição de 400ms
           </li>
         </ul>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

@@ -34,3 +34,14 @@
   font-size: 11px;
   color: var(--color-neutral-500);
 }
+
+@media (max-width: 768px) {
+  .showcase {
+    gap: var(--sp-sm);
+  }
+
+  .box {
+    width: 56px;
+    height: 56px;
+  }
+}

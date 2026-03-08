@@ -1,18 +1,3 @@
-.subsectionTitle {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: var(--text-md);
-  color: var(--color-neutral-800);
-  margin-bottom: var(--sp-2xs);
-}
-
-.subsectionDescription {
-  font-size: var(--text-sm);
-  color: var(--color-neutral-500);
-  line-height: 1.6;
-  margin-bottom: var(--sp-sm);
-}
-
 /* ——— States grid ——— */
 .statesGrid {
   display: flex;
@@ -49,6 +34,11 @@
 @media (max-width: 768px) {
   .statesGrid {
     flex-direction: column;
+    gap: var(--sp-lg);
+  }
+
+  .stateItem {
+    min-width: 0;
   }
 
   .exampleGrid {

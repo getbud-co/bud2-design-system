@@ -65,3 +65,9 @@
     animation: none;
   }
 }
+
+@media (max-width: 480px) {
+  .tooltip {
+    max-width: calc(100vw - 32px);
+  }
+}

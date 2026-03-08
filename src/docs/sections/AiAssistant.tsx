@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { AiAssistant, type MissionItem } from "../../components/AiAssistant";
 import s from "./AiAssistant.module.css";
@@ -63,10 +65,10 @@ export function AiAssistantSection() {
       id="ai-assistant"
       title="AI Assistant"
       description="Assistente de IA com experiência de chat completa: mensagens do usuário, indicador de typing, streaming simulado da resposta e auto-scroll. Usado como copiloto de IA da plataforma."
+      category={getCategoryForPage("ai-assistant")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Interativo</h3>
-        <p className={s.subsectionDescription}>
+      <SubSection id="interativo" title="Interativo">
+        <p>
           Demo funcional com respostas simuladas. Digite uma mensagem ou clique
           numa sugestão para ver o fluxo completo: bolha do usuário, typing
           indicator, streaming da resposta. Clique no <code>+</code> para ver o
@@ -88,11 +90,10 @@ export function AiAssistantSection() {
         {lastAction && (
           <p className={s.actionLog}>Última ação: {lastAction}</p>
         )}
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Customizado</h3>
-        <p className={s.subsectionDescription}>
+      <SubSection id="customizado" title="Customizado">
+        <p>
           Título, heading e sugestões são configuráveis. Sem{" "}
           <code>onMessage</code>, o assistente mostra apenas o estado vazio.
         </p>
@@ -106,21 +107,19 @@ export function AiAssistantSection() {
             ]}
           />
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Sem sugestões</h3>
-        <p className={s.subsectionDescription}>
-          Quando não há sugestões, o assistente exibe apenas o heading e o campo
-          de entrada — útil para telas com contexto já definido.
-        </p>
+      <SubSection
+        id="sem-sugestoes"
+        title="Sem sugestões"
+        description="Quando não há sugestões, o assistente exibe apenas o heading e o campo de entrada — útil para telas com contexto já definido."
+      >
         <div className={s.demoContainer}>
           <AiAssistant suggestions={[]} heading="Como posso ajudar?" />
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Anatomia</h3>
+      <SubSection id="anatomia" title="Anatomia">
         <ul className={s.anatomyList}>
           <li>
             <strong>Header</strong> — ícone Lightning (outline) + título + botão
@@ -144,10 +143,9 @@ export function AiAssistantSection() {
             Missão / Pesquisa (com flyout lateral de busca + checkboxes)
           </li>
         </ul>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Acessibilidade</h3>
+      <SubSection id="acessibilidade" title="Acessibilidade">
         <ul className={s.anatomyList}>
           <li>
             <code>role="region"</code> com <code>aria-label</code> no container
@@ -174,12 +172,11 @@ export function AiAssistantSection() {
             Todos os botões com <code>:focus-visible</code> ring
           </li>
         </ul>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

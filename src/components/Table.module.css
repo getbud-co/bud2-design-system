@@ -178,6 +178,23 @@
     padding: var(--sp-md) var(--sp-sm);
   }
 
+  .th {
+    padding: var(--sp-2xs) var(--sp-sm);
+  }
+
+  .thCheckbox {
+    padding: var(--sp-2xs) var(--sp-xs) var(--sp-2xs) var(--sp-sm);
+  }
+
+  .td {
+    padding: var(--sp-xs) var(--sp-sm);
+    height: 56px;
+  }
+
+  .tdCheckbox {
+    padding: var(--sp-xs) var(--sp-xs) var(--sp-xs) var(--sp-sm);
+  }
+
   .pagination {
     padding: var(--sp-xs) var(--sp-sm) var(--sp-sm);
   }

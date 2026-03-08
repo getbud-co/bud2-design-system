@@ -1,4 +1,6 @@
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CopyButton } from "../CopyButton";
 import { typeScale } from "../tokens";
 import type { TypeScaleEntry } from "../tokens";
@@ -64,6 +66,7 @@ export function Typography() {
       id="tipografia"
       title="Tipografia"
       description="Três famílias tipográficas: Crimson Pro (serif) para display, Plus Jakarta Sans para títulos e Inter para corpo de texto e labels. Cinco categorias com variantes Primary, Emphasized e Bold."
+      category={getCategoryForPage("tipografia")}
     >
       <div className={s.specimens}>
         <div className={s.specimen}>
@@ -116,8 +119,7 @@ export function Typography() {
         </div>
       </div>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Escala tipográfica</h3>
+      <SubSection id="escala-tipografica" title="Escala tipográfica">
         {categories.map((cat) => {
           const items = typeScale.filter((item) => item.category === cat);
           if (items.length === 0) return null;
@@ -178,7 +180,7 @@ export function Typography() {
             </div>
           );
         })}
-      </div>
+      </SubSection>
 
     </DocSection>
   );

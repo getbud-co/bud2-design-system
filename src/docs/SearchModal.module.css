@@ -142,7 +142,17 @@
 /* ——— Mobile ——— */
 
 @media (max-width: 768px) {
+  .overlay {
+    padding-top: var(--sp-xl);
+    align-items: flex-start;
+  }
+
   .container {
     width: calc(100vw - 32px);
+    max-height: 60vh;
+  }
+
+  .footer {
+    display: none;
   }
 }

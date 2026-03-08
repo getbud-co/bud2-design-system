@@ -31,9 +31,14 @@
 }
 
 @media (max-width: 768px) {
+  .showcase {
+    gap: var(--sp-sm);
+  }
+
   .card {
     width: auto;
     flex: 1;
     min-width: 140px;
+    padding: var(--sp-sm);
   }
 }

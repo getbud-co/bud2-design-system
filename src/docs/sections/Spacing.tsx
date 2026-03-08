@@ -1,4 +1,5 @@
 import { DocSection } from "../DocSection";
+import { getCategoryForPage } from "../nav-data";
 import { CopyButton } from "../CopyButton";
 import { spacingTokens } from "../tokens";
 import s from "./Spacing.module.css";
@@ -9,6 +10,7 @@ export function Spacing() {
       id="espacamento"
       title="Espaçamento"
       description="Escala de espaçamento baseada em grid de 4px. Use os tokens para padding, margin e gap — nunca valores avulsos."
+      category={getCategoryForPage("espacamento")}
     >
       <div className={s.scale}>
         {spacingTokens.map((t) => (

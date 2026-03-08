@@ -123,18 +123,22 @@
   flex-shrink: 0;
 }
 
-/* ——— Subsection ——— */
-
-.subsectionTitle {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: var(--text-md);
-  color: var(--color-neutral-800);
-  margin-bottom: var(--sp-sm);
-}
-
 @media (max-width: 768px) {
   .specimens {
     grid-template-columns: 1fr;
+  }
+
+  .specimen {
+    padding: var(--sp-sm);
+  }
+
+  .scaleRowHeader {
+    flex-direction: column;
+    gap: var(--sp-3xs);
+  }
+
+  .scaleSampleRow {
+    flex-direction: column;
+    gap: var(--sp-3xs);
   }
 }

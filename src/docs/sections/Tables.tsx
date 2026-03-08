@@ -1,6 +1,8 @@
 import { useState, useCallback } from "react";
 import { DotsThreeVertical, Circle } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Badge } from "../../components/Badge";
 import { Avatar } from "../../components/Avatar";
@@ -309,40 +311,35 @@ export function Tables() {
       id="tables"
       title="Tables"
       description="Tabelas de dados acessíveis e responsivas com suporte a seleção, ordenação, paginação e variantes visuais. Construída com HTML semântico (<table>) e API composável."
+      category={getCategoryForPage("tables")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Divider line — com seleção e ordenação</h3>
-        <p className={s.subsectionDescription}>
-          Variante padrão com linhas divisórias, checkbox de seleção, header com
-          título e badge, e paginação completa. Clique no header "Nome" para
-          ordenar.
-        </p>
+      <SubSection
+        id="divider-line-com-selecao-e-ordenacao"
+        title="Divider line — com seleção e ordenação"
+        description='Variante padrão com linhas divisórias, checkbox de seleção, header com título e badge, e paginação completa. Clique no header "Nome" para ordenar.'
+      >
         <DividerDemo />
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Alternating fills (striped)</h3>
-        <p className={s.subsectionDescription}>
-          Variante com preenchimento alternado nas linhas, sem divisores. Ideal
-          para tabelas densas onde a diferenciação visual entre linhas é
-          importante.
-        </p>
+      <SubSection
+        id="alternating-fills-striped"
+        title="Alternating fills (striped)"
+        description="Variante com preenchimento alternado nas linhas, sem divisores. Ideal para tabelas densas onde a diferenciação visual entre linhas é importante."
+      >
         <StripedDemo />
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Tabela simples — sem header card</h3>
-        <p className={s.subsectionDescription}>
-          Sem card header, sem seleção, sem paginação. Uso mínimo para dados
-          compactos.
-        </p>
+      <SubSection
+        id="tabela-simples-sem-header-card"
+        title="Tabela simples — sem header card"
+        description="Sem card header, sem seleção, sem paginação. Uso mínimo para dados compactos."
+      >
         <SimpleDemo />
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

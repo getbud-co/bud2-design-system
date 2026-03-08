@@ -1,5 +1,7 @@
 import { Plus, ArrowRight, PaperPlaneTilt, PencilSimple, Trash, MagnifyingGlass } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Button } from "../../components/Button";
 import btnStyles from "../../components/Button.module.css";
@@ -53,13 +55,13 @@ export function Buttons() {
       id="botoes"
       title="Botões"
       description="Três variantes (Primary, Secondary, Tertiary) e três tamanhos (Small, Medium, Big). Todos usam Inter Medium 500, border-radius xs (6px) e line-height 1.05."
+      category={getCategoryForPage("botoes")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Variantes e tamanhos</h3>
-        <p className={s.subsectionDescription}>
-          Primary para ações principais, Secondary para ações complementares e
-          Tertiary para ações de menor destaque.
-        </p>
+      <SubSection
+        id="variantes-tamanhos"
+        title="Variantes e tamanhos"
+        description="Primary para ações principais, Secondary para ações complementares e Tertiary para ações de menor destaque."
+      >
         <div className={s.matrix}>
           <div className={s.matrixHeader}>
             <div className={s.matrixCorner} />
@@ -82,14 +84,13 @@ export function Buttons() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Com ícones</h3>
-        <p className={s.subsectionDescription}>
-          Ícones à esquerda (ação) ou à direita (navegação). Tamanho do ícone
-          acompanha o tamanho do botão: 14px (sm), 16px (md), 20px (lg).
-        </p>
+      <SubSection
+        id="com-icones"
+        title="Com ícones"
+        description="Ícones à esquerda (ação) ou à direita (navegação). Tamanho do ícone acompanha o tamanho do botão: 14px (sm), 16px (md), 20px (lg)."
+      >
         <div className={s.showcase}>
           <Button variant="primary" size="lg" leftIcon={Plus}>
             Criar objetivo
@@ -104,15 +105,13 @@ export function Buttons() {
             Adicionar
           </Button>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Icon only</h3>
-        <p className={s.subsectionDescription}>
-          Botões sem texto, apenas com ícone. Dimensões quadradas: 24px (sm),
-          32px (md), 40px (lg). Sempre inclua <code>aria-label</code> para
-          acessibilidade.
-        </p>
+      <SubSection
+        id="icon-only"
+        title="Icon only"
+        description="Botões sem texto, apenas com ícone. Dimensões quadradas: 24px (sm), 32px (md), 40px (lg). Sempre inclua aria-label para acessibilidade."
+      >
         <div className={s.matrix}>
           <div className={s.matrixHeader}>
             <div className={s.matrixCorner} />
@@ -138,15 +137,13 @@ export function Buttons() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Estados</h3>
-        <p className={s.subsectionDescription}>
-          Active indica que o botão está associado a um elemento visível na
-          interface (ex: painel lateral aberto). Disabled desabilita interação.
-          Loading substitui o conteúdo por um spinner e bloqueia cliques.
-        </p>
+      <SubSection
+        id="estados"
+        title="Estados"
+        description="Active indica que o botão está associado a um elemento visível na interface (ex: painel lateral aberto). Disabled desabilita interação. Loading substitui o conteúdo por um spinner e bloqueia cliques."
+      >
         <div className={s.statesGrid}>
           {variants.map((variant) => (
             <div key={variant} className={s.statesGroup}>
@@ -186,12 +183,11 @@ export function Buttons() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

@@ -172,8 +172,20 @@
     padding: var(--sp-sm);
   }
 
+  .container {
+    min-height: auto;
+  }
+
   .sm, .md, .lg {
     width: calc(100vw - 32px);
+  }
+
+  .header {
+    padding: var(--sp-sm);
+  }
+
+  .body {
+    padding: var(--sp-sm);
   }
 
   .doubleLayout {

@@ -13,6 +13,8 @@ import {
   MagnifyingGlass,
 } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import s from "./Icons.module.css";
 
@@ -48,12 +50,13 @@ export function Icons() {
       id="icones"
       title="Ícones"
       description="Phosphor Icons 2.1 — biblioteca com 7.400+ ícones. No Bud, todos os ícones usam exclusivamente o peso regular (outline)."
+      category={getCategoryForPage("icones")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Galeria</h3>
-        <p className={s.subsectionDescription}>
-          Ícones mais usados na plataforma, renderizados em peso regular (outline).
-        </p>
+      <SubSection
+        id="galeria"
+        title="Galeria"
+        description="Ícones mais usados na plataforma, renderizados em peso regular (outline)."
+      >
         <div className={s.gallery}>
           {sampleIcons.map(({ Icon, name }) => (
             <div key={name} className={s.iconItem}>
@@ -62,14 +65,13 @@ export function Icons() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Tamanhos</h3>
-        <p className={s.subsectionDescription}>
-          Use 16px em inputs e badges, 20px como padrão, 24px em headers e 32px
-          para destaque.
-        </p>
+      <SubSection
+        id="tamanhos"
+        title="Tamanhos"
+        description="Use 16px em inputs e badges, 20px como padrão, 24px em headers e 32px para destaque."
+      >
         <div className={s.sizesRow}>
           {sizes.map((sz) => (
             <div key={sz} className={s.sizeItem}>
@@ -78,12 +80,11 @@ export function Icons() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

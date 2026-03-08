@@ -1,5 +1,7 @@
 import { Eye, GridFour, Lightning, Leaf } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import s from "./Overview.module.css";
 
@@ -70,6 +72,7 @@ export function Overview() {
       id="visao-geral"
       title="Bud Design System"
       description="Sistema de design para a plataforma Bud — gestão de desempenho contínua. Tokens, componentes e padrões que garantem consistência visual e experiência coesa."
+      category={getCategoryForPage("visao-geral")}
     >
       <div className={s.hero}>
         <div className={s.heroBadge}>
@@ -91,33 +94,37 @@ export function Overview() {
       </div>
 
       <div className={s.quickStart}>
-        <h3 className={s.subsectionTitle}>Instalação</h3>
-        <p className={s.subsectionDescription}>
-          O pacote está disponível via GitHub Packages como{" "}
-          <code className={s.inlineCode}>@mdonangelo/bud-ds</code>.
-        </p>
-        <CodeSnippet code={installCode} language="bash" />
+        <SubSection
+          id="instalacao"
+          title="Instalação"
+          description={`O pacote está disponível via GitHub Packages como @mdonangelo/bud-ds.`}
+        >
+          <CodeSnippet code={installCode} language="bash" />
+        </SubSection>
 
-        <h3 className={s.subsectionTitle}>Setup</h3>
-        <p className={s.subsectionDescription}>
-          Importe as fonts e os estilos do DS no entry point da aplicação.
-        </p>
-        <CodeSnippet code={setupCode} language="tsx" />
+        <SubSection
+          id="setup"
+          title="Setup"
+          description="Importe as fonts e os estilos do DS no entry point da aplicação."
+        >
+          <CodeSnippet code={setupCode} language="tsx" />
+        </SubSection>
 
-        <h3 className={s.subsectionTitle}>Uso</h3>
-        <p className={s.subsectionDescription}>
-          Importe os componentes diretamente do pacote.
-        </p>
-        <CodeSnippet code={usageExampleCode} language="tsx" />
+        <SubSection
+          id="uso"
+          title="Uso"
+          description="Importe os componentes diretamente do pacote."
+        >
+          <CodeSnippet code={usageExampleCode} language="tsx" />
+        </SubSection>
 
-        <h3 className={s.subsectionTitle}>Design Tokens</h3>
-        <p className={s.subsectionDescription}>
-          Todos os tokens ficam disponíveis como CSS custom properties ao importar{" "}
-          <code className={s.inlineCode}>@mdonangelo/bud-ds/styles</code>.
-          Use <code className={s.inlineCode}>var(--token-name)</code>{" "}
-          em qualquer CSS Module.
-        </p>
-        <CodeSnippet code={tokensCode} language="css" />
+        <SubSection
+          id="design-tokens"
+          title="Design Tokens"
+          description={`Todos os tokens ficam disponíveis como CSS custom properties ao importar @mdonangelo/bud-ds/styles. Use var(--token-name) em qualquer CSS Module.`}
+        >
+          <CodeSnippet code={tokensCode} language="css" />
+        </SubSection>
       </div>
     </DocSection>
   );

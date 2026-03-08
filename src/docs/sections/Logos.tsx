@@ -1,4 +1,6 @@
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import s from "./Logos.module.css";
 
@@ -41,10 +43,10 @@ export function Logos() {
       id="logos"
       title="Logos"
       description="Logotipo e símbolo da marca Bud em três variantes de cor: Orange (primário), Wine e Cream. O símbolo pode ser usado quando o espaço é reduzido."
+      category={getCategoryForPage("logos")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Logotipo principal</h3>
-        <p className={s.subsectionDescription}>
+      <SubSection id="logotipo-principal" title="Logotipo principal">
+        <p>
           Wordmark completo <strong>bud</strong> — uso preferencial em headers,
           documentos e materiais institucionais.
         </p>
@@ -72,14 +74,13 @@ export function Logos() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Símbolo</h3>
-        <p className={s.subsectionDescription}>
-          Versão reduzida para ícones, favicons e contextos onde o espaço é
-          limitado.
-        </p>
+      <SubSection
+        id="simbolo"
+        title="Símbolo"
+        description="Versão reduzida para ícones, favicons e contextos onde o espaço é limitado."
+      >
         <div className={s.grid}>
           {variants.map((v) => (
             <div
@@ -104,12 +105,11 @@ export function Logos() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Uso</h3>
+      <SubSection id="uso" title="Uso">
         <CodeSnippet code={usageCode} language="jsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

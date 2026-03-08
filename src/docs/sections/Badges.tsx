@@ -1,4 +1,6 @@
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Badge } from "../../components/Badge";
 import { Circle, X, Plus, CheckCircle, WarningCircle, Info } from "@phosphor-icons/react";
@@ -60,13 +62,13 @@ export function Badges() {
       id="badges"
       title="Badges"
       description="Rótulos compactos em formato pill para status, categorias e metadados. Sete variantes de cor, três tamanhos e suporte a ícone à esquerda, direita ou somente ícone."
+      category={getCategoryForPage("badges")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Cores — Apenas texto</h3>
-        <p className={s.subsectionDescription}>
-          Cada cor tem background na shade 50 e texto em shade 600-700,
-          garantindo contraste e leveza.
-        </p>
+      <SubSection
+        id="cores-apenas-texto"
+        title="Cores — Apenas texto"
+        description="Cada cor tem background na shade 50 e texto em shade 600-700, garantindo contraste e leveza."
+      >
         <div className={s.colorsGrid}>
           {colors.map((color) => (
             <div key={color} className={s.colorItem}>
@@ -81,14 +83,13 @@ export function Badges() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Com ícone à esquerda</h3>
-        <p className={s.subsectionDescription}>
-          Ícone de status ou categoria antes do texto. Ícones usam Phosphor
-          Icons no peso regular.
-        </p>
+      <SubSection
+        id="com-icone-a-esquerda"
+        title="Com ícone à esquerda"
+        description="Ícone de status ou categoria antes do texto. Ícones usam Phosphor Icons no peso regular."
+      >
         <div className={s.colorsGrid}>
           {colors.map((color) => (
             <div key={color} className={s.colorItem}>
@@ -103,13 +104,13 @@ export function Badges() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Com ícone à direita</h3>
-        <p className={s.subsectionDescription}>
-          Padrão de dismiss/ação. Usado em filtros e tags removíveis.
-        </p>
+      <SubSection
+        id="com-icone-a-direita"
+        title="Com ícone à direita"
+        description="Padrão de dismiss/ação. Usado em filtros e tags removíveis."
+      >
         <div className={s.colorsGrid}>
           {colors.map((color) => (
             <div key={color} className={s.colorItem}>
@@ -124,13 +125,13 @@ export function Badges() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Apenas ícone</h3>
-        <p className={s.subsectionDescription}>
-          Sem texto, padding uniforme. Usado para indicadores compactos.
-        </p>
+      <SubSection
+        id="apenas-icone"
+        title="Apenas ícone"
+        description="Sem texto, padding uniforme. Usado para indicadores compactos."
+      >
         <div className={s.iconOnlyGrid}>
           {sizes.map((size) => (
             <div key={size} className={s.iconOnlyGroup}>
@@ -145,13 +146,13 @@ export function Badges() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Uso semântico</h3>
-        <p className={s.subsectionDescription}>
-          Exemplos de uso real com significado contextual.
-        </p>
+      <SubSection
+        id="uso-semantico"
+        title="Uso semântico"
+        description="Exemplos de uso real com significado contextual."
+      >
         <div className={s.sizeRow}>
           <Badge color="success" size="sm" leftIcon={CheckCircle}>
             Concluído
@@ -175,12 +176,11 @@ export function Badges() {
             Filtro ativo
           </Badge>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

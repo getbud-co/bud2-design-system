@@ -1,4 +1,6 @@
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Avatar, type AvatarSize } from "../../components/Avatar";
 import {
@@ -91,51 +93,49 @@ export function Avatars() {
       id="avatars"
       title="Avatars"
       description="Representação visual de um usuário. Suporta foto, iniciais (fallback) e placeholder genérico. Seis tamanhos, indicador de online e badge de empresa."
+      category={getCategoryForPage("avatars")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Foto</h3>
-        <p className={s.subsectionDescription}>
-          Avatar com imagem. Borda de 1px em caramel-200, formato circular.
-        </p>
+      <SubSection
+        id="foto"
+        title="Foto"
+        description="Avatar com imagem. Borda de 1px em caramel-200, formato circular."
+      >
         <div className={s.row}>
           {sizes.map((size) => (
             <Avatar key={size} size={size} src={samplePhoto} alt="Exemplo" />
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Iniciais</h3>
-        <p className={s.subsectionDescription}>
-          Fallback quando não há foto. Fundo caramel-50, borda 2px, texto em
-          Inter Medium.
-        </p>
+      <SubSection
+        id="iniciais"
+        title="Iniciais"
+        description="Fallback quando não há foto. Fundo caramel-50, borda 2px, texto em Inter Medium."
+      >
         <div className={s.row}>
           {sizes.map((size) => (
             <Avatar key={size} size={size} initials="OR" />
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Placeholder</h3>
-        <p className={s.subsectionDescription}>
-          Ícone genérico (User) quando não há foto nem iniciais. Fundo
-          caramel-50, borda 1px.
-        </p>
+      <SubSection
+        id="placeholder"
+        title="Placeholder"
+        description="Ícone genérico (User) quando não há foto nem iniciais. Fundo caramel-50, borda 1px."
+      >
         <div className={s.row}>
           {sizes.map((size) => (
             <Avatar key={size} size={size} />
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Indicador online</h3>
-        <p className={s.subsectionDescription}>
-          Bolinha verde (green-500) no canto inferior direito com borda branca.
-          Escala proporcionalmente com o tamanho do avatar.
-        </p>
+      <SubSection
+        id="indicador-online"
+        title="Indicador online"
+        description="Bolinha verde (green-500) no canto inferior direito com borda branca. Escala proporcionalmente com o tamanho do avatar."
+      >
         <div className={s.grid}>
           <div className={s.gridRow}>
             <span className={s.gridLabel}>Foto</span>
@@ -162,15 +162,13 @@ export function Avatars() {
             ))}
           </div>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Avatar com label</h3>
-        <p className={s.subsectionDescription}>
-          Composição de avatar + nome e texto de apoio. Quatro tamanhos (sm, md,
-          lg, xl). Nome em Inter SemiBold, texto de apoio em Inter Medium com
-          cor neutral-500.
-        </p>
+      <SubSection
+        id="avatar-com-label"
+        title="Avatar com label"
+        description="Composição de avatar + nome e texto de apoio. Quatro tamanhos (sm, md, lg, xl). Nome em Inter SemiBold, texto de apoio em Inter Medium com cor neutral-500."
+      >
         <div className={s.labelGrid}>
           {labelSizes.map((size) => (
             <AvatarLabelGroup
@@ -201,14 +199,13 @@ export function Avatars() {
             />
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Grupo de avatares</h3>
-        <p className={s.subsectionDescription}>
-          Pilha de avatares sobrepostos com margem negativa. Contador "+N" para
-          excedentes e botão de adicionar opcional. Três tamanhos (xs, sm, md).
-        </p>
+      <SubSection
+        id="grupo-de-avatares"
+        title="Grupo de avatares"
+        description='Pilha de avatares sobrepostos com margem negativa. Contador "+N" para excedentes e botão de adicionar opcional. Três tamanhos (xs, sm, md).'
+      >
         <div className={s.grid}>
           <div className={s.gridRow}>
             <span className={s.gridLabel}>+N e add</span>
@@ -257,12 +254,11 @@ export function Avatars() {
             ))}
           </div>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

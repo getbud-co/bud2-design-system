@@ -511,3 +511,25 @@
   outline: 2px solid var(--color-orange-400);
   outline-offset: 2px;
 }
+
+@media (max-width: 480px) {
+  .body {
+    padding: var(--sp-sm) var(--sp-2xs);
+  }
+
+  .messageList {
+    padding: var(--sp-xs);
+  }
+
+  .userText {
+    max-width: 90%;
+  }
+
+  .aiMessage {
+    max-width: 90%;
+  }
+
+  .suggestions {
+    padding: 0 var(--sp-2xs);
+  }
+}

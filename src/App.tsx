@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { List } from "@phosphor-icons/react";
+import { List, X } from "@phosphor-icons/react";
 import { Sidebar } from "./docs/Sidebar";
 import { SearchModal } from "./docs/SearchModal";
 import { Overview } from "./docs/sections/Overview";
@@ -31,6 +31,8 @@ import { Popovers } from "./docs/sections/Popovers";
 import { Tables } from "./docs/sections/Tables";
 import { Tooltips } from "./docs/sections/Tooltips";
 import { AiAssistantSection } from "./docs/sections/AiAssistant";
+import { PagePagination } from "./docs/PagePagination";
+import { getAdjacentPages } from "./docs/nav-data";
 import { Toaster } from "./components/Toast";
 import s from "./App.module.css";
 
@@ -97,29 +99,37 @@ function App() {
   }, []);
 
   const ActiveSection = SECTIONS[activePage];
+  const { previous, next } = getAdjacentPages(activePage);
+
+  const handleNavigate = (id: string) => {
+    window.location.hash = id;
+    window.scrollTo(0, 0);
+  };
 
   return (
     <>
       <div className={s.layout}>
         <button
           className={s.hamburger}
-          onClick={() => setSidebarOpen(true)}
-          aria-label="Abrir menu"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-label={sidebarOpen ? "Fechar menu" : "Abrir menu"}
         >
-          <List size={20} />
+          {sidebarOpen ? <X size={20} /> : <List size={20} />}
         </button>
         <Sidebar
           activeSection={activePage}
-          onNavigate={(id) => {
-            window.location.hash = id;
-            window.scrollTo(0, 0);
-          }}
+          onNavigate={handleNavigate}
           onSearchOpen={() => setSearchOpen(true)}
           open={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
         />
         <main className={s.main}>
           <ActiveSection />
+          <PagePagination
+            previousPage={previous}
+            nextPage={next}
+            onNavigate={handleNavigate}
+          />
         </main>
       </div>
       <SearchModal

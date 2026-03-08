@@ -60,21 +60,6 @@
 
 .quickStart {}
 
-.subsectionTitle {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: var(--text-md);
-  color: var(--color-neutral-800);
-  margin-bottom: var(--sp-2xs);
-}
-
-.subsectionDescription {
-  font-size: var(--text-sm);
-  color: var(--color-neutral-500);
-  line-height: 1.6;
-  margin-bottom: var(--sp-sm);
-}
-
 .inlineCode {
   font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
   font-size: var(--text-xs);
@@ -87,5 +72,9 @@
 @media (max-width: 768px) {
   .principles {
     grid-template-columns: 1fr;
+  }
+
+  .principleCard {
+    padding: var(--sp-sm);
   }
 }

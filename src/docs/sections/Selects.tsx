@@ -1,5 +1,7 @@
 import { MapPin, Users } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Select } from "../../components/Select";
 import selectStyles from "../../components/Select.module.css";
@@ -73,13 +75,13 @@ export function Selects() {
       id="selects"
       title="Selects"
       description="Dropdown customizado com a mesma estrutura visual dos inputs. Suporta label, ícone à esquerda, mensagens de retorno e navegação por teclado."
+      category={getCategoryForPage("selects")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Estados</h3>
-        <p className={s.subsectionDescription}>
-          Mesmos estados visuais do input: placeholder, filled, hover, focused e
-          disabled. O caret rotaciona quando o dropdown está aberto.
-        </p>
+      <SubSection
+        id="estados"
+        title="Estados"
+        description="Mesmos estados visuais do input: placeholder, filled, hover, focused e disabled. O caret rotaciona quando o dropdown está aberto."
+      >
         <div className={s.statesGrid}>
           {states.map((state) => (
             <div key={state} className={s.stateItem}>
@@ -102,13 +104,13 @@ export function Selects() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Mensagens de retorno</h3>
-        <p className={s.subsectionDescription}>
-          Mesmo sistema de mensagens do input: erro, atenção e sucesso.
-        </p>
+      <SubSection
+        id="mensagens-de-retorno"
+        title="Mensagens de retorno"
+        description="Mesmo sistema de mensagens do input: erro, atenção e sucesso."
+      >
         <div className={s.messagesGrid}>
           <div className={s.messageItem}>
             <span className={s.stateLabel}>Error</span>
@@ -142,13 +144,13 @@ export function Selects() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Variações</h3>
-        <p className={s.subsectionDescription}>
-          Com ou sem ícone, com ou sem label.
-        </p>
+      <SubSection
+        id="variacoes"
+        title="Variações"
+        description="Com ou sem ícone, com ou sem label."
+      >
         <div className={s.variationsGrid}>
           <div className={s.variationItem}>
             <span className={s.stateLabel}>Com ícone</span>
@@ -176,11 +178,10 @@ export function Selects() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Com busca</h3>
-        <p className={s.subsectionDescription}>
+      <SubSection id="com-busca" title="Com busca">
+        <p>
           A prop <code>searchable</code> adiciona um campo de busca no topo do
           dropdown, filtrando as opções em tempo real.
         </p>
@@ -206,11 +207,10 @@ export function Selects() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Multi-select</h3>
-        <p className={s.subsectionDescription}>
+      <SubSection id="multi-select" title="Multi-select">
+        <p>
           A prop <code>multiple</code> transforma o select em multi-seleção com
           checkboxes. O dropdown permanece aberto ao selecionar. Combine com{" "}
           <code>searchable</code> para filtrar.
@@ -248,12 +248,11 @@ export function Selects() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

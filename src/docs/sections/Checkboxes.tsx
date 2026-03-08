@@ -1,4 +1,6 @@
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Checkbox } from "../../components/Checkbox";
 import cbStyles from "../../components/Checkbox.module.css";
@@ -26,13 +28,13 @@ export function Checkboxes() {
       id="checkboxes"
       title="Checkboxes"
       description="Dois tamanhos (Small 16px, Medium 20px) com três estados de seleção: vazio, selecionado e indeterminado. Suporta label com descrição opcional."
+      category={getCategoryForPage("checkboxes")}
     >
-      <div>
-        <h3 className={s.subsectionTitle}>Estados — Unchecked</h3>
-        <p className={s.subsectionDescription}>
-          A borda muda de caramel-300 (rest) para caramel-500 (hover) e
-          caramel-700 com anel (focus).
-        </p>
+      <SubSection
+        id="estados-unchecked"
+        title="Estados — Unchecked"
+        description="A borda muda de caramel-300 (rest) para caramel-500 (hover) e caramel-700 com anel (focus)."
+      >
         <div className={s.statesGrid}>
           {states.map((state) => (
             <div key={state} className={s.stateItem}>
@@ -64,13 +66,13 @@ export function Checkboxes() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Estados — Checked</h3>
-        <p className={s.subsectionDescription}>
-          Quando selecionado, o fundo muda para orange-500 com ícone Check branco.
-        </p>
+      <SubSection
+        id="estados-checked"
+        title="Estados — Checked"
+        description="Quando selecionado, o fundo muda para orange-500 com ícone Check branco."
+      >
         <div className={s.statesGrid}>
           {states.map((state) => (
             <div key={state} className={s.stateItem}>
@@ -104,14 +106,13 @@ export function Checkboxes() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Estados — Indeterminate</h3>
-        <p className={s.subsectionDescription}>
-          Estado indeterminado para seleções parciais, com ícone Minus. Mesmo
-          tratamento visual do checked.
-        </p>
+      <SubSection
+        id="estados-indeterminate"
+        title="Estados — Indeterminate"
+        description="Estado indeterminado para seleções parciais, com ícone Minus. Mesmo tratamento visual do checked."
+      >
         <div className={s.statesGrid}>
           {states.map((state) => (
             <div key={state} className={s.stateItem}>
@@ -145,14 +146,13 @@ export function Checkboxes() {
             </div>
           ))}
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Com label</h3>
-        <p className={s.subsectionDescription}>
-          Label com título e descrição opcional. O título alinha verticalmente
-          com o centro do checkbox.
-        </p>
+      <SubSection
+        id="com-label"
+        title="Com label"
+        description="Label com título e descrição opcional. O título alinha verticalmente com o centro do checkbox."
+      >
         <div className={s.labelsGrid}>
           <div className={s.labelItem}>
             <Checkbox
@@ -197,12 +197,11 @@ export function Checkboxes() {
             />
           </div>
         </div>
-      </div>
+      </SubSection>
 
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

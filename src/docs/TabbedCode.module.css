@@ -1,0 +1,41 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.tabBar {
+  display: flex;
+  gap: var(--sp-3xs);
+  padding: var(--sp-2xs) var(--sp-sm);
+  background-color: var(--color-neutral-950);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tab {
+  padding: var(--sp-3xs) var(--sp-2xs);
+  border: none;
+  border-radius: var(--radius-2xs);
+  background: transparent;
+  font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.tab:hover {
+  color: var(--color-neutral-300);
+}
+
+.tabActive {
+  background-color: var(--color-neutral-800);
+  color: var(--color-neutral-200);
+}
+
+/* Remove CodeSnippet's own border-radius when inside tabbed wrapper */
+.wrapper > div {
+  border-radius: 0;
+}

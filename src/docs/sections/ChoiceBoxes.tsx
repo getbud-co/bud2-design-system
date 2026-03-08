@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { DocSection } from "../DocSection";
+import { SubSection } from "../SubSection";
+import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { ChoiceBoxGroup, ChoiceBox } from "../../components/ChoiceBox";
 import choiceBoxStyles from "../../components/ChoiceBox.module.css";
@@ -59,14 +61,14 @@ export function ChoiceBoxes() {
       id="choice-boxes"
       title="Choice Boxes"
       description="Card selecionável com indicador radio ou checkbox, título, descrição e link opcional. Alternativa visual mais rica ao radio/checkbox, ideal para escolhas com contexto adicional."
+      category={getCategoryForPage("choice-boxes")}
     >
       {/* States — Unchecked */}
-      <div>
-        <h3 className={s.subsectionTitle}>Estados — Não selecionado</h3>
-        <p className={s.subsectionDescription}>
-          Border caramel-200 (rest), caramel-500 + bg caramel-50 (hover),
-          caramel-700 com anel (focus). Radio segue o mesmo padrão.
-        </p>
+      <SubSection
+        id="estados-nao-selecionado"
+        title="Estados — Não selecionado"
+        description="Border caramel-200 (rest), caramel-500 + bg caramel-50 (hover), caramel-700 com anel (focus). Radio segue o mesmo padrão."
+      >
         <div className={s.statesGrid}>
           <div className={s.stateItem}>
             <span className={s.stateLabel}>Default</span>
@@ -112,15 +114,14 @@ export function ChoiceBoxes() {
             </ChoiceBoxGroup>
           </div>
         </div>
-      </div>
+      </SubSection>
 
       {/* States — Checked */}
-      <div>
-        <h3 className={s.subsectionTitle}>Estados — Selecionado</h3>
-        <p className={s.subsectionDescription}>
-          Border orange-500 quando selecionado. Radio com fundo orange-500 e dot
-          branco.
-        </p>
+      <SubSection
+        id="estados-selecionado"
+        title="Estados — Selecionado"
+        description="Border orange-500 quando selecionado. Radio com fundo orange-500 e dot branco."
+      >
         <div className={s.statesGrid}>
           <div className={s.stateItem}>
             <span className={s.stateLabel}>Selected</span>
@@ -166,15 +167,14 @@ export function ChoiceBoxes() {
             </ChoiceBoxGroup>
           </div>
         </div>
-      </div>
+      </SubSection>
 
       {/* With link */}
-      <div>
-        <h3 className={s.subsectionTitle}>Com link</h3>
-        <p className={s.subsectionDescription}>
-          Link opcional abaixo do texto, alinhado ao conteúdo. O click no link
-          não seleciona o card.
-        </p>
+      <SubSection
+        id="com-link"
+        title="Com link"
+        description="Link opcional abaixo do texto, alinhado ao conteúdo. O click no link não seleciona o card."
+      >
         <div className={s.statesGrid}>
           <div className={s.stateItem}>
             <ChoiceBoxGroup name="link-demo" defaultValue="starter">
@@ -198,15 +198,14 @@ export function ChoiceBoxes() {
             </ChoiceBoxGroup>
           </div>
         </div>
-      </div>
+      </SubSection>
 
       {/* Interactive example */}
-      <div>
-        <h3 className={s.subsectionTitle}>Exemplo interativo</h3>
-        <p className={s.subsectionDescription}>
-          Grupo controlado com seleção única. Clique em qualquer card para
-          selecionar.
-        </p>
+      <SubSection
+        id="exemplo-interativo"
+        title="Exemplo interativo"
+        description="Grupo controlado com seleção única. Clique em qualquer card para selecionar."
+      >
         <div className={s.exampleGrid}>
           <ChoiceBoxGroup
             label="Escolha um plano"
@@ -234,14 +233,14 @@ export function ChoiceBoxes() {
             />
           </ChoiceBoxGroup>
         </div>
-      </div>
+      </SubSection>
 
       {/* Disabled group */}
-      <div>
-        <h3 className={s.subsectionTitle}>Grupo desabilitado</h3>
-        <p className={s.subsectionDescription}>
-          Propriedade disabled no grupo desabilita todos os cards.
-        </p>
+      <SubSection
+        id="grupo-desabilitado"
+        title="Grupo desabilitado"
+        description="Propriedade disabled no grupo desabilita todos os cards."
+      >
         <div className={s.exampleGrid}>
           <ChoiceBoxGroup
             label="Frequência de check-in"
@@ -261,14 +260,13 @@ export function ChoiceBoxes() {
             />
           </ChoiceBoxGroup>
         </div>
-      </div>
+      </SubSection>
 
       {/* ——— Multiple choice section ——— */}
 
       {/* Multiple — States */}
-      <div>
-        <h3 className={s.subsectionTitle}>Múltipla escolha — Estados</h3>
-        <p className={s.subsectionDescription}>
+      <SubSection id="multipla-escolha-estados" title="Múltipla escolha — Estados">
+        <p>
           Com <code>multiple</code>, o indicador muda de radio (circle) para
           checkbox (square + ícone Check). Os estados visuais seguem o mesmo
           padrão de cores.
@@ -317,12 +315,11 @@ export function ChoiceBoxes() {
             </ChoiceBoxGroup>
           </div>
         </div>
-      </div>
+      </SubSection>
 
       {/* Multiple — Interactive */}
-      <div>
-        <h3 className={s.subsectionTitle}>Múltipla escolha — Exemplo interativo</h3>
-        <p className={s.subsectionDescription}>
+      <SubSection id="multipla-escolha-exemplo-interativo" title="Múltipla escolha — Exemplo interativo">
+        <p>
           Grupo controlado com <code>multiple</code>. Vários cards podem ser
           selecionados simultaneamente.
         </p>
@@ -356,13 +353,12 @@ export function ChoiceBoxes() {
             />
           </ChoiceBoxGroup>
         </div>
-      </div>
+      </SubSection>
 
       {/* Usage */}
-      <div>
-        <h3 className={s.subsectionTitle}>Como usar</h3>
+      <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
-      </div>
+      </SubSection>
     </DocSection>
   );
 }

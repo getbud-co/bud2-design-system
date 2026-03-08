@@ -72,11 +72,3 @@
 .tableSection {
   margin-top: var(--sp-sm);
 }
-
-.subsectionTitle {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: var(--text-md);
-  color: var(--color-neutral-800);
-  margin-bottom: var(--sp-sm);
-}

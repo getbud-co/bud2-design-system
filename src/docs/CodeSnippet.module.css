@@ -2,6 +2,7 @@
   position: relative;
   border-radius: var(--radius-md);
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .pre {
@@ -57,5 +58,16 @@
 @media (max-width: 768px) {
   .pre {
     padding: var(--sp-sm) var(--sp-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .pre {
+    padding: var(--sp-xs) var(--sp-2xs);
+    font-size: 11px;
+  }
+
+  .lang {
+    display: none;
   }
 }
