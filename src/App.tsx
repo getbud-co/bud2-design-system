@@ -16,6 +16,7 @@ import { Textareas } from "./docs/sections/Textareas";
 import { Selects } from "./docs/sections/Selects";
 import { DatePickers } from "./docs/sections/DatePickers";
 import { DropdownButtons } from "./docs/sections/DropdownButtons";
+import { FilterBars } from "./docs/sections/FilterBars";
 import { Checkboxes } from "./docs/sections/Checkboxes";
 import { Radios } from "./docs/sections/Radios";
 import { ChoiceBoxes } from "./docs/sections/ChoiceBoxes";
@@ -55,6 +56,7 @@ const SECTIONS: Record<string, React.ComponentType> = {
   "textareas": Textareas,
   "selects": Selects,
   "date-picker": DatePickers,
+  "filter-bar": FilterBars,
   "checkboxes": Checkboxes,
   "radios": Radios,
   "choice-boxes": ChoiceBoxes,

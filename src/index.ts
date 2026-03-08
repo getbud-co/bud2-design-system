@@ -16,6 +16,7 @@ export { Checkbox } from "./components/Checkbox";
 export { ChoiceBoxGroup, ChoiceBox } from "./components/ChoiceBox";
 export { DatePicker } from "./components/DatePicker";
 export { DropdownButton } from "./components/DropdownButton";
+export { FilterBar, FilterChip, FilterDropdown } from "./components/FilterBar";
 export { GoalProgressBar, GoalGaugeBar } from "./components/GoalProgress";
 export { Input } from "./components/Input";
 export { Modal, ModalHeader, ModalBody, ModalFooter } from "./components/Modal";
@@ -46,6 +47,7 @@ export type { AvatarLabelGroupSize } from "./components/AvatarLabelGroup";
 export type { BreadcrumbItem } from "./components/Breadcrumb";
 export type { DatePickerProps } from "./components/DatePicker";
 export type { DropdownItem } from "./components/DropdownButton";
+export type { FilterOption } from "./components/FilterBar";
 export type { PopoverItem } from "./components/Popover";
 export type { SelectOption } from "./components/Select";
 

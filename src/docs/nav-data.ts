@@ -53,6 +53,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { id: "checkboxes", label: "Checkboxes" },
       { id: "choice-boxes", label: "Choice Boxes" },
       { id: "date-picker", label: "Date Picker" },
+      { id: "filter-bar", label: "Filter Bar" },
       { id: "inputs", label: "Inputs" },
       { id: "radios", label: "Radio Buttons" },
       { id: "selects", label: "Selects" },

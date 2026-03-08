@@ -1,0 +1,251 @@
+/* ——— Demo containers ——— */
+
+.demoCard {
+  padding: var(--sp-lg);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-sm);
+}
+
+.stateLabel {
+  font-size: 11px;
+  color: var(--color-neutral-500);
+  font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+}
+
+.hint {
+  margin-top: var(--sp-2xs);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-500);
+  line-height: 1.4;
+}
+
+/* ——— Dropdown filter helpers (used in demo popovers) ——— */
+
+.dropdownSearch {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  padding: var(--sp-2xs) var(--sp-xs);
+  border-bottom: 1px solid var(--color-caramel-200);
+}
+
+.dropdownSearchIcon {
+  flex-shrink: 0;
+  color: var(--color-neutral-400);
+}
+
+.dropdownSearchInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-950);
+  line-height: normal;
+}
+
+.dropdownSearchInput::placeholder {
+  color: var(--color-neutral-400);
+}
+
+.dropdownBody {
+  padding: var(--sp-3xs);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.dropdownCheckItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  padding: var(--sp-3xs) var(--sp-2xs);
+  border-radius: var(--radius-2xs);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.dropdownCheckItem:hover {
+  background-color: var(--color-caramel-100);
+}
+
+.dropdownCheckLabel {
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-800);
+  white-space: nowrap;
+}
+
+.dropdownDot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.dropdownEmpty {
+  padding: var(--sp-sm) var(--sp-xs);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-400);
+  text-align: center;
+}
+
+/* ——— DatePicker embedded in dropdown ——— */
+
+.dateFilterBody {
+  padding: var(--sp-3xs);
+}
+
+/* Remove the wrapper border/shadow from embedded DatePicker */
+.dateFilterBody > div {
+  width: 100%;
+}
+
+/* ——— Anatomy section ——— */
+
+.anatomyGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-lg);
+}
+
+.anatomyItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+}
+
+.anatomyDesc {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-600);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.anatomyDesc code {
+  font-size: 11px;
+  background-color: var(--color-caramel-100);
+  padding: 1px var(--sp-3xs);
+  border-radius: var(--radius-2xs);
+}
+
+/* ——— Save view modal ——— */
+
+.saveModalContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-lg);
+}
+
+.saveFiltersSummary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+}
+
+.saveFiltersTitle {
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-950);
+  line-height: 1.05;
+}
+
+.saveFiltersList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+}
+
+.saveFilterItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  padding: var(--sp-xs) var(--sp-xs);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  border-bottom: 1px solid var(--color-caramel-200);
+}
+
+.saveFilterItem:last-child {
+  border-bottom: none;
+}
+
+.saveFilterIcon {
+  flex-shrink: 0;
+  color: var(--color-neutral-400);
+}
+
+.saveFilterName {
+  color: var(--color-neutral-600);
+  white-space: nowrap;
+}
+
+.saveFilterValue {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+  color: var(--color-neutral-950);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .anatomyGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .demoCard {
+    padding: var(--sp-sm);
+  }
+
+  .dropdownSearch {
+    padding: var(--sp-xs) var(--sp-sm);
+  }
+
+  .dropdownSearchInput {
+    font-size: 16px; /* prevent iOS zoom */
+  }
+
+  .dropdownBody {
+    padding: var(--sp-2xs);
+    max-height: none;
+  }
+
+  .dropdownCheckItem {
+    min-height: 44px;
+    padding: var(--sp-xs) var(--sp-xs);
+    gap: var(--sp-xs);
+  }
+
+  .dropdownCheckLabel {
+    font-size: var(--text-sm);
+  }
+
+  .dropdownEmpty {
+    padding: var(--sp-lg) var(--sp-sm);
+    font-size: var(--text-sm);
+  }
+
+  .dateFilterBody {
+    padding: var(--sp-2xs);
+  }
+}

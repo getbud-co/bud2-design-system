@@ -1,0 +1,611 @@
+/* ——— FilterBar layout ——— */
+
+.bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-xs);
+  min-height: 32px;
+}
+
+/* ——— Left: filters area ——— */
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+/* ——— Right: actions area ——— */
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  flex-shrink: 0;
+}
+
+/* ——— Add-filter trigger ——— */
+
+.addTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+  min-height: 28px;
+  padding: var(--sp-3xs) var(--sp-2xs);
+  padding-left: var(--sp-3xs); /* optical adjust: icon side */
+  background-color: transparent;
+  border: 1px dashed var(--color-caramel-300);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  line-height: 1.05;
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.addTrigger:hover {
+  background-color: var(--color-caramel-100);
+  border-color: var(--color-caramel-500);
+  color: var(--color-neutral-800);
+}
+
+.addTrigger.addOpen {
+  background-color: var(--color-caramel-100);
+  border-color: var(--color-caramel-500);
+  color: var(--color-neutral-800);
+}
+
+.addTrigger:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 2px;
+}
+
+/* ——— Action button: ghost style for clear/save ——— */
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+  min-height: 28px;
+  padding: var(--sp-3xs) var(--sp-2xs);
+  padding-left: var(--sp-3xs);
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  line-height: 1.05;
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.actionBtn:hover {
+  background-color: var(--color-caramel-100);
+  color: var(--color-neutral-800);
+}
+
+.actionBtn:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 2px;
+}
+
+.actionLabel {
+  /* hidden on mobile via media query */
+}
+
+/* ——— Overlay (behind bottom sheets on mobile) ——— */
+
+.overlay {
+  display: none;
+}
+
+/* ——— Bottom sheet handle ——— */
+
+.sheetHandle {
+  display: none;
+}
+
+/* ——— Add-filter popover ——— */
+
+.addPopover {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-md);
+  z-index: 9200;
+  overflow: hidden;
+  min-width: 200px;
+  max-width: 280px;
+  animation: filterPopoverIn 150ms ease both;
+  transform-origin: top left;
+}
+
+@keyframes filterPopoverIn {
+  from {
+    opacity: 0;
+    transform: scaleY(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.addSearchBox {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  padding: var(--sp-2xs) var(--sp-xs);
+  border-bottom: 1px solid var(--color-caramel-200);
+}
+
+.addSearchIcon {
+  flex-shrink: 0;
+  color: var(--color-neutral-400);
+}
+
+.addSearchInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-950);
+  line-height: normal;
+}
+
+.addSearchInput::placeholder {
+  color: var(--color-neutral-400);
+}
+
+.addList {
+  list-style: none;
+  margin: 0;
+  padding: var(--sp-3xs);
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.addItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  width: 100%;
+  padding: var(--sp-2xs) var(--sp-2xs);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-2xs);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-800);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 120ms ease;
+  text-align: left;
+}
+
+.addItem:hover,
+.addItem.addItemFocused {
+  background-color: var(--color-caramel-100);
+}
+
+.addItemIcon {
+  flex-shrink: 0;
+  color: var(--color-neutral-500);
+}
+
+.addEmpty {
+  padding: var(--sp-sm) var(--sp-xs);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-400);
+  text-align: center;
+}
+
+/* ——— FilterChip ——— */
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+  min-height: 28px;
+  padding: var(--sp-3xs) var(--sp-2xs);
+  background-color: var(--color-caramel-100);
+  border: 1px solid var(--color-caramel-300);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  line-height: 1.05;
+  color: var(--color-neutral-950);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.chip:hover {
+  background-color: var(--color-caramel-200);
+  border-color: var(--color-caramel-400);
+}
+
+.chip.chipActive {
+  border-color: var(--color-caramel-700);
+  box-shadow: 0 0 0 2px var(--color-caramel-200);
+}
+
+.chip:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 2px;
+}
+
+.chipIcon {
+  flex-shrink: 0;
+  color: var(--color-neutral-500);
+}
+
+.chipLabel {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chipRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin-left: var(--sp-3xs);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-2xs);
+  color: var(--color-neutral-400);
+  cursor: pointer;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.chipRemove:hover {
+  background-color: var(--color-caramel-300);
+  color: var(--color-neutral-700);
+}
+
+.chipRemove:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 1px;
+}
+
+/* ——— Separator between chips and actions ——— */
+
+.separator {
+  width: 1px;
+  height: 16px;
+  background-color: var(--color-caramel-300);
+  flex-shrink: 0;
+}
+
+/* ——— FilterDropdown ——— */
+
+.dropdown {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-md);
+  z-index: 9200;
+  overflow: hidden;
+  min-width: 220px;
+  animation: filterPopoverIn 150ms ease both;
+  transform-origin: top left;
+}
+
+.dropdownSearch {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  padding: var(--sp-2xs) var(--sp-xs);
+  border-bottom: 1px solid var(--color-caramel-200);
+}
+
+.dropdownSearchIcon {
+  flex-shrink: 0;
+  color: var(--color-neutral-400);
+}
+
+.dropdownSearchInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-950);
+  line-height: normal;
+}
+
+.dropdownSearchInput::placeholder {
+  color: var(--color-neutral-400);
+}
+
+.dropdownBody {
+  padding: var(--sp-3xs);
+  max-height: 260px;
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  width: 100%;
+  padding: var(--sp-2xs) var(--sp-2xs);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-2xs);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-800);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 120ms ease;
+  text-align: left;
+}
+
+.dropdownItem:hover {
+  background-color: var(--color-caramel-100);
+}
+
+.dropdownDot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.dropdownFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--sp-2xs);
+  padding: var(--sp-2xs) var(--sp-xs);
+  border-top: 1px solid var(--color-caramel-200);
+}
+
+.dropdownEmpty {
+  padding: var(--sp-sm) var(--sp-xs);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-400);
+  text-align: center;
+}
+
+/* ============================================================
+   MOBILE — Bottom sheet pattern
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+  /* ——— Bar: stack, chips scroll horizontal ——— */
+
+  .bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--sp-2xs);
+  }
+
+  .filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px; /* prevent clipping of focus ring */
+  }
+
+  .filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chip {
+    flex-shrink: 0;
+    min-height: 36px;
+    padding: var(--sp-2xs) var(--sp-xs);
+    font-size: var(--text-sm);
+  }
+
+  .chipRemove {
+    width: 24px;
+    height: 24px;
+  }
+
+  .addTrigger {
+    flex-shrink: 0;
+    min-height: 36px;
+    padding: var(--sp-2xs) var(--sp-xs);
+    padding-left: var(--sp-2xs);
+    font-size: var(--text-sm);
+  }
+
+  /* ——— Actions: compact row, labels hidden ——— */
+
+  .actions {
+    width: 100%;
+    justify-content: flex-end;
+    gap: var(--sp-2xs);
+  }
+
+  .actionBtn {
+    min-height: 36px;
+    padding: var(--sp-2xs) var(--sp-xs);
+    padding-left: var(--sp-2xs);
+    font-size: var(--text-sm);
+  }
+
+  .actionLabel {
+    display: none;
+  }
+
+  .separator {
+    display: none;
+  }
+
+  /* ——— Overlay backdrop ——— */
+
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.35);
+    z-index: 9199;
+    animation: overlayIn 200ms ease both;
+  }
+
+  @keyframes overlayIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ——— Bottom sheet handle ——— */
+
+  .sheetHandle {
+    display: flex;
+    justify-content: center;
+    padding: var(--sp-2xs) 0 var(--sp-3xs);
+  }
+
+  .sheetHandle::after {
+    content: "";
+    width: 32px;
+    height: 4px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-caramel-300);
+  }
+
+  /* ——— Add-filter popover → bottom sheet ——— */
+
+  .addPopover {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    min-width: 100%;
+    max-width: 100%;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    border-bottom: none;
+    box-shadow: var(--shadow-xl);
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    animation: sheetIn 250ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    transform-origin: bottom center;
+  }
+
+  @keyframes sheetIn {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .addSearchBox {
+    padding: var(--sp-xs) var(--sp-sm);
+  }
+
+  .addSearchInput {
+    font-size: 16px; /* prevent iOS zoom */
+  }
+
+  .addList {
+    padding: var(--sp-2xs) var(--sp-2xs);
+    max-height: none;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .addItem {
+    min-height: 44px; /* Apple HIG touch target */
+    padding: var(--sp-xs) var(--sp-xs);
+    font-size: var(--text-sm);
+    gap: var(--sp-xs);
+  }
+
+  .addItemIcon {
+    color: var(--color-neutral-600);
+  }
+
+  .addEmpty {
+    padding: var(--sp-lg) var(--sp-sm);
+    font-size: var(--text-sm);
+  }
+
+  /* ——— FilterDropdown → bottom sheet ——— */
+
+  .dropdown {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    min-width: 100%;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    border-bottom: none;
+    box-shadow: var(--shadow-xl);
+    max-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    animation: sheetIn 250ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    transform-origin: bottom center;
+  }
+
+  .dropdownSearch {
+    padding: var(--sp-xs) var(--sp-sm);
+  }
+
+  .dropdownSearchInput {
+    font-size: 16px; /* prevent iOS zoom */
+  }
+
+  .dropdownBody {
+    padding: var(--sp-2xs);
+    max-height: none;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dropdownItem {
+    min-height: 44px;
+    padding: var(--sp-xs);
+    font-size: var(--text-sm);
+  }
+
+  .dropdownEmpty {
+    padding: var(--sp-lg) var(--sp-sm);
+    font-size: var(--text-sm);
+  }
+}
