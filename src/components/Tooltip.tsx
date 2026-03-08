@@ -41,7 +41,7 @@ export function Tooltip({
   const wrapperRef = useRef<HTMLSpanElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const arrowRef = useRef<HTMLSpanElement>(null);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const [visible, setVisible] = useState(false);
   const [resolvedPlacement, setResolvedPlacement] = useState(placement);

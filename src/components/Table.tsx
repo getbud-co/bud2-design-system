@@ -3,7 +3,6 @@ import {
   type HTMLAttributes,
   type ThHTMLAttributes,
   type TdHTMLAttributes,
-  type ComponentType,
   createContext,
   useContext,
   useCallback,
@@ -153,7 +152,7 @@ interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
 }
 
 export function TableRow({ rowId, children, className, ...rest }: TableRowProps) {
-  const { variant, selectable, selectedRows } = useContext(TableContext);
+  const { variant, selectedRows } = useContext(TableContext);
   const isSelected = rowId ? selectedRows.has(rowId) : false;
 
   const classes = [
