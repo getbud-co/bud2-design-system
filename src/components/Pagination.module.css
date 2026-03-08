@@ -1,0 +1,151 @@
+/* ——— Root ——— */
+
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-xs);
+}
+
+/* ——— Prev / Next wrappers ——— */
+
+.prev {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.next {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* ——— Prev / Next buttons ——— */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  background: var(--color-caramel-100);
+  border: 1px solid var(--color-caramel-300);
+  border-radius: var(--radius-xs);
+  padding: var(--sp-2xs);
+  min-height: 34px;
+  min-width: 44px;
+  justify-content: center;
+  font-family: var(--font-label);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-950);
+  cursor: pointer;
+  line-height: 1.05;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.button:hover:not(:disabled) {
+  background: var(--color-caramel-200);
+  border-color: var(--color-caramel-500);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.buttonLabel {
+  display: inline;
+}
+
+/* ——— Page numbers ——— */
+
+.numbers {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 34px;
+  padding: var(--sp-2xs);
+  border: none;
+  background: none;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-label);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-950);
+  cursor: pointer;
+  line-height: 1.05;
+  transition: background-color 120ms ease;
+}
+
+.number:hover {
+  background: var(--color-caramel-50);
+}
+
+.number:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 2px;
+}
+
+.numberActive {
+  background: var(--color-caramel-100);
+  font-weight: 600;
+}
+
+/* ——— Ellipsis ——— */
+
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 34px;
+  font-family: var(--font-label);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-500);
+}
+
+/* ——— Mobile label ——— */
+
+.mobileLabel {
+  display: none;
+  font-family: var(--font-label);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-700);
+  line-height: 1.05;
+}
+
+/* ——— Responsive ——— */
+
+@media (max-width: 640px) {
+  .numbers {
+    display: none;
+  }
+
+  .mobileLabel {
+    display: inline;
+  }
+
+  .buttonLabel {
+    display: none;
+  }
+
+  .prev,
+  .next {
+    flex: 0;
+  }
+}

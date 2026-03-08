@@ -26,7 +26,9 @@ import { Modals } from "./docs/sections/Modals";
 import { Toasts } from "./docs/sections/Toasts";
 import { GoalProgress } from "./docs/sections/GoalProgress";
 import { Charts } from "./docs/sections/Charts";
+import { Paginations } from "./docs/sections/Paginations";
 import { Popovers } from "./docs/sections/Popovers";
+import { Tables } from "./docs/sections/Tables";
 import { AiAssistantSection } from "./docs/sections/AiAssistant";
 import { Toaster } from "./components/Toast";
 import s from "./App.module.css";
@@ -56,7 +58,9 @@ const SECTIONS: Record<string, React.ComponentType> = {
   "toasts": Toasts,
   "goal-progress": GoalProgress,
   "charts": Charts,
+  "pagination": Paginations,
   "popovers": Popovers,
+  "tables": Tables,
   "ai-assistant": AiAssistantSection,
 };
 

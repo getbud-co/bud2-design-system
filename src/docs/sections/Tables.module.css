@@ -1,0 +1,79 @@
+.subsectionTitle {
+  font-family: var(--font-heading);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-neutral-900);
+  margin: 0 0 var(--sp-3xs);
+}
+
+.subsectionDescription {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-500);
+  margin: 0 0 var(--sp-sm);
+  line-height: 1.5;
+}
+
+/* Avatar cell layout */
+.avatarCell {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+}
+
+.avatarCellText {
+  display: flex;
+  flex-direction: column;
+}
+
+.avatarCellName {
+  font-family: var(--font-label);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-neutral-950);
+  line-height: 1.05;
+}
+
+.avatarCellHandle {
+  font-family: var(--font-label);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-500);
+  line-height: 1.05;
+}
+
+/* Team badges row */
+.teamBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3xs);
+}
+
+/* Bold text in cells */
+.boldText {
+  font-weight: 600;
+  color: var(--color-neutral-950);
+}
+
+/* Menu button in card header */
+.menuButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: var(--sp-3xs);
+  cursor: pointer;
+  color: var(--color-neutral-500);
+  border-radius: var(--radius-2xs);
+  transition: color 120ms ease;
+}
+
+.menuButton:hover {
+  color: var(--color-neutral-700);
+}
+
+.menuButton:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 2px;
+}

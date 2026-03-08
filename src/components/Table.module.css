@@ -1,0 +1,184 @@
+/* ——— Root card wrapper ——— */
+
+.root {
+  background: var(--color-neutral-0);
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+/* ——— Card Header ——— */
+
+.cardHeader {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardHeaderContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+  padding: var(--sp-md) var(--sp-lg);
+}
+
+.cardHeaderTextBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+}
+
+.cardHeaderTitle {
+  font-family: var(--font-heading);
+  font-size: var(--text-md);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--color-neutral-950);
+  margin: 0;
+}
+
+.cardHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+}
+
+.cardHeaderDivider {
+  height: 1px;
+  background: var(--color-caramel-200);
+}
+
+/* ——— Scroll wrapper ——— */
+
+.scrollWrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scrollWrapper:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: -2px;
+}
+
+/* ——— Table ——— */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-label);
+  font-size: var(--text-sm);
+  line-height: 1.05;
+}
+
+/* ——— Header cells ——— */
+
+.th {
+  background: var(--color-neutral-50);
+  border-bottom: 1px solid var(--color-caramel-200);
+  padding: var(--sp-xs) var(--sp-lg);
+  text-align: left;
+  font-family: var(--font-label);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-neutral-600);
+  line-height: 1.05;
+  white-space: nowrap;
+  height: 44px;
+  vertical-align: middle;
+}
+
+.thCheckbox {
+  width: 44px;
+  padding: var(--sp-xs) var(--sp-sm) var(--sp-xs) var(--sp-lg);
+}
+
+/* ——— Sort button ——— */
+
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+
+.sortButton:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 2px;
+  border-radius: var(--radius-2xs);
+}
+
+.sortIconIdle {
+  opacity: 0.35;
+}
+
+/* ——— Body rows ——— */
+
+.row {
+  transition: background-color 120ms ease;
+}
+
+/* Divider variant (default) */
+.row > .td {
+  border-bottom: 1px solid var(--color-caramel-200);
+}
+
+/* Striped variant */
+.row.striped:nth-child(even) {
+  background: var(--color-caramel-50);
+}
+
+/* Selected row */
+.row.selected {
+  background: var(--color-caramel-100);
+}
+
+/* Hover */
+.row:hover {
+  background: var(--color-caramel-50);
+}
+
+.row.selected:hover {
+  background: var(--color-caramel-100);
+}
+
+/* ——— Data cells ——— */
+
+.td {
+  padding: var(--sp-sm) var(--sp-lg);
+  vertical-align: middle;
+  height: 72px;
+  color: var(--color-neutral-500);
+  font-weight: 600;
+}
+
+.tdCheckbox {
+  width: 44px;
+  padding: var(--sp-sm) var(--sp-sm) var(--sp-sm) var(--sp-lg);
+}
+
+/* ——— Pagination (inside table) ——— */
+
+.pagination {
+  padding: var(--sp-xs) var(--sp-lg) var(--sp-sm);
+  border-top: 1px solid var(--color-caramel-200);
+}
+
+/* ——— Responsive ——— */
+
+@media (max-width: 640px) {
+  .cardHeaderContent {
+    padding: var(--sp-md) var(--sp-sm);
+  }
+
+  .pagination {
+    padding: var(--sp-xs) var(--sp-sm) var(--sp-sm);
+  }
+}
