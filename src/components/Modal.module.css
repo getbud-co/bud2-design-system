@@ -122,8 +122,15 @@
 
 .headerTop {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--sp-sm);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+  flex-shrink: 0;
 }
 
 .headerText {
