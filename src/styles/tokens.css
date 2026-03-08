@@ -91,6 +91,13 @@
   --color-yellow-900: #7b3306;
   --color-yellow-950: #461901;
 
+  /* ——— Colors: Chart palette ——— */
+  --color-chart-1: var(--color-orange-600);
+  --color-chart-2: var(--color-neutral-800);
+  --color-chart-3: var(--color-neutral-400);
+  --color-chart-4: var(--color-wine-600);
+  --color-chart-5: var(--color-caramel-900);
+
   /* ——— Colors: Base ——— */
   --color-white: #ffffff;
 

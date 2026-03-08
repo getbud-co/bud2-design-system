@@ -1,4 +1,92 @@
-/* ——— States grid ——— */
+/* ——— Palette grid ——— */
+
+.paletteGrid {
+  display: flex;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+}
+
+.paletteItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3xs);
+}
+
+.paletteSwatch {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-caramel-200);
+}
+
+.paletteToken {
+  font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+  font-size: 11px;
+  color: var(--color-neutral-700);
+}
+
+.paletteHex {
+  font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+  font-size: 11px;
+  color: var(--color-neutral-400);
+}
+
+/* ——— Chart frame ——— */
+
+.chartFrame {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-sm);
+  padding: var(--sp-lg);
+}
+
+/* ——— Legend ——— */
+
+.legend {
+  display: flex;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-sm);
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.legendLabel {
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+  line-height: 1.05;
+}
+
+/* ——— Pie wrapper ——— */
+
+.pieWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xl);
+  flex-wrap: wrap;
+}
+
+.pieWrapper .legend {
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+/* ——— States grid (gauge) ——— */
+
 .statesGrid {
   display: flex;
   gap: var(--sp-2xl);
@@ -19,6 +107,7 @@
 }
 
 /* ——— Interactive controls ——— */
+
 .controls {
   display: flex;
   flex-direction: column;
@@ -70,6 +159,8 @@
   border-radius: var(--radius-sm);
 }
 
+/* ——— Responsive ——— */
+
 @media (max-width: 768px) {
   .statesGrid {
     flex-direction: row;
@@ -80,6 +171,15 @@
   .interactiveRow {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .pieWrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .pieWrapper .legend {
+    flex-direction: row;
   }
 }
 

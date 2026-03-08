@@ -11,6 +11,7 @@ export { Breadcrumb } from "./components/Breadcrumb";
 export { Button } from "./components/Button";
 export { Card, CardHeader, CardBody, CardFooter, CardDivider } from "./components/Card";
 export { Chart } from "./components/Chart";
+export { ChartTooltipContent } from "./components/ChartTooltip";
 export { Checkbox } from "./components/Checkbox";
 export { ChoiceBoxGroup, ChoiceBox } from "./components/ChoiceBox";
 export { DatePicker } from "./components/DatePicker";
