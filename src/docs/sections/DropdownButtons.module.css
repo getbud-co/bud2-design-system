@@ -1,0 +1,134 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--sp-sm);
+}
+
+.labeledItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+}
+
+.label {
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ——— Comparison table ——— */
+
+.comparisonTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  padding: var(--sp-xs) var(--sp-sm);
+  text-align: left;
+  border-bottom: 1px solid var(--color-caramel-200);
+}
+
+.comparisonTable th {
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background-color: var(--color-caramel-50);
+}
+
+.comparisonTable td {
+  color: var(--color-neutral-700);
+  line-height: 1.5;
+}
+
+.comparisonTable tr:last-child td {
+  border-bottom: none;
+}
+
+.comparisonTable td:first-child {
+  font-family: var(--font-label);
+  font-weight: 500;
+  color: var(--color-neutral-950);
+  white-space: nowrap;
+}
+
+.comparisonExamples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-lg);
+  margin-top: var(--sp-sm);
+}
+
+.comparisonCard {
+  flex: 1;
+  min-width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+  padding: var(--sp-sm);
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-xs);
+  background-color: var(--color-caramel-50);
+}
+
+.comparisonCardTitle {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-950);
+}
+
+.comparisonCardDesc {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.comparisonCardUse {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3xs);
+}
+
+.comparisonCardUse li {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-700);
+  line-height: 1.4;
+  padding-left: var(--sp-sm);
+  position: relative;
+}
+
+.comparisonCardUse li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--color-neutral-400);
+}
+
+@media (max-width: 480px) {
+  .comparisonExamples {
+    flex-direction: column;
+  }
+
+  .comparisonTable th,
+  .comparisonTable td {
+    padding: var(--sp-2xs) var(--sp-xs);
+    font-size: var(--text-xs);
+  }
+}

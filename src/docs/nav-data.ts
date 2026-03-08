@@ -49,6 +49,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "Formulários",
     items: [
       { id: "botoes", label: "Botões" },
+      { id: "dropdown-buttons", label: "Dropdown Buttons" },
       { id: "checkboxes", label: "Checkboxes" },
       { id: "choice-boxes", label: "Choice Boxes" },
       { id: "date-picker", label: "Date Picker" },
@@ -65,10 +66,12 @@ export const NAV_GROUPS: NavGroup[] = [
       { id: "avatars", label: "Avatars" },
       { id: "badges", label: "Badges" },
       { id: "breadcrumbs", label: "Breadcrumbs" },
+      { id: "cards", label: "Cards" },
       { id: "charts", label: "Charts" },
       { id: "goal-progress", label: "Goal Progress" },
       { id: "pagination", label: "Pagination" },
       { id: "popovers", label: "Popovers" },
+      { id: "sidebars", label: "Sidebar" },
       { id: "tables", label: "Tables" },
       { id: "tooltips", label: "Tooltips" },
     ],
@@ -76,6 +79,7 @@ export const NAV_GROUPS: NavGroup[] = [
   {
     label: "Feedback",
     items: [
+      { id: "alerts", label: "Alerts" },
       { id: "modals", label: "Modals" },
       { id: "toasts", label: "Toasts" },
     ],

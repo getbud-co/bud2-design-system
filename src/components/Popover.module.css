@@ -27,13 +27,14 @@
   align-items: center;
   gap: var(--sp-2xs);
   width: 100%;
+  min-height: 32px;
   padding: var(--sp-2xs) var(--sp-xs);
   border: none;
   background: transparent;
   border-radius: var(--radius-2xs);
   font-family: var(--font-label);
   font-weight: 500;
-  font-size: var(--text-xs);
+  font-size: var(--text-sm);
   color: var(--color-neutral-800);
   cursor: pointer;
   white-space: nowrap;
@@ -42,6 +43,18 @@
 
 .item:hover {
   background-color: var(--color-caramel-100);
+}
+
+.itemDanger {
+  color: var(--color-red-700);
+}
+
+.itemDanger .itemIcon {
+  color: var(--color-red-700);
+}
+
+.itemDanger:hover {
+  background-color: var(--color-red-50);
 }
 
 .itemIcon {

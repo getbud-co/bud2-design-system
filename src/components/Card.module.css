@@ -1,0 +1,139 @@
+/* ——— Card Root ——— */
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.shadow {
+  box-shadow: var(--shadow-xs);
+}
+
+/* ——— Padding variants ——— */
+
+.padding-sm {
+  --card-padding: var(--sp-sm);
+}
+
+.padding-md {
+  --card-padding: var(--sp-lg);
+}
+
+.padding-lg {
+  --card-padding: var(--sp-xl);
+}
+
+/* ——— Header ——— */
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: var(--card-padding, var(--sp-lg));
+}
+
+/* Remove bottom padding only when body follows directly */
+.header:has(+ .body) {
+  padding-bottom: 0;
+}
+
+/* When header has description, align to top */
+.header:has(.description) {
+  align-items: flex-start;
+}
+
+.headerText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  line-height: 1.3;
+  color: var(--color-neutral-950);
+}
+
+.description {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  color: var(--color-neutral-500);
+}
+
+.headerAction {
+  flex-shrink: 0;
+}
+
+/* ——— Body ——— */
+
+.body {
+  flex: 1;
+  padding: var(--card-padding, var(--sp-lg));
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--color-neutral-700);
+}
+
+.body p {
+  margin: 0;
+}
+
+/* Header + Body: reduce top padding on body */
+.header + .body {
+  padding-top: var(--sp-xs);
+}
+
+/* ——— Body before Footer: tighten bottom ——— */
+
+.body:has(+ .footer) {
+  padding-bottom: var(--sp-sm);
+}
+
+/* ——— Footer ——— */
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  padding: var(--sp-sm) var(--card-padding, var(--sp-lg));
+  padding-top: 0;
+}
+
+/* Body + Footer: add top border with balanced spacing */
+.body + .footer,
+.header + .footer {
+  padding-top: var(--sp-sm);
+  border-top: 1px solid var(--color-caramel-200);
+}
+
+/* ——— Divider ——— */
+
+.divider {
+  margin: 0;
+  border: none;
+  border-top: 1px solid var(--color-caramel-200);
+}
+
+/* ——— Responsive ——— */
+
+@media (max-width: 480px) {
+  .padding-lg {
+    --card-padding: var(--sp-lg);
+  }
+
+  .padding-md {
+    --card-padding: var(--sp-sm);
+  }
+}

@@ -1,0 +1,65 @@
+/* ——— Logo ——— */
+
+.logo {
+  width: 48px;
+  height: auto;
+  color: var(--color-orange-400);
+}
+
+/* ——— Demo frame ——— */
+
+.demoFrame {
+  height: 560px;
+  max-width: 420px;
+  padding-right: var(--sp-md);
+}
+
+.demoFrame > * {
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-xs);
+}
+
+/* ——— Anatomy ——— */
+
+.anatomyList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+}
+
+.anatomyItem {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-700);
+  line-height: 1.5;
+}
+
+.anatomyCode {
+  font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+  font-size: var(--text-xs);
+  background-color: var(--color-caramel-100);
+  padding: 2px var(--sp-3xs);
+  border-radius: var(--radius-2xs);
+  color: var(--color-neutral-800);
+}
+
+/* ——— Accessibility ——— */
+
+.a11yList {
+  list-style: disc;
+  padding-left: var(--sp-lg);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+}
+
+.a11yItem {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-700);
+  line-height: 1.5;
+}

@@ -64,6 +64,38 @@
   color: var(--color-neutral-800);
 }
 
+/* ——— Cross-reference note ——— */
+
+.crossRef {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-xs);
+  padding: var(--sp-sm);
+  background-color: var(--color-caramel-50);
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-xs);
+  margin-bottom: var(--sp-lg);
+}
+
+.crossRefText {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-700);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.crossRefLink {
+  font-weight: 600;
+  color: var(--color-orange-500);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.crossRefLink:hover {
+  text-decoration: underline;
+}
+
 .a11yList {
   list-style: disc;
   padding-left: var(--sp-lg);

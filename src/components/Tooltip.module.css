@@ -18,6 +18,7 @@
   font-weight: 500;
   line-height: 1.4;
   border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-sm);
   pointer-events: none;
   animation: tooltipIn 120ms ease both;
   word-wrap: break-word;

@@ -187,6 +187,17 @@ export function Popovers() {
       description="Popover flutuante ancorado a um trigger, com suporte a submenu/flyout lateral. Renderizado como portal para evitar clipping."
       category={getCategoryForPage("popovers")}
     >
+      <div className={s.crossRef}>
+        <p className={s.crossRefText}>
+          Precisa de um botão que abre uma lista para o usuário <strong>escolher uma opção</strong> (filtro de time, período, ordenação)?
+          Use o{" "}
+          <a className={s.crossRefLink} href="#dropdown-buttons" onClick={(e) => { e.preventDefault(); window.location.hash = "dropdown-buttons"; window.scrollTo(0, 0); }}>
+            Dropdown Button
+          </a>
+          . O Popover é para <strong>menus de ações</strong> — cada item executa algo diferente (Editar, Duplicar, Excluir).
+        </p>
+      </div>
+
       {/* Básico */}
       <SubSection
         id="basico"

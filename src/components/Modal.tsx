@@ -150,20 +150,22 @@ export function ModalHeader({
 }: ModalHeaderProps) {
   return (
     <div className={s.header}>
-      <div className={s.headerText}>
-        <h2 className={s.title}>{title}</h2>
-        {description && <p className={s.description}>{description}</p>}
+      <div className={s.headerTop}>
+        <div className={s.headerText}>
+          <h2 className={s.title}>{title}</h2>
+          {description && <p className={s.description}>{description}</p>}
+        </div>
+        {onClose && (
+          <Button
+            variant="tertiary"
+            size="md"
+            leftIcon={X}
+            onClick={onClose}
+            aria-label="Fechar"
+          />
+        )}
       </div>
       {children}
-      {onClose && (
-        <Button
-          variant="tertiary"
-          size="md"
-          leftIcon={X}
-          onClick={onClose}
-          aria-label="Fechar"
-        />
-      )}
     </div>
   );
 }

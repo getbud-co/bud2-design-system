@@ -15,6 +15,7 @@ import { Inputs } from "./docs/sections/Inputs";
 import { Textareas } from "./docs/sections/Textareas";
 import { Selects } from "./docs/sections/Selects";
 import { DatePickers } from "./docs/sections/DatePickers";
+import { DropdownButtons } from "./docs/sections/DropdownButtons";
 import { Checkboxes } from "./docs/sections/Checkboxes";
 import { Radios } from "./docs/sections/Radios";
 import { ChoiceBoxes } from "./docs/sections/ChoiceBoxes";
@@ -22,6 +23,7 @@ import { Badges } from "./docs/sections/Badges";
 import { Breadcrumbs } from "./docs/sections/Breadcrumbs";
 import { Avatars } from "./docs/sections/Avatars";
 import { Toggles } from "./docs/sections/Toggles";
+import { Alerts } from "./docs/sections/Alerts";
 import { Modals } from "./docs/sections/Modals";
 import { Toasts } from "./docs/sections/Toasts";
 import { GoalProgress } from "./docs/sections/GoalProgress";
@@ -30,6 +32,8 @@ import { Paginations } from "./docs/sections/Paginations";
 import { Popovers } from "./docs/sections/Popovers";
 import { Tables } from "./docs/sections/Tables";
 import { Tooltips } from "./docs/sections/Tooltips";
+import { Cards } from "./docs/sections/Cards";
+import { Sidebars } from "./docs/sections/Sidebars";
 import { AiAssistantSection } from "./docs/sections/AiAssistant";
 import { PagePagination } from "./docs/PagePagination";
 import { getAdjacentPages } from "./docs/nav-data";
@@ -46,6 +50,7 @@ const SECTIONS: Record<string, React.ComponentType> = {
   "sombras": Shadows,
   "icones": Icons,
   "botoes": Buttons,
+  "dropdown-buttons": DropdownButtons,
   "inputs": Inputs,
   "textareas": Textareas,
   "selects": Selects,
@@ -57,14 +62,17 @@ const SECTIONS: Record<string, React.ComponentType> = {
   "breadcrumbs": Breadcrumbs,
   "avatars": Avatars,
   "toggles": Toggles,
+  "alerts": Alerts,
   "modals": Modals,
   "toasts": Toasts,
   "goal-progress": GoalProgress,
   "charts": Charts,
   "pagination": Paginations,
   "popovers": Popovers,
+  "sidebars": Sidebars,
   "tables": Tables,
   "tooltips": Tooltips,
+  "cards": Cards,
   "ai-assistant": AiAssistantSection,
 };
 

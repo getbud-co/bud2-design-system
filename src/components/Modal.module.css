@@ -114,10 +114,16 @@
 /* ——— Header ——— */
 .header {
   display: flex;
-  align-items: flex-start;
-  gap: var(--sp-sm);
+  flex-direction: column;
+  gap: var(--sp-xs);
   padding: var(--sp-lg);
   border-bottom: 1px solid var(--color-caramel-200);
+}
+
+.headerTop {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
 }
 
 .headerText {

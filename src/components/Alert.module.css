@@ -1,0 +1,205 @@
+/* ——— Root ——— */
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-xs);
+  padding: var(--sp-sm);
+  border: 1px solid var(--color-caramel-300);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-white);
+}
+
+/* ——— Icon ——— */
+
+.icon {
+  flex-shrink: 0;
+  display: flex;
+  padding-top: 1px;
+}
+
+/* ——— Content ——— */
+
+.content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3xs);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+}
+
+.description {
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--color-neutral-600);
+}
+
+.description p {
+  margin: 0;
+}
+
+/* ——— Action button ——— */
+
+.action {
+  align-self: flex-start;
+  margin-top: var(--sp-3xs);
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: var(--text-xs);
+  line-height: 1.05;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 120ms ease;
+}
+
+.action:hover {
+  opacity: 0.7;
+}
+
+/* ——— Dismiss button ——— */
+
+.dismiss {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: -2px -2px 0 0;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-2xs);
+  cursor: pointer;
+  color: var(--color-neutral-400);
+  transition: color 120ms ease, background-color 120ms ease;
+}
+
+.dismiss:hover {
+  color: var(--color-neutral-700);
+  background-color: var(--color-caramel-100);
+}
+
+.dismiss:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 2px;
+}
+
+/* ——— Variant: Info ——— */
+
+.info {
+  border-color: var(--color-neutral-200);
+  background-color: var(--color-neutral-50);
+}
+
+.info .icon {
+  color: var(--color-neutral-600);
+}
+
+.info .title {
+  color: var(--color-neutral-900);
+}
+
+.info .action {
+  color: var(--color-neutral-700);
+}
+
+.info .dismiss:hover {
+  background-color: var(--color-neutral-100);
+}
+
+/* ——— Variant: Success ——— */
+
+.success {
+  border-color: var(--color-green-200);
+  background-color: var(--color-green-50);
+}
+
+.success .icon {
+  color: var(--color-green-700);
+}
+
+.success .title {
+  color: var(--color-green-900);
+}
+
+.success .action {
+  color: var(--color-green-700);
+}
+
+.success .dismiss {
+  color: var(--color-green-400);
+}
+
+.success .dismiss:hover {
+  color: var(--color-green-700);
+  background-color: var(--color-green-100);
+}
+
+/* ——— Variant: Warning ——— */
+
+.warning {
+  border-color: var(--color-yellow-200);
+  background-color: var(--color-yellow-50);
+}
+
+.warning .icon {
+  color: var(--color-yellow-700);
+}
+
+.warning .title {
+  color: var(--color-yellow-900);
+}
+
+.warning .action {
+  color: var(--color-yellow-700);
+}
+
+.warning .dismiss {
+  color: var(--color-yellow-400);
+}
+
+.warning .dismiss:hover {
+  color: var(--color-yellow-700);
+  background-color: var(--color-yellow-100);
+}
+
+/* ——— Variant: Error ——— */
+
+.error {
+  border-color: var(--color-red-200);
+  background-color: var(--color-red-50);
+}
+
+.error .icon {
+  color: var(--color-red-700);
+}
+
+.error .title {
+  color: var(--color-red-900);
+}
+
+.error .action {
+  color: var(--color-red-700);
+}
+
+.error .dismiss {
+  color: var(--color-red-400);
+}
+
+.error .dismiss:hover {
+  color: var(--color-red-700);
+  background-color: var(--color-red-100);
+}

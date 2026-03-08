@@ -25,6 +25,8 @@ export interface PopoverItem {
   submenu?: ReactNode;
   /** Número exibido como badge (ex: contagem de seleções no submenu) */
   badge?: number;
+  /** Estilo destrutivo (vermelho) para ações como logout/excluir */
+  danger?: boolean;
 }
 
 interface PopoverProps {
@@ -145,7 +147,7 @@ export function Popover({ items, open, onClose, anchorRef }: PopoverProps) {
           <button
             key={item.id}
             type="button"
-            className={s.item}
+            className={`${s.item}${item.danger ? ` ${s.itemDanger}` : ""}`}
             role="menuitem"
             onClick={() => {
               item.onClick?.();
