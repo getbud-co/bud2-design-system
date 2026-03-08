@@ -29,6 +29,7 @@ import { Charts } from "./docs/sections/Charts";
 import { Paginations } from "./docs/sections/Paginations";
 import { Popovers } from "./docs/sections/Popovers";
 import { Tables } from "./docs/sections/Tables";
+import { Tooltips } from "./docs/sections/Tooltips";
 import { AiAssistantSection } from "./docs/sections/AiAssistant";
 import { Toaster } from "./components/Toast";
 import s from "./App.module.css";
@@ -61,6 +62,7 @@ const SECTIONS: Record<string, React.ComponentType> = {
   "pagination": Paginations,
   "popovers": Popovers,
   "tables": Tables,
+  "tooltips": Tooltips,
   "ai-assistant": AiAssistantSection,
 };
 

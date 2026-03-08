@@ -50,6 +50,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { id: "pagination", label: "Pagination" },
       { id: "popovers", label: "Popovers" },
       { id: "tables", label: "Tables" },
+      { id: "tooltips", label: "Tooltips" },
     ],
   },
   {

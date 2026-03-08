@@ -1,0 +1,67 @@
+/* ——— Trigger wrapper ——— */
+
+.wrapper {
+  display: inline-flex;
+}
+
+/* ——— Tooltip bubble ——— */
+
+.tooltip {
+  position: fixed;
+  z-index: 9200;
+  max-width: 240px;
+  padding: var(--sp-2xs) var(--sp-xs);
+  background: var(--color-neutral-900);
+  color: var(--color-neutral-0);
+  font-family: var(--font-label);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  line-height: 1.4;
+  border-radius: var(--radius-xs);
+  pointer-events: none;
+  animation: tooltipIn 120ms ease both;
+  word-wrap: break-word;
+}
+
+@keyframes tooltipIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ——— Arrow ——— */
+
+.arrow {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: var(--color-neutral-900);
+}
+
+/* Arrow axis position per placement (the cross-axis is set via JS) */
+.top .arrow {
+  bottom: -3px;
+}
+
+.bottom .arrow {
+  top: -3px;
+}
+
+.left .arrow {
+  right: -3px;
+}
+
+.right .arrow {
+  left: -3px;
+}
+
+/* ——— Reduced motion ——— */
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip {
+    animation: none;
+  }
+}
