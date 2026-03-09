@@ -1,0 +1,32 @@
+.root {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.step {
+  transition: opacity 120ms ease; /* DS standard transition */
+  cursor: default;
+}
+
+.stepDimmed {
+  opacity: 0.5;
+}
+
+.stepHovered {
+  opacity: 0.85; /* slight fade on direct hover for visual feedback */
+}
+
+.label {
+  font-family: var(--font-label);
+  font-weight: 500; /* Medium — label weight */
+  font-size: var(--text-sm);
+  fill: var(--color-neutral-950);
+}
+
+.valueText {
+  font-family: var(--font-label);
+  font-weight: 500; /* Medium — label weight */
+  font-size: var(--text-xs);
+  fill: var(--color-neutral-500);
+}

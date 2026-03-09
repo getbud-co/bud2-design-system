@@ -1,0 +1,46 @@
+.root {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 120ms ease; /* DS standard transition */
+}
+
+.fill {
+  opacity: 0.3;
+  transition: fill 120ms ease; /* DS standard transition */
+}
+
+/* ——— Color variants ——— */
+
+.orange .line {
+  stroke: var(--color-orange-500);
+}
+.orange .fill {
+  fill: var(--color-orange-100);
+}
+
+.green .line {
+  stroke: var(--color-green-500);
+}
+.green .fill {
+  fill: var(--color-green-100);
+}
+
+.red .line {
+  stroke: var(--color-red-500);
+}
+.red .fill {
+  fill: var(--color-red-100);
+}
+
+.neutral .line {
+  stroke: var(--color-neutral-500);
+}
+.neutral .fill {
+  fill: var(--color-neutral-100);
+}

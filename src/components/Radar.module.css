@@ -1,0 +1,45 @@
+.root {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.grid {
+  fill: none;
+  stroke: var(--color-caramel-200);
+  stroke-width: 1; /* structural SVG stroke */
+}
+
+.axis {
+  stroke: var(--color-caramel-200);
+  stroke-width: 1; /* structural SVG stroke */
+}
+
+.area {
+  opacity: 0.2;
+  transition: opacity 120ms ease;
+}
+
+.outline {
+  fill: none;
+  stroke-width: 1.5; /* structural SVG stroke — data polygon emphasis */
+  stroke-linejoin: round;
+  transition: stroke 120ms ease;
+}
+
+.dot {
+  transition: fill 120ms ease;
+}
+
+.label {
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  fill: var(--color-neutral-500);
+}
+
+.valueText {
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  fill: var(--color-neutral-950);
+}

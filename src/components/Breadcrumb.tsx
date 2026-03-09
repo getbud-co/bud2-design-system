@@ -4,6 +4,7 @@ import s from "./Breadcrumb.module.css";
 export interface BreadcrumbItem {
   label: string;
   href?: string;
+  onClick?: () => void;
 }
 
 interface BreadcrumbProps {
@@ -34,6 +35,14 @@ export function Breadcrumb({ items, current = 0 }: BreadcrumbProps) {
                 <a href={item.href} className={itemClass}>
                   {item.label}
                 </a>
+              ) : isPast && item.onClick ? (
+                <button
+                  type="button"
+                  className={`${itemClass} ${s.clickable}`}
+                  onClick={item.onClick}
+                >
+                  {item.label}
+                </button>
               ) : (
                 <span
                   className={itemClass}

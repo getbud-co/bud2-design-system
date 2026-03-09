@@ -33,12 +33,21 @@
   color: var(--color-neutral-950);
 }
 
-a.item {
+a.item,
+.clickable {
   text-decoration: none;
   transition: color 120ms ease;
 }
 
-a.item:hover {
+.clickable {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+a.item:hover,
+.clickable:hover {
   color: var(--color-neutral-950);
 }
 

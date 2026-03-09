@@ -18,7 +18,9 @@ export { ChoiceBoxGroup, ChoiceBox } from "./components/ChoiceBox";
 export { DatePicker } from "./components/DatePicker";
 export { DropdownButton } from "./components/DropdownButton";
 export { FilterBar, FilterChip, FilterDropdown } from "./components/FilterBar";
+export { Funnel } from "./components/Funnel";
 export { GoalProgressBar, GoalGaugeBar } from "./components/GoalProgress";
+export { Heatmap } from "./components/Heatmap";
 export { NotificationPanel } from "./components/NotificationPanel";
 export {
   PageHeader,
@@ -30,8 +32,10 @@ export { CommandPalette } from "./components/CommandPalette";
 export { Input } from "./components/Input";
 export { Modal, ModalHeader, ModalBody, ModalFooter } from "./components/Modal";
 export { Popover } from "./components/Popover";
+export { Radar } from "./components/Radar";
 export { Radio } from "./components/Radio";
 export { Select } from "./components/Select";
+export { Sparkline } from "./components/Sparkline";
 export {
   Sidebar,
   SidebarHeader,
@@ -59,6 +63,9 @@ export type { DatePickerProps } from "./components/DatePicker";
 export type { DropdownItem } from "./components/DropdownButton";
 export type { CommandItem, CommandGroup } from "./components/CommandPalette";
 export type { FilterOption } from "./components/FilterBar";
+export type { FunnelStep } from "./components/Funnel";
+export type { HeatmapCell, HeatmapProps } from "./components/Heatmap";
+export type { RadarDataPoint } from "./components/Radar";
 export type { NotificationItem } from "./components/NotificationPanel";
 export type { PopoverItem } from "./components/Popover";
 export type { SelectOption } from "./components/Select";

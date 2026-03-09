@@ -21,6 +21,10 @@ import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Chart } from "../../components/Chart";
 import { ChartTooltipContent } from "../../components/ChartTooltip";
+import { Heatmap } from "../../components/Heatmap";
+import { Sparkline } from "../../components/Sparkline";
+import { Radar } from "../../components/Radar";
+import { Funnel } from "../../components/Funnel";
 import s from "./Charts.module.css";
 
 /* ——— Paleta de cores ——— */
@@ -195,6 +199,137 @@ const gaugeSizesCode = `import { Chart } from "@mdonangelo/bud-ds";
 <Chart variant="half" value={75} size={64} />
 <Chart variant="half" value={75} size={96} />
 <Chart variant="half" value={75} size={128} />`;
+
+/* ——— Heatmap data ——— */
+
+const heatmapDays = ["Seg", "Ter", "Qua", "Qui", "Sex"];
+const heatmapHours = ["9h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h"];
+
+const heatmapData = [
+  { row: "Seg", col: "9h", value: 3 }, { row: "Seg", col: "10h", value: 8 },
+  { row: "Seg", col: "11h", value: 12 }, { row: "Seg", col: "12h", value: 5 },
+  { row: "Seg", col: "13h", value: 2 }, { row: "Seg", col: "14h", value: 15 },
+  { row: "Seg", col: "15h", value: 18 }, { row: "Seg", col: "16h", value: 10 },
+  { row: "Seg", col: "17h", value: 4 },
+  { row: "Ter", col: "9h", value: 6 }, { row: "Ter", col: "10h", value: 14 },
+  { row: "Ter", col: "11h", value: 20 }, { row: "Ter", col: "12h", value: 8 },
+  { row: "Ter", col: "13h", value: 3 }, { row: "Ter", col: "14h", value: 16 },
+  { row: "Ter", col: "15h", value: 12 }, { row: "Ter", col: "16h", value: 7 },
+  { row: "Ter", col: "17h", value: 2 },
+  { row: "Qua", col: "9h", value: 4 }, { row: "Qua", col: "10h", value: 10 },
+  { row: "Qua", col: "11h", value: 15 }, { row: "Qua", col: "12h", value: 6 },
+  { row: "Qua", col: "13h", value: 1 }, { row: "Qua", col: "14h", value: 11 },
+  { row: "Qua", col: "15h", value: 14 }, { row: "Qua", col: "16h", value: 9 },
+  { row: "Qua", col: "17h", value: 3 },
+  { row: "Qui", col: "9h", value: 7 }, { row: "Qui", col: "10h", value: 13 },
+  { row: "Qui", col: "11h", value: 18 }, { row: "Qui", col: "12h", value: 9 },
+  { row: "Qui", col: "13h", value: 4 }, { row: "Qui", col: "14h", value: 17 },
+  { row: "Qui", col: "15h", value: 20 }, { row: "Qui", col: "16h", value: 11 },
+  { row: "Qui", col: "17h", value: 5 },
+  { row: "Sex", col: "9h", value: 2 }, { row: "Sex", col: "10h", value: 9 },
+  { row: "Sex", col: "11h", value: 11 }, { row: "Sex", col: "12h", value: 4 },
+  { row: "Sex", col: "13h", value: 1 }, { row: "Sex", col: "14h", value: 8 },
+  { row: "Sex", col: "15h", value: 6 }, { row: "Sex", col: "16h", value: 3 },
+  { row: "Sex", col: "17h", value: 1 },
+];
+
+const heatmapCode = `import { Heatmap } from "@mdonangelo/bud-ds";
+
+const rows = ["Seg", "Ter", "Qua", "Qui", "Sex"];
+const columns = ["9h", "10h", "11h", "12h", "13h", "14h", "15h", "16h", "17h"];
+
+const data = [
+  { row: "Seg", col: "9h", value: 3 },
+  { row: "Seg", col: "10h", value: 8 },
+  // ...
+];
+
+<Heatmap data={data} rows={rows} columns={columns} />
+<Heatmap data={data} rows={rows} columns={columns} color="green" />
+<Heatmap data={data} rows={rows} columns={columns} color="red" />
+<Heatmap data={data} rows={rows} columns={columns} color="yellow" />
+<Heatmap data={data} rows={rows} columns={columns} color="wine" />
+<Heatmap data={data} rows={rows} columns={columns} color="neutral" />`;
+
+const heatmapCustomCode = `<Heatmap
+  data={data}
+  rows={rows}
+  columns={columns}
+  cellSize={32}
+  showValues={false}
+  color="green"
+/>
+
+<Heatmap
+  data={data}
+  rows={rows}
+  columns={columns}
+  cellSize={48}
+  formatValue={(v) => \`\${v}h\`}
+/>`;
+
+/* ——— Sparkline data ——— */
+
+const sparklineData1 = [4, 7, 5, 9, 12, 8, 14, 11, 16, 13, 18];
+const sparklineData2 = [20, 18, 15, 17, 12, 10, 8, 11, 6, 4, 3];
+const sparklineData3 = [5, 8, 6, 9, 7, 10, 8, 11, 9, 10, 8];
+
+const sparklineCode = `import { Sparkline } from "@mdonangelo/bud-ds";
+
+<Sparkline data={[4, 7, 5, 9, 12, 8, 14]} />
+<Sparkline data={data} color="green" />
+<Sparkline data={data} color="red" filled />
+<Sparkline data={data} width={120} height={32} />`;
+
+/* ——— Radar data ——— */
+
+const radarData = [
+  { label: "Comunicação", value: 85 },
+  { label: "Liderança", value: 70 },
+  { label: "Técnico", value: 92 },
+  { label: "Criatividade", value: 65 },
+  { label: "Colaboração", value: 88 },
+  { label: "Organização", value: 75 },
+];
+
+const radarCode = `import { Radar } from "@mdonangelo/bud-ds";
+
+const data = [
+  { label: "Comunicação", value: 85 },
+  { label: "Liderança", value: 70 },
+  { label: "Técnico", value: 92 },
+  { label: "Criatividade", value: 65 },
+  { label: "Colaboração", value: 88 },
+  { label: "Organização", value: 75 },
+];
+
+<Radar data={data} />
+<Radar data={data} color="green" showValues />
+<Radar data={data} size={160} color="wine" />`;
+
+/* ——— Funnel data ——— */
+
+const funnelData = [
+  { label: "Visitantes", value: 12000 },
+  { label: "Cadastros", value: 5200 },
+  { label: "Ativação", value: 3100 },
+  { label: "Conversão", value: 1400 },
+  { label: "Retenção", value: 820 },
+];
+
+const funnelCode = `import { Funnel } from "@mdonangelo/bud-ds";
+
+const data = [
+  { label: "Visitantes", value: 12000 },
+  { label: "Cadastros", value: 5200 },
+  { label: "Ativação", value: 3100 },
+  { label: "Conversão", value: 1400 },
+  { label: "Retenção", value: 820 },
+];
+
+<Funnel data={data} />
+<Funnel data={data} showPercentage={false} />
+<Funnel data={data} formatValue={(v) => v.toLocaleString("pt-BR")} />`;
 
 export function Charts() {
   const [gaugeValue, setGaugeValue] = useState(64);
@@ -772,7 +907,215 @@ export function Charts() {
         <CodeSnippet code={gaugeSizesCode} language="tsx" />
       </SubSection>
 
-      {/* ——— 14. Instalação ——— */}
+      {/* ——— 14. Heatmap ——— */}
+      <SubSection
+        id="heatmap"
+        title="Heatmap — Mapa de Calor"
+        description="Grid de intensidade por cor. Ideal para visualizar padrões em duas dimensões (ex: atividade por dia da semana × horário). Suporta 4 paletas de cor."
+      >
+        <div className={s.chartFrame}>
+          <Heatmap data={heatmapData} rows={heatmapDays} columns={heatmapHours} />
+        </div>
+        <CodeSnippet code={heatmapCode} language="tsx" />
+      </SubSection>
+
+      {/* ——— 15. Heatmap — Paletas ——— */}
+      <SubSection
+        id="heatmap-paletas"
+        title="Heatmap — Paletas de cor"
+        description={`Seis paletas disponíveis via prop color: orange (padrão, cor primária da marca), green (sucesso/progresso), red (erro/intensidade), yellow (atenção/alerta), wine (institucional) e neutral (dados neutros).`}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-lg)" }}>
+          <div>
+            <p className={s.legendLabel} style={{ marginBottom: "var(--sp-2xs)" }}>orange — cor primária da marca (padrão)</p>
+            <Heatmap data={heatmapData} rows={heatmapDays} columns={heatmapHours} cellSize={32} showValues={false} />
+          </div>
+          <div>
+            <p className={s.legendLabel} style={{ marginBottom: "var(--sp-2xs)" }}>green — sucesso, progresso, desempenho positivo</p>
+            <Heatmap data={heatmapData} rows={heatmapDays} columns={heatmapHours} color="green" cellSize={32} showValues={false} />
+          </div>
+          <div>
+            <p className={s.legendLabel} style={{ marginBottom: "var(--sp-2xs)" }}>red — erros, intensidade crítica, calor</p>
+            <Heatmap data={heatmapData} rows={heatmapDays} columns={heatmapHours} color="red" cellSize={32} showValues={false} />
+          </div>
+          <div>
+            <p className={s.legendLabel} style={{ marginBottom: "var(--sp-2xs)" }}>yellow — atenção, alertas, avisos</p>
+            <Heatmap data={heatmapData} rows={heatmapDays} columns={heatmapHours} color="yellow" cellSize={32} showValues={false} />
+          </div>
+          <div>
+            <p className={s.legendLabel} style={{ marginBottom: "var(--sp-2xs)" }}>wine — institucional, destaques de marca</p>
+            <Heatmap data={heatmapData} rows={heatmapDays} columns={heatmapHours} color="wine" cellSize={32} showValues={false} />
+          </div>
+          <div>
+            <p className={s.legendLabel} style={{ marginBottom: "var(--sp-2xs)" }}>neutral — dados neutros, sem conotação semântica</p>
+            <Heatmap data={heatmapData} rows={heatmapDays} columns={heatmapHours} color="neutral" cellSize={32} showValues={false} />
+          </div>
+        </div>
+      </SubSection>
+
+      {/* ——— 16. Heatmap — Customização ——— */}
+      <SubSection
+        id="heatmap-custom"
+        title="Heatmap — Customização"
+        description="Ajuste o tamanho das células, oculte valores ou formate-os com função customizada."
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "var(--sp-lg)" }}>
+          <div>
+            <p className={s.legendLabel} style={{ marginBottom: "var(--sp-2xs)" }}>Sem valores (cellSize=32)</p>
+            <Heatmap data={heatmapData} rows={heatmapDays} columns={heatmapHours} color="green" cellSize={32} showValues={false} />
+          </div>
+          <div>
+            <p className={s.legendLabel} style={{ marginBottom: "var(--sp-2xs)" }}>Com formatação customizada (cellSize=48)</p>
+            <Heatmap data={heatmapData} rows={heatmapDays} columns={heatmapHours} cellSize={48} formatValue={(v) => `${v}h`} />
+          </div>
+        </div>
+        <CodeSnippet code={heatmapCustomCode} language="tsx" />
+      </SubSection>
+
+      {/* ——— 17. Sparkline ——— */}
+      <SubSection
+        id="sparkline"
+        title="Sparkline — Tendência Inline"
+        description="Micro gráfico de tendência sem eixos. Ideal para uso inline em tabelas, cards de KPI e dashboards compactos."
+      >
+        <div className={s.statesGrid}>
+          <div className={s.stateItem}>
+            <Sparkline data={sparklineData1} />
+            <span className={s.stateLabel}>Alta (orange)</span>
+          </div>
+          <div className={s.stateItem}>
+            <Sparkline data={sparklineData2} color="red" />
+            <span className={s.stateLabel}>Queda (red)</span>
+          </div>
+          <div className={s.stateItem}>
+            <Sparkline data={sparklineData3} color="green" />
+            <span className={s.stateLabel}>Estável (green)</span>
+          </div>
+          <div className={s.stateItem}>
+            <Sparkline data={sparklineData3} color="neutral" />
+            <span className={s.stateLabel}>Neutro</span>
+          </div>
+        </div>
+      </SubSection>
+
+      {/* ——— 18. Sparkline — Preenchido ——— */}
+      <SubSection
+        id="sparkline-filled"
+        title="Sparkline — Preenchido"
+        description="A prop filled adiciona uma área de preenchimento abaixo da linha, útil para dar mais peso visual à tendência."
+      >
+        <div className={s.statesGrid}>
+          <div className={s.stateItem}>
+            <Sparkline data={sparklineData1} filled />
+            <span className={s.stateLabel}>Orange filled</span>
+          </div>
+          <div className={s.stateItem}>
+            <Sparkline data={sparklineData2} color="red" filled />
+            <span className={s.stateLabel}>Red filled</span>
+          </div>
+          <div className={s.stateItem}>
+            <Sparkline data={sparklineData1} color="green" filled />
+            <span className={s.stateLabel}>Green filled</span>
+          </div>
+          <div className={s.stateItem}>
+            <Sparkline data={sparklineData1} color="neutral" filled />
+            <span className={s.stateLabel}>Neutral filled</span>
+          </div>
+        </div>
+      </SubSection>
+
+      {/* ——— 19. Sparkline — Tamanhos ——— */}
+      <SubSection
+        id="sparkline-sizes"
+        title="Sparkline — Tamanhos"
+        description="Controle width e height para adaptar ao contexto. Padrão: 80×24."
+      >
+        <div className={s.statesGrid}>
+          <div className={s.stateItem}>
+            <Sparkline data={sparklineData1} width={60} height={16} />
+            <span className={s.stateLabel}>60×16</span>
+          </div>
+          <div className={s.stateItem}>
+            <Sparkline data={sparklineData1} />
+            <span className={s.stateLabel}>80×24 (padrão)</span>
+          </div>
+          <div className={s.stateItem}>
+            <Sparkline data={sparklineData1} width={120} height={32} filled />
+            <span className={s.stateLabel}>120×32 filled</span>
+          </div>
+          <div className={s.stateItem}>
+            <Sparkline data={sparklineData1} width={160} height={40} color="green" filled />
+            <span className={s.stateLabel}>160×40 filled</span>
+          </div>
+        </div>
+        <CodeSnippet code={sparklineCode} language="tsx" />
+      </SubSection>
+
+      {/* ——— 20. Radar ——— */}
+      <SubSection
+        id="radar"
+        title="Radar — Gráfico Spider"
+        description="Compara múltiplas dimensões em eixos radiais. Ideal para avaliação de competências, análise 360° e perfis multidimensionais."
+      >
+        <div className={s.chartFrame}>
+          <Radar data={radarData} />
+        </div>
+      </SubSection>
+
+      {/* ——— 21. Radar — Variações ——— */}
+      <SubSection
+        id="radar-variations"
+        title="Radar — Variações"
+        description="Paletas de cor, exibição de valores e tamanhos diferentes."
+      >
+        <div className={s.statesGrid}>
+          <div className={s.stateItem}>
+            <Radar data={radarData} size={180} />
+            <span className={s.stateLabel}>Orange (padrão)</span>
+          </div>
+          <div className={s.stateItem}>
+            <Radar data={radarData} size={180} color="green" showValues />
+            <span className={s.stateLabel}>Green + valores</span>
+          </div>
+          <div className={s.stateItem}>
+            <Radar data={radarData} size={180} color="wine" />
+            <span className={s.stateLabel}>Wine</span>
+          </div>
+          <div className={s.stateItem}>
+            <Radar data={radarData} size={180} color="neutral" />
+            <span className={s.stateLabel}>Neutral</span>
+          </div>
+        </div>
+        <CodeSnippet code={radarCode} language="tsx" />
+      </SubSection>
+
+      {/* ——— 22. Funnel ——— */}
+      <SubSection
+        id="funnel"
+        title="Funnel — Gráfico de Funil"
+        description="Visualiza conversão por etapas, do topo (maior volume) ao fundo (menor). Ideal para onboarding, jornada do aluno e pipelines de vendas."
+      >
+        <div className={s.chartFrame}>
+          <Funnel data={funnelData} />
+        </div>
+        <CodeSnippet code={funnelCode} language="tsx" />
+      </SubSection>
+
+      {/* ——— 23. Funnel — Formatado ——— */}
+      <SubSection
+        id="funnel-formatted"
+        title="Funnel — Valor formatado"
+        description="Use formatValue para customizar a exibição dos números."
+      >
+        <div className={s.chartFrame}>
+          <Funnel
+            data={funnelData}
+            formatValue={(v) => v.toLocaleString("pt-BR")}
+          />
+        </div>
+      </SubSection>
+
+      {/* ——— 24. Instalação ——— */}
       <SubSection
         id="instalacao"
         title="Instalação"
