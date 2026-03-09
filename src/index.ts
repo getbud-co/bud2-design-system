@@ -35,6 +35,7 @@ export { Popover } from "./components/Popover";
 export { Radar } from "./components/Radar";
 export { Radio } from "./components/Radio";
 export { Select } from "./components/Select";
+export { Skeleton } from "./components/Skeleton";
 export { Sparkline } from "./components/Sparkline";
 export {
   Sidebar,

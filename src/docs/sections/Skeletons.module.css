@@ -1,0 +1,146 @@
+/* ——— Demo rows ——— */
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+}
+
+/* ——— Card skeleton demo ——— */
+
+.cardDemo {
+  display: flex;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+}
+
+.cardSkeleton {
+  width: 280px;
+  padding: var(--sp-sm);
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+}
+
+.cardLines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+}
+
+/* ——— List skeleton demo ——— */
+
+.listDemo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xs);
+  max-width: 400px;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  padding: var(--sp-xs) 0;
+  border-bottom: 1px solid var(--color-caramel-200);
+}
+
+.listText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3xs);
+}
+
+/* ——— Table skeleton demo ——— */
+
+.tableSkeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+  max-width: 560px;
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 80px;
+  gap: var(--sp-sm);
+  align-items: center;
+  padding: var(--sp-2xs) 0;
+}
+
+.tableRow:not(:last-child) {
+  border-bottom: 1px solid var(--color-caramel-200);
+}
+
+.tableHeaderRow {
+  composes: tableRow;
+  border-bottom: 2px solid var(--color-caramel-300);
+  padding-bottom: var(--sp-xs);
+}
+
+/* ——— Dashboard / KPIs skeleton demo ——— */
+
+.dashboardDemo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-sm);
+  max-width: 560px;
+}
+
+.kpiCard {
+  padding: var(--sp-sm);
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xs);
+}
+
+.kpiDelta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+}
+
+@media (max-width: 480px) {
+  .dashboardDemo {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ——— Form skeleton demo ——— */
+
+.formDemo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+  max-width: 400px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+}
+
+.formActions {
+  display: flex;
+  gap: var(--sp-xs);
+  padding-top: var(--sp-2xs);
+}

@@ -1,0 +1,52 @@
+/* ——— Skeleton ——— */
+
+.skeleton {
+  display: block;
+  background-color: var(--color-caramel-200);
+  background-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    transparent 40%,
+    var(--color-caramel-100) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-attachment: fixed;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+/* ——— Variants ——— */
+
+.text {
+  border-radius: var(--radius-2xs);
+  height: 1em; /* matches font-size of parent */
+}
+
+.circular {
+  border-radius: 50%;
+}
+
+.rectangular {
+  border-radius: 0;
+}
+
+.rounded {
+  border-radius: var(--radius-xs);
+}
+
+/* ——— No animation ——— */
+
+.noAnimation {
+  animation: none;
+  background-image: none;
+}
