@@ -2,7 +2,7 @@ import { type ComponentType, type ButtonHTMLAttributes, forwardRef } from "react
 import { CircleNotch } from "@phosphor-icons/react";
 import s from "./Button.module.css";
 
-type ButtonVariant = "primary" | "secondary" | "tertiary";
+type ButtonVariant = "primary" | "secondary" | "tertiary" | "danger";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface IconProps {

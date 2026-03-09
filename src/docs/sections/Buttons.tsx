@@ -49,13 +49,14 @@ const [open, setOpen] = useState(false);
 {/* Label customizado */}
 <AssistantButton label="IA" active={open} onClick={() => setOpen(!open)} />`;
 
-const variants = ["primary", "secondary", "tertiary"] as const;
+const variants = ["primary", "secondary", "tertiary", "danger"] as const;
 const sizes = ["sm", "md", "lg"] as const;
 
 const variantLabel: Record<string, string> = {
   primary: "Primary",
   secondary: "Secondary",
   tertiary: "Tertiary",
+  danger: "Danger",
 };
 
 const sizeLabel: Record<string, string> = {

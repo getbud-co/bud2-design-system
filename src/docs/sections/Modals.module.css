@@ -25,6 +25,34 @@
   align-items: center;
 }
 
+/* ——— Deletion modal demo ——— */
+
+.dangerTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+}
+
+.dangerIcon {
+  color: var(--color-red-600);
+  flex-shrink: 0;
+}
+
+.deletionBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+
+.deletionList {
+  margin: 0;
+  padding-left: var(--sp-lg);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--color-neutral-700);
+}
+
 .behaviorList {
   font-family: var(--font-body);
   font-size: var(--text-sm);

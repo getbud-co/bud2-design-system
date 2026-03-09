@@ -276,6 +276,9 @@
   text-decoration: none;
   text-align: left;
   transition: background-color 120ms ease, border-color 120ms ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .subItem:hover {

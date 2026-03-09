@@ -8,7 +8,7 @@ import { Input } from "../../components/Input";
 import { Select } from "../../components/Select";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from "../../components/Modal";
 import { AiAssistant, type MissionItem } from "../../components/AiAssistant";
-import { Users, FloppyDisk, ArrowRight } from "@phosphor-icons/react";
+import { Users, FloppyDisk, ArrowRight, Warning } from "@phosphor-icons/react";
 import { AssistantButton } from "../../components/PageHeader";
 import s from "./Modals.module.css";
 
@@ -66,6 +66,127 @@ const MOCK_MISSIONS: MissionItem[] = [
   { id: "3", label: "Meta NPS 80" },
   { id: "4", label: "Projeto Expansão Regional" },
 ];
+
+/* ——— Código de uso do modal de deleção ——— */
+
+const deletionCode = `import { useState } from "react";
+import {
+  Modal, ModalHeader, ModalBody, ModalFooter, Button, Input
+} from "@mdonangelo/bud-ds";
+import { Warning } from "@phosphor-icons/react";
+
+function DeleteMissionModal({ open, onClose, missionName }) {
+  const [confirmation, setConfirmation] = useState("");
+  const canDelete = confirmation === "excluir";
+
+  return (
+    <Modal open={open} onClose={onClose} size="sm">
+      <ModalHeader
+        title={
+          <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Warning size={20} style={{ color: "var(--color-red-600)" }} />
+            Excluir missão
+          </span>
+        }
+        description="Esta ação não pode ser desfeita."
+        onClose={onClose}
+      />
+      <ModalBody>
+        <p>
+          A missão <strong>"{missionName}"</strong> e todos os seus
+          dados serão excluídos permanentemente.
+        </p>
+        <Input
+          label='Digite "excluir" para confirmar'
+          placeholder="excluir"
+          value={confirmation}
+          onChange={(e) => setConfirmation(e.target.value)}
+        />
+      </ModalBody>
+      <ModalFooter>
+        <Button variant="tertiary" onClick={onClose}>Cancelar</Button>
+        <Button variant="danger" disabled={!canDelete} onClick={onClose}>
+          Excluir missão
+        </Button>
+      </ModalFooter>
+    </Modal>
+  );
+}`;
+
+function DeletionDemo() {
+  const [open, setOpen] = useState(false);
+  const [confirmation, setConfirmation] = useState("");
+  const canDelete = confirmation === "excluir";
+
+  const handleClose = () => {
+    setOpen(false);
+    setConfirmation("");
+  };
+
+  return (
+    <SubSection
+      id="modal-de-delecao"
+      title="Modal de deleção"
+      description="Padrão para ações destrutivas irreversíveis. Usa o botão danger (vermelho), ícone de warning e confirmação por digitação para evitar exclusões acidentais."
+    >
+      <div className={s.buttonRow}>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setOpen(true)}
+        >
+          Excluir missão
+        </Button>
+      </div>
+
+      <Modal open={open} onClose={handleClose} size="sm">
+        <ModalHeader
+          title={
+            <span className={s.dangerTitle}>
+              <Warning size={20} className={s.dangerIcon} />
+              Excluir missão
+            </span>
+          }
+          description="Esta ação não pode ser desfeita."
+          onClose={handleClose}
+        />
+        <ModalBody>
+          <div className={s.deletionBody}>
+            <p className={s.demoText}>
+              A missão <strong>&quot;Onboarding Q1&quot;</strong> e todos os seus
+              dados serão excluídos permanentemente, incluindo:
+            </p>
+            <ul className={s.deletionList}>
+              <li>24 respostas coletadas</li>
+              <li>3 relatórios gerados</li>
+              <li>12 comentários</li>
+            </ul>
+            <Input
+              label={'Digite "excluir" para confirmar'}
+              placeholder="excluir"
+              value={confirmation}
+              onChange={(e) => setConfirmation(e.target.value)}
+            />
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="tertiary" onClick={handleClose}>
+            Cancelar
+          </Button>
+          <Button
+            variant="danger"
+            disabled={!canDelete}
+            onClick={handleClose}
+          >
+            Excluir missão
+          </Button>
+        </ModalFooter>
+      </Modal>
+
+      <CodeSnippet code={deletionCode} language="tsx" />
+    </SubSection>
+  );
+}
 
 function DoubleDemo() {
   const [open, setOpen] = useState(false);
@@ -375,6 +496,8 @@ export function Modals() {
       </SubSection>
 
       <DoubleDemo />
+
+      <DeletionDemo />
 
       <SubSection id="comportamento" title="Comportamento">
         <ul className={s.behaviorList}>

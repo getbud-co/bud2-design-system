@@ -126,6 +126,29 @@
   background-color: var(--color-caramel-100);
 }
 
+/* ——— Danger ——— */
+.danger {
+  background-color: var(--color-red-600);
+  border-color: var(--color-red-700);
+  color: var(--color-white);
+}
+
+.danger:hover:not(:disabled),
+.danger.hovered,
+.danger.active {
+  background-color: var(--color-red-700);
+  border-color: var(--color-red-800);
+}
+
+.danger:active:not(:disabled) {
+  background-color: var(--color-red-700);
+  border-color: var(--color-red-800);
+}
+
+.danger:focus-visible {
+  outline-color: var(--color-red-400);
+}
+
 /* ——— Disabled (all variants) ——— */
 .button:disabled {
   background-color: var(--color-neutral-100);
