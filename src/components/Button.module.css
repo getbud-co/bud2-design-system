@@ -21,44 +21,40 @@
 
 /* ——— Sizes ——— */
 .sm {
-  min-height: 24px;
-  padding: var(--sp-3xs) var(--sp-2xs);
+  height: 24px;
+  padding: 0 var(--sp-2xs);
   gap: var(--sp-3xs);
   font-size: var(--text-xs);
 }
 
 .md {
-  min-height: 32px;
-  padding: var(--sp-2xs) var(--sp-xs);
+  height: 32px;
+  padding: 0 var(--sp-xs);
   gap: var(--sp-3xs);
   font-size: var(--text-sm);
 }
 
 .lg {
-  min-height: 40px;
-  padding: var(--sp-xs) var(--sp-sm);
+  height: 40px;
+  padding: 0 var(--sp-sm);
   gap: var(--sp-2xs);
   font-size: var(--text-md);
 }
 
-/* ——— Icon-only ——— */
-/* width/height include 1px border per side (box-sizing: border-box) */
+/* ——— Icon-only (square, same height as regular) ——— */
 .iconOnly.sm {
-  width: 26px;
-  height: 26px;
-  padding: var(--sp-3xs);
+  width: 24px;
+  padding: 0;
 }
 
 .iconOnly.md {
-  width: 34px;
-  height: 34px;
-  padding: var(--sp-2xs);
+  width: 32px;
+  padding: 0;
 }
 
 .iconOnly.lg {
-  width: 42px;
-  height: 42px;
-  padding: var(--sp-xs);
+  width: 40px;
+  padding: 0;
 }
 
 /* ——— Optical adjustment: icon side gets less padding ——— */

@@ -38,18 +38,18 @@
 
 /* ——— Sizes (shared between trigger and rangeTrigger) ——— */
 .sm {
-  min-height: 24px;
-  padding: var(--sp-3xs);
+  height: 24px; /* match Button sm */
+  padding: 0 var(--sp-3xs);
 }
 
 .md {
-  min-height: 32px;
-  padding: var(--sp-2xs);
+  height: 32px; /* match Button md */
+  padding: 0 var(--sp-2xs);
 }
 
 .lg {
-  min-height: 40px;
-  padding: var(--sp-xs);
+  height: 40px; /* match Button lg */
+  padding: 0 var(--sp-xs);
 }
 
 /* Range trigger uses horizontal padding only — vertical comes from inputs */
