@@ -1,0 +1,28 @@
+/* ——— Demo label ——— */
+
+.stateLabel {
+  font-size: 11px; /* no token below --text-xs (12px) */
+  color: var(--color-neutral-500);
+  font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace; /* monospace — code/token display */
+}
+
+/* ——— Demo grid ——— */
+
+.demosGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-xl);
+}
+
+.demoItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+}
+
+.panelDemo {
+  padding: var(--sp-md);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-500);
+}

@@ -195,3 +195,13 @@
 .offTrack .thumb {
   border-color: var(--color-red-500);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .fill,
+  .safeZone,
+  .gaugeMarker,
+  .thumb {
+    animation: none;
+    transition: none;
+  }
+}

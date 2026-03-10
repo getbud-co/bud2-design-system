@@ -10,6 +10,20 @@ import { createPortal } from "react-dom";
 import { BellSlash } from "@phosphor-icons/react";
 import s from "./NotificationPanel.module.css";
 
+/** Extract plain text from a ReactNode for aria-labels */
+function getTextContent(node: ReactNode): string {
+  if (node == null || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(getTextContent).join("");
+  if (typeof node === "object" && "props" in node) {
+    return getTextContent((node as { props: { children?: ReactNode } }).props.children);
+  }
+  return "";
+}
+
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 /* ——— Types ——— */
 
 interface IconProps {
@@ -74,6 +88,7 @@ export function NotificationPanel({
   className,
 }: NotificationPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
   const hasUnread = notifications.some((n) => n.unread);
 
   /* ——— Positioning ——— */
@@ -159,6 +174,63 @@ export function NotificationPanel({
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [open, onClose]);
 
+  /* ——— Focus management ——— */
+
+  useEffect(() => {
+    if (!open) return;
+
+    // Store previously focused element
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
+
+    // Focus first focusable element inside the panel
+    requestAnimationFrame(() => {
+      const el = panelRef.current;
+      if (!el) return;
+      const first = el.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+      first?.focus();
+    });
+
+    return () => {
+      // Restore focus on close
+      previousFocusRef.current?.focus();
+      previousFocusRef.current = null;
+    };
+  }, [open]);
+
+  /* ——— Focus trap (Tab / Shift+Tab) ——— */
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.key !== "Tab") return;
+      const el = panelRef.current;
+      if (!el) return;
+
+      const focusable = Array.from(
+        el.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+      );
+      if (focusable.length === 0) {
+        e.preventDefault();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    },
+    []
+  );
+
   if (!open) return null;
 
   const classes = [s.panel, className ?? ""].filter(Boolean).join(" ");
@@ -170,7 +242,9 @@ export function NotificationPanel({
         ref={panelRef}
         className={classes}
         role="dialog"
+        aria-modal="true"
         aria-label={title}
+        onKeyDown={handleKeyDown}
         onMouseDown={(e) => e.preventDefault()}
       >
         <div className={s.sheetHandle} />
@@ -202,6 +276,7 @@ export function NotificationPanel({
                 key={n.id}
                 type="button"
                 className={`${s.item} ${n.unread ? s.itemUnread : ""}`}
+                aria-label={`${getTextContent(n.title)}${n.time ? `, ${n.time}` : ""}${n.unread ? ", não lida" : ""}`}
                 onClick={() => onClickItem?.(n.id)}
               >
                 {/* Avatar / Icon */}

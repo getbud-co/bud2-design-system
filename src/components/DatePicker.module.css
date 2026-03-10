@@ -26,8 +26,6 @@
   align-items: center;
   gap: var(--sp-3xs);
   width: 100%;
-  min-height: 40px;
-  padding: var(--sp-xs);
   background-color: var(--color-white);
   border: 1px solid var(--color-caramel-300);
   border-radius: var(--radius-2xs);
@@ -36,6 +34,35 @@
   outline: none;
   transition: border-color 120ms ease, box-shadow 120ms ease;
   text-align: left;
+}
+
+/* ——— Sizes (shared between trigger and rangeTrigger) ——— */
+.sm {
+  min-height: 24px;
+  padding: var(--sp-3xs);
+}
+
+.md {
+  min-height: 32px;
+  padding: var(--sp-2xs);
+}
+
+.lg {
+  min-height: 40px;
+  padding: var(--sp-xs);
+}
+
+/* Range trigger uses horizontal padding only — vertical comes from inputs */
+.rangeTrigger.sm {
+  padding: 0 var(--sp-3xs);
+}
+
+.rangeTrigger.md {
+  padding: 0 var(--sp-2xs);
+}
+
+.rangeTrigger.lg {
+  padding: 0 var(--sp-xs);
 }
 
 .trigger:hover:not(.disabled),
@@ -100,6 +127,16 @@
   white-space: nowrap;
 }
 
+.sm .value,
+.sm .placeholder {
+  font-size: var(--text-xs);
+}
+
+.lg .value,
+.lg .placeholder {
+  font-size: var(--text-md);
+}
+
 .disabled .value {
   color: var(--color-neutral-400);
 }
@@ -110,8 +147,6 @@
   align-items: center;
   gap: var(--sp-3xs);
   width: 100%;
-  min-height: 40px;
-  padding: 0 var(--sp-xs);
   background-color: var(--color-white);
   border: 1px solid var(--color-caramel-300);
   border-radius: var(--radius-2xs);
@@ -167,8 +202,26 @@
   font-size: var(--text-sm);
   line-height: normal;
   color: var(--color-neutral-950);
-  padding: var(--sp-xs) 0;
+  padding: var(--sp-2xs) 0;
   text-align: center;
+}
+
+.sm .rangeTriggerInput {
+  font-size: var(--text-xs);
+  padding: var(--sp-3xs) 0;
+}
+
+.lg .rangeTriggerInput {
+  font-size: var(--text-md);
+  padding: var(--sp-xs) 0;
+}
+
+.sm .rangeSeparator {
+  font-size: var(--text-xs);
+}
+
+.lg .rangeSeparator {
+  font-size: var(--text-md);
 }
 
 .rangeTriggerInput::placeholder {

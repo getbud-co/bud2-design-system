@@ -4,6 +4,7 @@ import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Input } from "../../components/Input";
+import { Button } from "../../components/Button";
 import inputStyles from "../../components/Input.module.css";
 import s from "./Inputs.module.css";
 
@@ -49,6 +50,30 @@ export function Inputs() {
       description="Campo de entrada com label, ícones opcionais e mensagem de retorno. Suporta estados de erro, atenção e sucesso com feedback visual via borda e mensagem."
       category={getCategoryForPage("inputs")}
     >
+      <SubSection
+        id="tamanhos"
+        title="Tamanhos"
+        description="Três tamanhos que combinam com os tamanhos de Button: sm (24px), md (32px, padrão) e lg (40px). Use para alinhar inputs ao lado de botões."
+      >
+        <div className={s.sizesGrid}>
+          {(["sm", "md", "lg"] as const).map((sz) => (
+            <div key={sz} className={s.sizeItem}>
+              <span className={s.stateLabel}>{sz}</span>
+              <div className={s.sizeRow}>
+                <Input
+                  size={sz}
+                  placeholder="Placeholder"
+                  leftIcon={EnvelopeSimple}
+                />
+                <Button size={sz} variant="primary">
+                  Enviar
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SubSection>
+
       <SubSection
         id="estados"
         title="Estados"

@@ -44,3 +44,11 @@
 .neutral .fill {
   fill: var(--color-neutral-100);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .line,
+  .fill {
+    animation: none;
+    transition: none;
+  }
+}

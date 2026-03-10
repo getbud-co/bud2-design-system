@@ -26,8 +26,6 @@
   align-items: center;
   gap: var(--sp-3xs);
   width: 100%;
-  min-height: 40px;
-  padding: var(--sp-xs);
   background-color: var(--color-white);
   border: 1px solid var(--color-caramel-300);
   border-radius: var(--radius-2xs);
@@ -36,6 +34,22 @@
   outline: none;
   transition: border-color 120ms ease, box-shadow 120ms ease;
   text-align: left;
+}
+
+/* ——— Sizes ——— */
+.sm {
+  min-height: 24px;
+  padding: var(--sp-3xs);
+}
+
+.md {
+  min-height: 32px;
+  padding: var(--sp-2xs);
+}
+
+.lg {
+  min-height: 40px;
+  padding: var(--sp-xs);
 }
 
 .trigger:hover:not(.disabled),
@@ -100,6 +114,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.sm .value,
+.sm .placeholder {
+  font-size: var(--text-xs);
+}
+
+.lg .value,
+.lg .placeholder {
+  font-size: var(--text-md);
 }
 
 .disabled .value {

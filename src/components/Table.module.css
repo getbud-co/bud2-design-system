@@ -4,8 +4,11 @@
   background: var(--color-neutral-0);
   border: 1px solid var(--color-caramel-200);
   border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-xs);
   overflow: hidden;
+}
+
+.elevated {
+  box-shadow: var(--shadow-xs);
 }
 
 /* ——— Card Header ——— */
@@ -47,6 +50,87 @@
 .cardHeaderDivider {
   height: 1px;
   background: var(--color-caramel-200);
+}
+
+/* ——— Bulk actions floating bar ——— */
+
+.bulkBar {
+  position: fixed;
+  bottom: var(--sp-lg);
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: var(--sp-xs) var(--sp-sm);
+  background-color: var(--color-neutral-950);
+  color: var(--color-white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  animation: bulkSlideUp 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes bulkSlideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.bulkLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+}
+
+.bulkClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--sp-lg);
+  height: var(--sp-lg);
+  background: none;
+  border: 1px solid transparent;
+  border-radius: var(--radius-2xs);
+  color: var(--color-neutral-400);
+  cursor: pointer;
+  transition: color 120ms ease, background-color 120ms ease;
+}
+
+.bulkClose:hover {
+  color: var(--color-white);
+  background-color: var(--color-neutral-800);
+}
+
+.bulkClose:focus-visible {
+  outline: 2px solid var(--color-white);
+  outline-offset: 2px;
+}
+
+.bulkCount {
+  font-family: var(--font-label);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: 1.05;
+  white-space: nowrap;
+}
+
+.bulkDivider {
+  width: 1px;
+  height: 20px; /* structural height — no token */
+  background-color: var(--color-neutral-700);
+  flex-shrink: 0;
+}
+
+.bulkActions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
 }
 
 /* ——— Scroll wrapper ——— */
@@ -155,8 +239,8 @@
   padding: var(--sp-sm) var(--sp-lg);
   vertical-align: middle;
   height: 72px;
-  color: var(--color-neutral-500);
-  font-weight: 600;
+  color: var(--color-neutral-950);
+  font-weight: 400;
 }
 
 .tdCheckbox {
@@ -174,6 +258,24 @@
 /* ——— Responsive ——— */
 
 @media (max-width: 640px) {
+  .bulkBar {
+    left: var(--sp-sm);
+    right: var(--sp-sm);
+    bottom: var(--sp-sm);
+    transform: translateX(0) translateY(0);
+  }
+
+  @keyframes bulkSlideUp {
+    from {
+      opacity: 0;
+      transform: translateX(0) translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) translateY(0);
+    }
+  }
+
   .cardHeaderContent {
     padding: var(--sp-md) var(--sp-sm);
   }

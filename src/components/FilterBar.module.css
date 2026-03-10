@@ -271,6 +271,12 @@
   cursor: pointer;
 }
 
+.chipLabelBtn:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 2px;
+  border-radius: var(--radius-2xs);
+}
+
 .chipStatic {
   cursor: default;
 }
@@ -619,5 +625,20 @@
   .dropdownEmpty {
     padding: var(--sp-lg) var(--sp-sm);
     font-size: var(--text-sm);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .addTrigger,
+  .actionBtn,
+  .addPopover,
+  .addItem,
+  .chip,
+  .chipRemove,
+  .dropdown,
+  .dropdownItem,
+  .overlay {
+    animation: none;
+    transition: none;
   }
 }

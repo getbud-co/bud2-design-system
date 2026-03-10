@@ -43,3 +43,12 @@
   font-size: var(--text-xs);
   fill: var(--color-neutral-950);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .area,
+  .outline,
+  .dot {
+    animation: none;
+    transition: none;
+  }
+}

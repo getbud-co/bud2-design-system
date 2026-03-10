@@ -4,6 +4,7 @@ import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Select } from "../../components/Select";
+import { Button } from "../../components/Button";
 import selectStyles from "../../components/Select.module.css";
 import s from "./Selects.module.css";
 
@@ -77,6 +78,31 @@ export function Selects() {
       description="Dropdown customizado com a mesma estrutura visual dos inputs. Suporta label, ícone à esquerda, mensagens de retorno e navegação por teclado."
       category={getCategoryForPage("selects")}
     >
+      <SubSection
+        id="tamanhos"
+        title="Tamanhos"
+        description="Três tamanhos que combinam com os tamanhos de Button: sm (24px), md (32px, padrão) e lg (40px)."
+      >
+        <div className={s.sizesGrid}>
+          {(["sm", "md", "lg"] as const).map((sz) => (
+            <div key={sz} className={s.sizeItem}>
+              <span className={s.stateLabel}>{sz}</span>
+              <div className={s.sizeRow}>
+                <Select
+                  size={sz}
+                  placeholder="Selecione..."
+                  leftIcon={Users}
+                  options={departmentOptions}
+                />
+                <Button size={sz} variant="primary">
+                  Salvar
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SubSection>
+
       <SubSection
         id="estados"
         title="Estados"

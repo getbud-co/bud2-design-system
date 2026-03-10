@@ -215,3 +215,13 @@
     min-width: 0;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .container,
+  .doubleLayout,
+  .sidePanel {
+    animation: none;
+    transition: none;
+  }
+}

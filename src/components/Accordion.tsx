@@ -97,6 +97,7 @@ export function AccordionItem({
         role="region"
         aria-labelledby={triggerId}
         className={s.panel}
+        inert={!isOpen || undefined}
       >
         <div className={s.panelInner}>
           {children}

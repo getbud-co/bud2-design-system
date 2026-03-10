@@ -7,6 +7,8 @@ import {
   useContext,
   useState,
   useEffect,
+  useRef,
+  useCallback,
   useId,
 } from "react";
 import { CaretDown, CaretLineLeft, CaretLineRight, DotsThree, X } from "@phosphor-icons/react";
@@ -40,6 +42,10 @@ export function Sidebar({
   onMobileClose,
   ...rest
 }: SidebarProps) {
+  const asideRef = useRef<HTMLElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
   /* Bloqueia scroll do body quando drawer está aberto */
   useEffect(() => {
     if (!mobileOpen) return;
@@ -48,15 +54,53 @@ export function Sidebar({
     return () => { document.body.style.overflow = prev; };
   }, [mobileOpen]);
 
-  /* Fecha com Escape */
+  /* Focus the close button on open; restore focus on close */
+  useEffect(() => {
+    if (mobileOpen) {
+      previousFocusRef.current = document.activeElement as HTMLElement | null;
+      closeRef.current?.focus();
+    }
+  }, [mobileOpen]);
+
+  const handleMobileClose = useCallback(() => {
+    onMobileClose?.();
+    previousFocusRef.current?.focus();
+    previousFocusRef.current = null;
+  }, [onMobileClose]);
+
+  /* Fecha com Escape + focus trap */
   useEffect(() => {
     if (!mobileOpen || !onMobileClose) return;
     function handleKey(e: KeyboardEvent) {
-      if (e.key === "Escape") onMobileClose!();
+      if (e.key === "Escape") {
+        handleMobileClose();
+        return;
+      }
+
+      if (e.key === "Tab" && asideRef.current) {
+        const focusable = asideRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
     }
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [mobileOpen, onMobileClose]);
+  }, [mobileOpen, onMobileClose, handleMobileClose]);
 
   const cls = [
     s.root,
@@ -72,17 +116,18 @@ export function Sidebar({
       {/* Overlay */}
       <div
         className={`${s.overlay}${mobileOpen ? ` ${s.overlayVisible}` : ""}`}
-        onClick={onMobileClose}
+        onClick={handleMobileClose}
         aria-hidden="true"
       />
 
-      <aside className={cls} {...rest}>
+      <aside ref={asideRef} className={cls} aria-label="Menu lateral" {...rest}>
         {/* Botão fechar mobile */}
         {onMobileClose && (
           <button
+            ref={closeRef}
             type="button"
             className={s.mobileClose}
-            onClick={onMobileClose}
+            onClick={handleMobileClose}
             aria-label="Fechar menu"
           >
             <X size={20} />
@@ -174,7 +219,7 @@ export function SidebarNav({
 }: SidebarNavProps) {
   return (
     <nav className={s.nav} aria-label={ariaLabel}>
-      <div className={s.navList}>{children}</div>
+      <div className={s.navList} role="list">{children}</div>
     </nav>
   );
 }
@@ -237,6 +282,7 @@ export function SidebarItem({
         className={cls}
         onClick={onClick}
         aria-current={active ? "page" : undefined}
+        aria-label={collapsed ? label : undefined}
       >
         <Icon size={16} />
         <span className={s.itemLabel}>{label}</span>
@@ -249,6 +295,7 @@ export function SidebarItem({
         aria-current={active && !hasChildren ? "page" : undefined}
         aria-expanded={hasChildren && !collapsed ? expanded : undefined}
         aria-controls={hasChildren && !collapsed ? panelId : undefined}
+        aria-label={collapsed ? label : undefined}
       >
         <Icon size={16} />
         <span className={s.itemLabel}>{label}</span>

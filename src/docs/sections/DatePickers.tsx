@@ -3,6 +3,7 @@ import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { DatePicker } from "../../components/DatePicker";
+import { Button } from "../../components/Button";
 import dpStyles from "../../components/DatePicker.module.css";
 import s from "./DatePickers.module.css";
 
@@ -38,6 +39,26 @@ export function DatePickers() {
       description="Seletor de data com calendário inspirado no Geist da Vercel. Suporta seleção de data única e período (range), com entrada de texto DD/MM/AAAA e navegação por teclado."
       category={getCategoryForPage("date-picker")}
     >
+      <SubSection
+        id="tamanhos"
+        title="Tamanhos"
+        description="Três tamanhos que combinam com os tamanhos de Button: sm (24px), md (32px, padrão) e lg (40px)."
+      >
+        <div className={s.sizesGrid}>
+          {(["sm", "md", "lg"] as const).map((sz) => (
+            <div key={sz} className={s.sizeItem}>
+              <span className={s.stateLabel}>{sz}</span>
+              <div className={s.sizeRow}>
+                <DatePicker size={sz} placeholder="DD/MM/AAAA" />
+                <Button size={sz} variant="primary">
+                  Aplicar
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </SubSection>
+
       <SubSection
         id="estados"
         title="Estados"

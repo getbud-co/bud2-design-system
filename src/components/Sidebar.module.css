@@ -28,7 +28,8 @@
   transition: opacity 120ms ease;
 }
 
-.root:hover .collapseHitArea {
+.root:hover .collapseHitArea,
+.root:focus-within .collapseHitArea {
   opacity: 1;
 }
 
@@ -318,7 +319,8 @@
   padding: var(--sp-3xs);
 }
 
-.itemWrapper:hover > .flyout {
+.itemWrapper:hover > .flyout,
+.itemWrapper:focus-within > .flyout {
   opacity: 1;
   pointer-events: auto;
 }
@@ -555,8 +557,8 @@
     position: absolute;
     top: var(--sp-xs);
     right: var(--sp-xs);
-    width: 32px;
-    height: 32px;
+    width: 44px; /* Apple HIG minimum touch target */
+    height: 44px; /* Apple HIG minimum touch target */
     background: none;
     border: 1px solid transparent;
     border-radius: var(--radius-xs);

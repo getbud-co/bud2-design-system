@@ -198,3 +198,12 @@
     font-size: var(--text-md); /* prevent iOS zoom — 16px via token */
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .container,
+  .item {
+    animation: none;
+    transition: none;
+  }
+}

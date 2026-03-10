@@ -123,3 +123,10 @@
     overflow-x: auto;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .cell {
+    animation: none;
+    transition: none;
+  }
+}

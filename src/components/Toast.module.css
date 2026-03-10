@@ -165,3 +165,10 @@
     bottom: var(--sp-sm);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .actionBtn {
+    animation: none;
+    transition: none;
+  }
+}

@@ -60,10 +60,14 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       type="button"
       className={classes}
       disabled={disabled || loading}
+      aria-busy={loading || undefined}
       {...rest}
     >
       {loading ? (
-        <CircleNotch size={iSize} className={s.spinner} />
+        <>
+          <CircleNotch size={iSize} className={s.spinner} />
+          <span className={s.srOnly}>Carregando...</span>
+        </>
       ) : (
         <>
           {LeftIcon && <LeftIcon size={iSize} />}

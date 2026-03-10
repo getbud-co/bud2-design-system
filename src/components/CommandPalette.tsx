@@ -5,6 +5,8 @@ import {
   useEffect,
   useRef,
   useMemo,
+  useId,
+  useCallback,
 } from "react";
 import { createPortal } from "react-dom";
 import { MagnifyingGlass } from "@phosphor-icons/react";
@@ -73,6 +75,39 @@ export function CommandPalette({
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const uid = useId();
+  const listboxId = `${uid}-listbox`;
+
+  /* ——— Item id helper ——— */
+
+  const getItemId = useCallback(
+    (flatIdx: number) => `${uid}-item-${flatIdx}`,
+    [uid]
+  );
+
+  /* ——— Focus trap ——— */
+
+  function handleFocusTrap(e: React.KeyboardEvent) {
+    if (e.key !== "Tab" || !containerRef.current) return;
+    const focusable = containerRef.current.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusable.length === 0) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      }
+    } else {
+      if (document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
 
   /* ——— Filtered & flattened ——— */
 
@@ -123,6 +158,7 @@ export function CommandPalette({
   /* ——— Keyboard ——— */
 
   function handleKeyDown(e: React.KeyboardEvent) {
+    handleFocusTrap(e);
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault();
@@ -167,20 +203,27 @@ export function CommandPalette({
       }}
       onKeyDown={handleKeyDown}
     >
-      <div className={s.container} role="dialog" aria-label="Busca">
+      <div className={s.container} ref={containerRef} role="dialog" aria-modal="true" aria-label="Busca">
         <div className={s.inputRow}>
           <MagnifyingGlass size={16} className={s.inputIcon} />
           <input
             ref={inputRef}
             className={s.input}
             type="text"
+            role="combobox"
+            aria-expanded="true"
+            aria-haspopup="listbox"
+            aria-controls={listboxId}
+            aria-activedescendant={
+              flatItems.length > 0 ? getItemId(selectedIndex) : undefined
+            }
             placeholder={placeholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
 
-        <div className={s.list} ref={listRef}>
+        <div className={s.list} ref={listRef} id={listboxId} role="listbox">
           {flatItems.length === 0 ? (
             <div className={s.empty}>{emptyMessage}</div>
           ) : (
@@ -190,7 +233,10 @@ export function CommandPalette({
                 {g.items.map(({ item, flatIdx }) => (
                   <button
                     key={item.id}
+                    id={getItemId(flatIdx)}
                     type="button"
+                    role="option"
+                    aria-selected={flatIdx === selectedIndex}
                     data-command-item
                     className={`${s.item} ${flatIdx === selectedIndex ? s.itemSelected : ""}`}
                     onMouseEnter={() => setSelectedIndex(flatIdx)}

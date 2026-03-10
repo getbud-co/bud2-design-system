@@ -32,7 +32,13 @@ export interface SelectOption {
   label: string;
 }
 
+type SelectSize = "sm" | "md" | "lg";
+
+const ICON_SIZES: Record<SelectSize, number> = { sm: 14, md: 16, lg: 20 };
+
 interface SelectBaseProps {
+  /** Tamanho do trigger — combina com Button sizes (default: "md") */
+  size?: SelectSize;
   label?: ReactNode;
   leftIcon?: ComponentType<IconProps>;
   placeholder?: string;
@@ -69,6 +75,7 @@ const messageIconMap: Record<MessageType, ComponentType<IconProps>> = {
 
 export function Select(props: SelectProps) {
   const {
+    size = "md",
     label,
     leftIcon: LeftIcon,
     placeholder = "Selecione...",
@@ -81,6 +88,8 @@ export function Select(props: SelectProps) {
     disabled = false,
     className,
   } = props;
+
+  const iconSize = ICON_SIZES[size];
 
   // ——— Single value state ———
   const isSingleControlled =
@@ -115,6 +124,7 @@ export function Select(props: SelectProps) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const triggerId = useId();
   const listId = useId();
+  const messageId = useId();
 
   // ——— Filtered options ———
   const filtered = useMemo(() => {
@@ -143,6 +153,7 @@ export function Select(props: SelectProps) {
 
   const triggerClasses = [
     s.trigger,
+    s[size],
     isError ? s.error : "",
     disabled ? s.disabled : "",
     open ? s.open : "",
@@ -332,6 +343,7 @@ export function Select(props: SelectProps) {
         if (open) {
           setOpen(false);
           setSearch("");
+          triggerRef.current?.focus();
         }
         break;
     }
@@ -357,7 +369,7 @@ export function Select(props: SelectProps) {
 
   return (
     <div className={wrapperClasses} ref={wrapperRef}>
-      {label && <label className={s.label}>{label}</label>}
+      {label && <label className={s.label} htmlFor={triggerId}>{label}</label>}
       <div className={s.anchor}>
         <button
           ref={triggerRef}
@@ -370,13 +382,16 @@ export function Select(props: SelectProps) {
           aria-haspopup="listbox"
           aria-expanded={open}
           aria-controls={open ? listId : undefined}
+          aria-activedescendant={open && focusedIndex >= 0 ? `${listId}-opt-${focusedIndex}` : undefined}
+          aria-describedby={hasMessage ? messageId : undefined}
+          aria-invalid={isError || undefined}
         >
-          {LeftIcon && <LeftIcon size={16} />}
+          {LeftIcon && <LeftIcon size={iconSize} />}
           <span className={triggerText ? s.value : s.placeholder}>
             {triggerText ?? placeholder}
           </span>
           <CaretDown
-            size={16}
+            size={iconSize}
                         className={`${s.caret} ${open ? s.caretOpen : ""}`}
           />
         </button>
@@ -402,6 +417,7 @@ export function Select(props: SelectProps) {
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyDown={handleListKeyDown}
                   aria-label="Buscar opções"
+                  aria-activedescendant={focusedIndex >= 0 ? `${listId}-opt-${focusedIndex}` : undefined}
                 />
               </div>
             )}
@@ -414,7 +430,7 @@ export function Select(props: SelectProps) {
               aria-multiselectable={multiple || undefined}
             >
               {filtered.length === 0 && (
-                <li className={s.empty}>Nenhum resultado</li>
+                <li className={s.empty} role="status" aria-live="polite">Nenhum resultado</li>
               )}
               {filtered.map((opt, i) => {
                 const isSelected = multiple
@@ -452,7 +468,7 @@ export function Select(props: SelectProps) {
           document.body
         )}
       {hasMessage && (
-        <div className={`${s.message} ${s[messageType]}`}>
+        <div id={messageId} className={`${s.message} ${s[messageType]}`}>
           {MsgIcon && <MsgIcon size={14} />}
           <span>{message}</span>
         </div>

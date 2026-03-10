@@ -308,3 +308,14 @@
     min-height: 44px; /* Apple HIG touch target */
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .overlay,
+  .markAllBtn,
+  .item,
+  .footerBtn {
+    animation: none;
+    transition: none;
+  }
+}

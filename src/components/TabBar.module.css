@@ -1,0 +1,142 @@
+/* ——— Wrapper — scroll overflow hints ——— */
+
+.wrapper {
+  position: relative;
+}
+
+.wrapper::before,
+.wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--sp-xl); /* 32px fade zone */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 150ms ease;
+  z-index: 1;
+}
+
+.wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-white), transparent);
+}
+
+.wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-white), transparent);
+}
+
+.overflowLeft::before {
+  opacity: 1;
+}
+
+.overflowRight::after {
+  opacity: 1;
+}
+
+/* ——— Container ——— */
+
+.tabList {
+  display: flex;
+  align-items: stretch;
+  gap: var(--sp-lg);
+  padding: 0 var(--sp-sm);
+  border-bottom: 1px solid var(--color-caramel-300);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.tabList::-webkit-scrollbar {
+  display: none;
+}
+
+/* ——— Tab button ——— */
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+  padding: var(--sp-xs) 0;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  line-height: 1.05;
+  color: var(--color-neutral-500);
+  white-space: nowrap;
+  transition: color 120ms ease;
+}
+
+/* Indicador ativo — pseudo-element sobre a borda do container */
+.tab::after {
+  content: "";
+  position: absolute;
+  bottom: -1px; /* sobrepõe a borda do container */
+  left: 0;
+  right: 0;
+  height: 3px; /* indicador — valor estrutural, sem token */
+  background: transparent;
+  transition: background-color 120ms ease;
+}
+
+/* ——— States ——— */
+
+.tab:hover:not(.disabled) {
+  color: var(--color-neutral-950);
+}
+
+.tab:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 2px;
+  border-radius: var(--radius-2xs);
+}
+
+.disabled {
+  color: var(--color-neutral-300);
+  cursor: not-allowed;
+}
+
+.disabled:hover {
+  color: var(--color-neutral-300);
+}
+
+/* ——— Active ——— */
+
+.active {
+  font-weight: 700;
+  color: var(--color-neutral-950);
+}
+
+.active::after {
+  background: var(--color-caramel-300);
+}
+
+/* ——— Responsive ——— */
+
+@media (max-width: 640px) {
+  .tabList {
+    gap: var(--sp-md);
+    padding: 0 var(--sp-xs);
+  }
+
+  .tab {
+    min-height: 44px; /* Apple HIG touch target */
+  }
+}
+
+/* ——— Reduced motion ——— */
+
+@media (prefers-reduced-motion: reduce) {
+  .tab,
+  .tab::after,
+  .wrapper::before,
+  .wrapper::after {
+    transition: none;
+  }
+}

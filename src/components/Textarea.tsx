@@ -3,6 +3,7 @@ import {
   type TextareaHTMLAttributes,
   type ReactNode,
   forwardRef,
+  useId,
 } from "react";
 import { WarningCircle, CheckCircle } from "@phosphor-icons/react";
 import s from "./Textarea.module.css";
@@ -40,6 +41,9 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     },
     ref
   ) => {
+    const autoId = useId();
+    const textareaId = rest.id ?? autoId;
+    const messageId = `${textareaId}-message`;
     const hasMessage = !!message && !!messageType;
     const isError = messageType === "error";
 
@@ -59,18 +63,21 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     return (
       <div className={wrapperClasses}>
-        {label && <label className={s.label}>{label}</label>}
+        {label && <label className={s.label} htmlFor={textareaId}>{label}</label>}
         <div className={boxClasses}>
           <textarea
             ref={ref}
+            id={textareaId}
             className={s.textarea}
             disabled={disabled}
             rows={rows}
+            aria-invalid={isError || undefined}
+            aria-describedby={hasMessage ? messageId : undefined}
             {...rest}
           />
         </div>
         {hasMessage && (
-          <div className={`${s.message} ${s[messageType]}`}>
+          <div id={messageId} className={`${s.message} ${s[messageType]}`}>
             {MsgIcon && <MsgIcon size={14} />}
             <span>{message}</span>
           </div>

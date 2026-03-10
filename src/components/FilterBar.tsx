@@ -104,6 +104,12 @@ interface FilterDropdownProps {
   /** Conteúdo do dropdown */
   children: ReactNode;
   className?: string;
+  /** Posicionamento relativo ao âncora. Default: "bottom-start" */
+  placement?: "bottom-start" | "right-start";
+  /** Refs de elementos que NÃO devem disparar click-outside */
+  ignoreRefs?: React.RefObject<HTMLElement | null>[];
+  /** Se true, não renderiza overlay de fundo (útil para sub-menus) */
+  noOverlay?: boolean;
 }
 
 export function FilterDropdown({
@@ -112,6 +118,9 @@ export function FilterDropdown({
   anchorRef,
   children,
   className,
+  placement = "bottom-start",
+  ignoreRefs,
+  noOverlay,
 }: FilterDropdownProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -128,21 +137,33 @@ export function FilterDropdown({
     const margin = 8;
 
     el.style.position = "fixed";
-    el.style.left = `${ar.left}px`;
-    el.style.top = `${ar.bottom + gap}px`;
-    el.style.bottom = "auto";
+
+    if (placement === "right-start") {
+      el.style.left = `${ar.right + gap}px`;
+      el.style.top = `${ar.top}px`;
+      el.style.bottom = "auto";
+    } else {
+      el.style.left = `${ar.left}px`;
+      el.style.top = `${ar.bottom + gap}px`;
+      el.style.bottom = "auto";
+    }
 
     const dr = el.getBoundingClientRect();
 
     if (dr.bottom > window.innerHeight - margin) {
       el.style.top = "auto";
-      el.style.bottom = `${window.innerHeight - ar.top + gap}px`;
+      el.style.bottom = `${margin}px`;
     }
 
     if (dr.right > window.innerWidth - margin) {
-      el.style.left = `${Math.max(margin, window.innerWidth - dr.width - margin)}px`;
+      if (placement === "right-start") {
+        // Flip to left side
+        el.style.left = `${Math.max(margin, ar.left - dr.width - gap)}px`;
+      } else {
+        el.style.left = `${Math.max(margin, window.innerWidth - dr.width - margin)}px`;
+      }
     }
-  }, [anchorRef]);
+  }, [anchorRef, placement]);
 
   useLayoutEffect(() => {
     if (!open) return;
@@ -169,12 +190,18 @@ export function FilterDropdown({
         dropdownRef.current &&
         !dropdownRef.current.contains(target)
       ) {
+        // Check if click landed on an ignored element
+        if (ignoreRefs?.some((ref) => ref.current?.contains(target))) return;
+        // Check if click landed on another FilterDropdown portal
+        if (target instanceof Element && target.closest("[data-filter-dropdown]")) return;
+        // Check if click landed on a portaled dialog (e.g. DatePicker calendar)
+        if (target instanceof Element && target.closest('[role="dialog"]')) return;
         onClose();
       }
     }
     document.addEventListener("mousedown", handleMouseDown);
     return () => document.removeEventListener("mousedown", handleMouseDown);
-  }, [open, onClose, anchorRef]);
+  }, [open, onClose, anchorRef, ignoreRefs]);
 
   useEffect(() => {
     if (!open) return;
@@ -191,11 +218,18 @@ export function FilterDropdown({
 
   return createPortal(
     <>
-      <div className={s.overlay} role="presentation" onClick={onClose} />
+      {!noOverlay && <div className={s.overlay} role="presentation" onClick={onClose} />}
       <div
         ref={dropdownRef}
         className={classes}
-        onMouseDown={(e) => e.preventDefault()}
+        data-filter-dropdown
+        onMouseDown={(e) => {
+          // Prevent focus loss on buttons/checkboxes, but allow inputs to receive focus
+          const tag = (e.target as HTMLElement).tagName;
+          if (tag !== "INPUT" && tag !== "TEXTAREA" && tag !== "SELECT") {
+            e.preventDefault();
+          }
+        }}
       >
         <div className={s.sheetHandle} />
         {children}
@@ -228,6 +262,8 @@ interface FilterBarProps {
   primaryAction?: ReactNode;
   /** Placeholder do campo de busca no popover */
   searchPlaceholder?: string;
+  /** Abre o popover de adicionar filtro ao montar */
+  defaultOpen?: boolean;
   /** FilterChips renderizados como children */
   children?: ReactNode;
   className?: string;
@@ -241,10 +277,11 @@ export function FilterBar({
   saveViewLabel = "Salvar visualização",
   primaryAction,
   searchPlaceholder = "Buscar filtro...",
+  defaultOpen = false,
   children,
   className,
 }: FilterBarProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const [search, setSearch] = useState("");
   const [focusedIndex, setFocusedIndex] = useState(-1);
 
@@ -469,6 +506,8 @@ export function FilterBar({
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     onKeyDown={handleKeyDown}
+                    role="combobox"
+                    aria-expanded="true"
                     aria-label="Buscar filtro"
                     aria-controls={listboxId}
                     aria-activedescendant={

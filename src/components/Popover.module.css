@@ -98,7 +98,8 @@
   display: none;
 }
 
-.submenuWrapper:hover .submenu {
+.submenuWrapper:hover .submenu,
+.submenuWrapper:focus-within .submenu {
   display: block;
 }
 
@@ -134,5 +135,14 @@
 
   .submenuFlip .submenu {
     right: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popover,
+  .submenu,
+  .item {
+    animation: none;
+    transition: none;
   }
 }

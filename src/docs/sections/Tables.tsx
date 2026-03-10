@@ -9,6 +9,7 @@ import { Avatar } from "../../components/Avatar";
 import {
   Table,
   TableCardHeader,
+  TableBulkActions,
   TableContent,
   TableHead,
   TableBody,
@@ -17,6 +18,8 @@ import {
   TableCell,
   TablePagination,
 } from "../../components/Table";
+import { Button } from "../../components/Button";
+import { Trash, Export } from "@phosphor-icons/react";
 import s from "./Tables.module.css";
 
 /* ——— Demo data ——— */
@@ -137,6 +140,17 @@ function DividerDemo() {
       onSelectRow={handleSelectRow}
       onSelectAll={handleSelectAll}
     >
+      <TableBulkActions
+        count={selected.size}
+        onClear={() => setSelected(new Set())}
+      >
+        <Button variant="secondary" size="sm" leftIcon={Export}>
+          Exportar
+        </Button>
+        <Button variant="danger" size="sm" leftIcon={Trash}>
+          Excluir
+        </Button>
+      </TableBulkActions>
       <TableCardHeader
         title="Membros do time"
         badge={

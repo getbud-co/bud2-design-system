@@ -49,6 +49,8 @@ export {
   SidebarFooter,
   SidebarUser,
 } from "./components/Sidebar";
+export { TabBar, getTabId, getPanelId } from "./components/TabBar";
+export { Table, TableContent, TableHead, TableBody, TableRow, TableHeaderCell, TableCell, TableCardHeader, TableBulkActions, TablePagination } from "./components/Table";
 export { Textarea } from "./components/Textarea";
 export { toast, Toaster } from "./components/Toast";
 export { Toggle } from "./components/Toggle";
@@ -70,6 +72,7 @@ export type { RadarDataPoint } from "./components/Radar";
 export type { NotificationItem } from "./components/NotificationPanel";
 export type { PopoverItem } from "./components/Popover";
 export type { SelectOption } from "./components/Select";
+export type { TabItem, TabBarProps } from "./components/TabBar";
 
 // Utilities
 export {

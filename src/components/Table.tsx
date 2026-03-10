@@ -5,10 +5,10 @@ import {
   type TdHTMLAttributes,
   createContext,
   useContext,
-  useCallback,
   useMemo,
 } from "react";
-import { ArrowDown, ArrowUp } from "@phosphor-icons/react";
+import { createPortal } from "react-dom";
+import { ArrowDown, ArrowUp, X } from "@phosphor-icons/react";
 import { Checkbox } from "./Checkbox";
 import { Pagination } from "./Pagination";
 import s from "./Table.module.css";
@@ -37,6 +37,8 @@ const TableContext = createContext<TableContextValue>({
 
 interface TableProps extends HTMLAttributes<HTMLDivElement> {
   variant?: "divider" | "striped";
+  /** Adiciona box-shadow ao container (default: true) */
+  elevated?: boolean;
   selectable?: boolean;
   selectedRows?: Set<string>;
   rowIds?: string[];
@@ -46,6 +48,7 @@ interface TableProps extends HTMLAttributes<HTMLDivElement> {
 
 export function Table({
   variant = "divider",
+  elevated = true,
   selectable = false,
   selectedRows,
   rowIds = [],
@@ -75,7 +78,7 @@ export function Table({
   return (
     <TableContext.Provider value={ctx}>
       <div
-        className={[s.root, className ?? ""].filter(Boolean).join(" ")}
+        className={[s.root, elevated && s.elevated, className].filter(Boolean).join(" ")}
         {...rest}
       >
         {children}
@@ -104,6 +107,42 @@ export function TableCardHeader({ title, badge, actions }: TableCardHeaderProps)
       </div>
       <div className={s.cardHeaderDivider} />
     </div>
+  );
+}
+
+/* ——— TableBulkActions ——— */
+
+interface TableBulkActionsProps {
+  /** Quantidade de itens selecionados */
+  count: number;
+  /** Callback ao clicar em desmarcar tudo */
+  onClear: () => void;
+  /** Botões de ação (ex: Excluir, Exportar) */
+  children: ReactNode;
+}
+
+export function TableBulkActions({ count, onClear, children }: TableBulkActionsProps) {
+  if (count === 0) return null;
+
+  return createPortal(
+    <div className={s.bulkBar} role="toolbar" aria-label="Ações em lote">
+      <div className={s.bulkLeft}>
+        <button
+          type="button"
+          className={s.bulkClose}
+          onClick={onClear}
+          aria-label="Desmarcar todos"
+        >
+          <X size={16} />
+        </button>
+        <span className={s.bulkCount} aria-live="polite" role="status">
+          {count} {count === 1 ? "item selecionado" : "itens selecionados"}
+        </span>
+      </div>
+      <span className={s.bulkDivider} />
+      <div className={s.bulkActions}>{children}</div>
+    </div>,
+    document.body,
   );
 }
 
@@ -152,7 +191,7 @@ interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
 }
 
 export function TableRow({ rowId, children, className, ...rest }: TableRowProps) {
-  const { variant, selectedRows } = useContext(TableContext);
+  const { variant, selectable, selectedRows } = useContext(TableContext);
   const isSelected = rowId ? selectedRows.has(rowId) : false;
 
   const classes = [
@@ -165,7 +204,11 @@ export function TableRow({ rowId, children, className, ...rest }: TableRowProps)
     .join(" ");
 
   return (
-    <tr className={classes} {...rest}>
+    <tr
+      className={classes}
+      aria-selected={selectable ? isSelected || undefined : undefined}
+      {...rest}
+    >
       {children}
     </tr>
   );
@@ -212,15 +255,13 @@ export function TableHeaderCell({
     );
   }
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (sortable && onSort && (e.key === "Enter" || e.key === " ")) {
-        e.preventDefault();
-        onSort();
-      }
-    },
-    [sortable, onSort]
-  );
+  const sortLabel = sortable
+    ? sortDirection === "asc"
+      ? "ordenado crescente"
+      : sortDirection === "desc"
+        ? "ordenado decrescente"
+        : "clique para ordenar"
+    : undefined;
 
   return (
     <th
@@ -242,7 +283,7 @@ export function TableHeaderCell({
           type="button"
           className={s.sortButton}
           onClick={onSort}
-          onKeyDown={handleKeyDown}
+          aria-label={sortLabel}
         >
           <span>{children}</span>
           {sortDirection === "asc" && <ArrowUp size={12} />}

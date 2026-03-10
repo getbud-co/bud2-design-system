@@ -79,6 +79,7 @@ export function DropdownButton({
   const searchRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const triggerId = useId();
+  const listId = `${triggerId}-list`;
 
   const iSize = iconSize[size];
 
@@ -258,6 +259,11 @@ export function DropdownButton({
         onKeyDown={handleKeyDown}
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-activedescendant={
+          open && focusedIndex >= 0 && !searchable
+            ? `${triggerId}-opt-${focusedIndex}`
+            : undefined
+        }
       >
         {LeftIcon && <LeftIcon size={iSize} />}
         <span className={s.label}>{children}</span>
@@ -282,6 +288,13 @@ export function DropdownButton({
                   type="text"
                   placeholder={searchPlaceholder}
                   value={search}
+                  aria-label="Buscar itens"
+                  aria-controls={listId}
+                  aria-activedescendant={
+                    focusedIndex >= 0
+                      ? `${triggerId}-opt-${focusedIndex}`
+                      : undefined
+                  }
                   onChange={(e) => {
                     setSearch(e.target.value);
                     setFocusedIndex(0);
@@ -290,13 +303,14 @@ export function DropdownButton({
                 />
               </div>
             )}
-            <ul ref={listRef} className={s.list}>
+            <ul ref={listRef} id={listId} className={s.list}>
               {filtered.map((item, i) => (
                 <li
                   key={item.id}
+                  id={`${triggerId}-opt-${i}`}
                   className={`${s.item} ${i === focusedIndex ? s.focused : ""}`}
                   role="option"
-                  aria-selected={i === focusedIndex}
+                  aria-selected={false}
                   onMouseEnter={() => setFocusedIndex(i)}
                   onClick={() => handleSelect(item)}
                 >
@@ -310,7 +324,7 @@ export function DropdownButton({
                 </li>
               ))}
               {filtered.length === 0 && (
-                <li className={s.empty}>Nenhum resultado encontrado</li>
+                <li className={s.empty} role="presentation">Nenhum resultado encontrado</li>
               )}
             </ul>
           </div>,

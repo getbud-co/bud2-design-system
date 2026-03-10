@@ -9,6 +9,7 @@ import {
   useEffect,
   useCallback,
   useMemo,
+  useId,
 } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -48,7 +49,13 @@ interface IconProps {
   weight?: "regular";
 }
 
+type DatePickerSize = "sm" | "md" | "lg";
+
+const ICON_SIZES: Record<DatePickerSize, number> = { sm: 14, md: 16, lg: 20 };
+
 interface DatePickerBaseProps {
+  /** Tamanho do trigger — combina com Button sizes (default: "md") */
+  size?: DatePickerSize;
   label?: ReactNode;
   placeholder?: string;
   message?: string;
@@ -134,6 +141,7 @@ function applyDateMask(raw: string): string {
 
 export function DatePicker(props: DatePickerProps) {
   const {
+    size = "md",
     label,
     placeholder,
     message,
@@ -143,6 +151,8 @@ export function DatePicker(props: DatePickerProps) {
     maxDate,
     className,
   } = props;
+
+  const iconSize = ICON_SIZES[size];
 
   const mode = props.mode ?? "single";
   const isRange = mode === "range";
@@ -194,6 +204,12 @@ export function DatePicker(props: DatePickerProps) {
   const startInputRef = useRef<HTMLInputElement>(null);
   const endInputRef = useRef<HTMLInputElement>(null);
 
+  // ——— IDs for a11y ———
+  const autoId = useId();
+  const triggerId = `${autoId}-trigger`;
+  const messageId = `${autoId}-message`;
+  const startInputId = `${autoId}-start`;
+
   // ——— Derived ———
   const hasMessage = !!message && !!messageType;
   const isError = messageType === "error";
@@ -221,6 +237,7 @@ export function DatePicker(props: DatePickerProps) {
   const wrapperClasses = [s.wrapper, className ?? ""].filter(Boolean).join(" ");
   const triggerClasses = [
     s.trigger,
+    s[size],
     isError ? s.error : "",
     disabled ? s.disabled : "",
     open ? s.open : "",
@@ -229,6 +246,7 @@ export function DatePicker(props: DatePickerProps) {
     .join(" ");
   const rangeTriggerClasses = [
     s.rangeTrigger,
+    s[size],
     isError ? s.error : "",
     disabled ? s.disabled : "",
     open ? s.open : "",
@@ -330,6 +348,7 @@ export function DatePicker(props: DatePickerProps) {
         setStartText(singleValue ? formatDate(singleValue) : "");
         const nav = singleValue ?? today();
         setViewMonth({ year: nav.year, month: nav.month, day: 1 });
+        setFocusedDay(nav);
         requestAnimationFrame(() => startInputRef.current?.focus());
       }
     },
@@ -340,8 +359,7 @@ export function DatePicker(props: DatePickerProps) {
     setOpen(false);
     setFocusedDay(null);
     if (isRange) {
-      startInputRef.current?.blur();
-      endInputRef.current?.blur();
+      startInputRef.current?.focus();
     } else {
       triggerRef.current?.focus();
     }
@@ -639,7 +657,7 @@ export function DatePicker(props: DatePickerProps) {
 
   return (
     <div className={wrapperClasses} ref={wrapperRef}>
-      {label && <label className={s.label}>{label}</label>}
+      {label && <label className={s.label} htmlFor={isRange ? startInputId : triggerId}>{label}</label>}
       <div className={s.anchor}>
         {isRange ? (
           /* ——— Range trigger: inline inputs ——— */
@@ -650,12 +668,16 @@ export function DatePicker(props: DatePickerProps) {
               if (disabled) return;
               if (!open) openPopover("start");
             }}
+            role="group"
             aria-expanded={open}
             aria-haspopup="dialog"
+            aria-describedby={hasMessage ? messageId : undefined}
+            aria-invalid={isError || undefined}
           >
-            <CalendarBlank size={16} />
+            <CalendarBlank size={iconSize} />
             <input
               ref={startInputRef}
+              id={startInputId}
               type="text"
               className={s.rangeTriggerInput}
               placeholder="DD/MM/AAAA"
@@ -682,7 +704,7 @@ export function DatePicker(props: DatePickerProps) {
               aria-label="Data final"
             />
             <CaretDown
-              size={16}
+              size={iconSize}
                             className={`${s.caret} ${open ? s.caretOpen : ""}`}
             />
           </div>
@@ -690,6 +712,7 @@ export function DatePicker(props: DatePickerProps) {
           /* ——— Single trigger: button ——— */
           <button
             ref={triggerRef}
+            id={triggerId}
             type="button"
             className={triggerClasses}
             onClick={() => {
@@ -701,13 +724,15 @@ export function DatePicker(props: DatePickerProps) {
             disabled={disabled}
             aria-haspopup="dialog"
             aria-expanded={open}
+            aria-describedby={hasMessage ? messageId : undefined}
+            aria-invalid={isError || undefined}
           >
-            <CalendarBlank size={16} />
+            <CalendarBlank size={iconSize} />
             <span className={triggerText ? s.value : s.placeholder}>
               {triggerText ?? placeholder ?? defaultPlaceholder}
             </span>
             <CaretDown
-              size={16}
+              size={iconSize}
                             className={`${s.caret} ${open ? s.caretOpen : ""}`}
             />
           </button>
@@ -722,7 +747,6 @@ export function DatePicker(props: DatePickerProps) {
             style={popoverStyle}
             role="dialog"
             aria-label="Seletor de data"
-            aria-modal="true"
             onMouseDown={(e) => e.preventDefault()}
           >
             {/* ——— Header input (single mode only) ——— */}
@@ -823,7 +847,7 @@ export function DatePicker(props: DatePickerProps) {
         )}
 
       {hasMessage && (
-        <div className={`${s.message} ${s[messageType]}`}>
+        <div id={messageId} className={`${s.message} ${s[messageType]}`}>
           {MsgIcon && <MsgIcon size={14} />}
           <span>{message}</span>
         </div>

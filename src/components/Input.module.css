@@ -20,14 +20,28 @@
   display: flex;
   align-items: center;
   gap: var(--sp-3xs);
-  min-height: 40px;
-  padding: var(--sp-xs);
   background-color: var(--color-white);
   border: 1px solid var(--color-caramel-300);
   border-radius: var(--radius-2xs);
   color: var(--color-neutral-500);
   transition: border-color 120ms ease, box-shadow 120ms ease;
   overflow: clip;
+}
+
+/* ——— Sizes ——— */
+.sm {
+  min-height: 24px;
+  padding: var(--sp-3xs);
+}
+
+.md {
+  min-height: 32px;
+  padding: var(--sp-2xs);
+}
+
+.lg {
+  min-height: 40px;
+  padding: var(--sp-xs);
 }
 
 .inputBox:hover:not(.disabled),
@@ -77,6 +91,14 @@
   font-size: var(--text-sm);
   line-height: normal;
   color: var(--color-neutral-950);
+}
+
+.sm .input {
+  font-size: var(--text-xs);
+}
+
+.lg .input {
+  font-size: var(--text-md);
 }
 
 .input::placeholder {

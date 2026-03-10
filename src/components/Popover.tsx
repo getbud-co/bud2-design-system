@@ -35,11 +35,20 @@ interface PopoverProps {
   onClose: () => void;
   /** Ref do elemento trigger para posicionamento e click-outside */
   anchorRef: React.RefObject<HTMLElement | null>;
+  /** Rótulo acessível para o menu */
+  ariaLabel?: string;
 }
 
-export function Popover({ items, open, onClose, anchorRef }: PopoverProps) {
+export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverProps) {
   const popoverRef = useRef<HTMLDivElement>(null);
   const [submenuFlip, setSubmenuFlip] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const previousFocusRef = useRef<Element | null>(null);
+
+  const getMenuItems = useCallback((): HTMLElement[] => {
+    if (!popoverRef.current) return [];
+    return Array.from(popoverRef.current.querySelectorAll<HTMLElement>('[role="menuitem"]'));
+  }, []);
 
   const applyPosition = useCallback(() => {
     const anchor = anchorRef.current;
@@ -80,6 +89,47 @@ export function Popover({ items, open, onClose, anchorRef }: PopoverProps) {
     applyPosition();
   }, [open, applyPosition]);
 
+  // Store previously focused element and focus first item on open
+  useEffect(() => {
+    if (!open) return;
+    previousFocusRef.current = document.activeElement;
+    // Defer focus to after portal render
+    const raf = requestAnimationFrame(() => {
+      const menuItems = getMenuItems();
+      if (menuItems.length > 0) {
+        setFocusedIndex(0);
+        menuItems[0].focus();
+      }
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [open, getMenuItems]);
+
+  // Sync tabIndex when focusedIndex changes
+  useEffect(() => {
+    const menuItems = getMenuItems();
+    menuItems.forEach((item, i) => {
+      item.setAttribute("tabindex", i === focusedIndex ? "0" : "-1");
+    });
+    if (focusedIndex >= 0 && menuItems[focusedIndex]) {
+      menuItems[focusedIndex].focus();
+    }
+  }, [focusedIndex, getMenuItems]);
+
+  // Restore focus helper
+  const restoreFocus = useCallback(() => {
+    const el = previousFocusRef.current;
+    if (el && el instanceof HTMLElement) {
+      el.focus();
+    }
+    previousFocusRef.current = null;
+  }, []);
+
+  // Wrap onClose to restore focus
+  const handleClose = useCallback(() => {
+    onClose();
+    restoreFocus();
+  }, [onClose, restoreFocus]);
+
   // Reposition on scroll/resize
   useEffect(() => {
     if (!open) return;
@@ -102,24 +152,59 @@ export function Popover({ items, open, onClose, anchorRef }: PopoverProps) {
         popoverRef.current &&
         !popoverRef.current.contains(target)
       ) {
-        onClose();
+        handleClose();
       }
     }
     document.addEventListener("mousedown", handleMouseDown);
     return () => document.removeEventListener("mousedown", handleMouseDown);
-  }, [open, onClose, anchorRef]);
+  }, [open, handleClose, anchorRef]);
 
   // ESC
   useEffect(() => {
     if (!open) return;
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
-        onClose();
+        handleClose();
       }
     }
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, onClose]);
+  }, [open, handleClose]);
+
+  // Arrow key navigation on the popover container
+  const handlePopoverKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      const menuItems = getMenuItems();
+      const count = menuItems.length;
+      if (count === 0) return;
+
+      let nextIndex = focusedIndex;
+
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          nextIndex = focusedIndex < count - 1 ? focusedIndex + 1 : 0;
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          nextIndex = focusedIndex > 0 ? focusedIndex - 1 : count - 1;
+          break;
+        case "Home":
+          e.preventDefault();
+          nextIndex = 0;
+          break;
+        case "End":
+          e.preventDefault();
+          nextIndex = count - 1;
+          break;
+        default:
+          return;
+      }
+
+      setFocusedIndex(nextIndex);
+    },
+    [focusedIndex, getMenuItems],
+  );
 
   if (!open) return null;
 
@@ -128,12 +213,18 @@ export function Popover({ items, open, onClose, anchorRef }: PopoverProps) {
       ref={popoverRef}
       className={s.popover}
       role="menu"
-      aria-label="Popover"
+      aria-label={ariaLabel ?? "Popover"}
+      onKeyDown={handlePopoverKeyDown}
     >
-      {items.map((item) =>
+      {items.map((item, index) =>
         item.submenu ? (
           <div key={item.id} className={`${s.submenuWrapper} ${submenuFlip ? s.submenuFlip : ""}`}>
-            <button type="button" className={s.item} role="menuitem">
+            <button
+              type="button"
+              className={s.item}
+              role="menuitem"
+              tabIndex={index === focusedIndex ? 0 : -1}
+            >
               {item.icon && <item.icon size={16} className={s.itemIcon} />}
               <span className={s.itemLabel}>{item.label}</span>
               {item.badge != null && item.badge > 0 && (
@@ -149,9 +240,10 @@ export function Popover({ items, open, onClose, anchorRef }: PopoverProps) {
             type="button"
             className={`${s.item}${item.danger ? ` ${s.itemDanger}` : ""}`}
             role="menuitem"
+            tabIndex={index === focusedIndex ? 0 : -1}
             onClick={() => {
               item.onClick?.();
-              onClose();
+              handleClose();
             }}
           >
             {item.icon && <item.icon size={16} className={s.itemIcon} />}

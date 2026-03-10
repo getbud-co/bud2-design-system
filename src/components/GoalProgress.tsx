@@ -130,7 +130,42 @@ export function GoalProgressBar({
           <div
             className={s.thumb}
             style={{ left: `${percent}%` }}
-            aria-hidden="true"
+            role="slider"
+            tabIndex={0}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={value}
+            aria-label="Ajustar progresso"
+            onKeyDown={(e) => {
+              if (!onChange) return;
+              let next = value;
+              switch (e.key) {
+                case "ArrowRight":
+                case "ArrowUp":
+                  next = clamp(value + 1, 0, 100);
+                  break;
+                case "ArrowLeft":
+                case "ArrowDown":
+                  next = clamp(value - 1, 0, 100);
+                  break;
+                case "Home":
+                  next = 0;
+                  break;
+                case "End":
+                  next = 100;
+                  break;
+                case "PageUp":
+                  next = clamp(value + 10, 0, 100);
+                  break;
+                case "PageDown":
+                  next = clamp(value - 10, 0, 100);
+                  break;
+                default:
+                  return;
+              }
+              e.preventDefault();
+              onChange(next);
+            }}
           />
         )}
       </div>
@@ -293,6 +328,7 @@ export function GoalGaugeBar({
           aria-valuemin={min}
           aria-valuemax={max}
           aria-label={label}
+          aria-valuetext={`${display} — ${GAUGE_STATUS_LABELS[status]}`}
         >
           <div
             className={s.safeZone}
@@ -314,7 +350,42 @@ export function GoalGaugeBar({
           <div
             className={s.thumb}
             style={{ left: `${valuePos}%` }}
-            aria-hidden="true"
+            role="slider"
+            tabIndex={0}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={value}
+            aria-label="Ajustar progresso"
+            onKeyDown={(e) => {
+              if (!onChange) return;
+              let next = value;
+              switch (e.key) {
+                case "ArrowRight":
+                case "ArrowUp":
+                  next = clamp(value + 1, 0, 100);
+                  break;
+                case "ArrowLeft":
+                case "ArrowDown":
+                  next = clamp(value - 1, 0, 100);
+                  break;
+                case "Home":
+                  next = 0;
+                  break;
+                case "End":
+                  next = 100;
+                  break;
+                case "PageUp":
+                  next = clamp(value + 10, 0, 100);
+                  break;
+                case "PageDown":
+                  next = clamp(value - 10, 0, 100);
+                  break;
+                default:
+                  return;
+              }
+              e.preventDefault();
+              onChange(next);
+            }}
           />
         )}
       </div>
