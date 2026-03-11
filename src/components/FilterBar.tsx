@@ -194,8 +194,12 @@ export function FilterDropdown({
         if (ignoreRefs?.some((ref) => ref.current?.contains(target))) return;
         // Check if click landed on another FilterDropdown portal
         if (target instanceof Element && target.closest("[data-filter-dropdown]")) return;
-        // Check if click landed on a portaled dialog (e.g. DatePicker calendar)
-        if (target instanceof Element && target.closest('[role="dialog"]')) return;
+        // Check if click landed on a portaled dialog spawned by this dropdown (e.g. DatePicker calendar)
+        // but NOT on an unrelated dialog like a parent Modal
+        if (target instanceof Element) {
+          const dialog = target.closest('[role="dialog"]');
+          if (dialog && !dialog.contains(anchorRef.current)) return;
+        }
         onClose();
       }
     }
