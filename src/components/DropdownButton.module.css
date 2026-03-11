@@ -14,30 +14,33 @@
   transition: background-color 120ms ease, border-color 120ms ease;
 }
 
-/* ——— Sizes ——— */
+/* ——— Sizes (match Button: 24/32/40px) ——— */
 
 .sm {
-  min-height: 32px;
-  padding: var(--sp-2xs) var(--sp-xs);
+  height: 24px;
+  padding: 0 var(--sp-2xs);
+  gap: var(--sp-3xs);
   font-size: var(--text-xs);
 }
 
 .md {
-  min-height: 40px;
-  padding: var(--sp-2xs) var(--sp-sm);
+  height: 32px;
+  padding: 0 var(--sp-xs);
+  gap: var(--sp-3xs);
   font-size: var(--text-sm);
 }
 
 .lg {
-  min-height: 48px;
-  padding: var(--sp-xs) var(--sp-md);
-  font-size: var(--text-sm);
+  height: 40px;
+  padding: 0 var(--sp-sm);
+  gap: var(--sp-2xs);
+  font-size: var(--text-md);
 }
 
 /* Optical adjust: reduce left padding when has icon */
-.sm.hasLeftIcon { padding-left: var(--sp-2xs); }
-.md.hasLeftIcon { padding-left: var(--sp-xs); }
-.lg.hasLeftIcon { padding-left: var(--sp-sm); }
+.sm.hasLeftIcon { padding-left: var(--sp-3xs); }
+.md.hasLeftIcon { padding-left: var(--sp-2xs); }
+.lg.hasLeftIcon { padding-left: var(--sp-xs); }
 
 /* ——— Variants ——— */
 
