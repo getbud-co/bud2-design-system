@@ -25,6 +25,20 @@
   align-items: center;
 }
 
+.missionLink {
+  all: unset;
+  cursor: pointer;
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-orange-500);
+  line-height: 1.05;
+}
+
+.missionLink:hover {
+  text-decoration: underline;
+}
+
 /* ——— Deletion modal demo ——— */
 
 .dangerTitle {

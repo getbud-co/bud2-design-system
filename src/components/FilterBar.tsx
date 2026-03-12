@@ -291,7 +291,10 @@ export function FilterBar({
 
   const instanceId = useId();
   const listboxId = `${instanceId}-listbox`;
-  const getOptionId = (index: number) => `${instanceId}-option-${index}`;
+  const getOptionId = useCallback(
+    (index: number) => `${instanceId}-option-${index}`,
+    [instanceId],
+  );
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);

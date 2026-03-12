@@ -227,11 +227,40 @@ box-shadow: var(--shadow-sm);
 # Clonar e instalar
 git clone https://github.com/mdonangelo/bud-2-design-system.git
 cd bud-2-design-system
+
+# Usar Node 24 (via .nvmrc)
+nvm use
 npm install
 
 # Rodar docs page localmente
 npm run dev
 
+# Validar qualidade localmente
+npm run lint
+npm run typecheck
+
 # Build da lib
 npm run build:lib
+
+# Verificação completa antes de abrir PR / publicar
+npm run verify
 ```
+
+## Release
+
+```bash
+# 1. Atualizar a versão no package.json
+
+# 2. Validar tudo localmente
+npm run verify
+
+# 3. Commitar e subir a branch
+git add -A
+git commit -m "feat: sua mudança"
+git push
+
+# 4. Criar a release GitHub com a mesma versão do package.json
+gh release create vX.Y.Z
+```
+
+O workflow de publicação valida se a tag da release corresponde exatamente à versão do `package.json` e executa `npm pack --dry-run` antes de publicar.

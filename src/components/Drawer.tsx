@@ -2,9 +2,7 @@ import {
   type ReactNode,
   type CSSProperties,
   type KeyboardEvent,
-  useEffect,
   useRef,
-  useState,
   useCallback,
   useId,
   createContext,
@@ -13,6 +11,13 @@ import {
 import { createPortal } from "react-dom";
 import { X } from "@phosphor-icons/react";
 import { Button } from "./Button";
+import {
+  trapFocusWithin,
+  useBodyScrollLock,
+  useDocumentEscape,
+  useHasOpened,
+  useOpenFocus,
+} from "./overlay-utils";
 import s from "./Drawer.module.css";
 
 type DrawerSide = "right" | "left";
@@ -52,71 +57,20 @@ export function Drawer({
 }: DrawerProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-  const [everOpened, setEverOpened] = useState(false);
+  const everOpened = useHasOpened(open);
   const titleId = useId();
 
-  useEffect(() => {
-    if (open && !everOpened) setEverOpened(true);
-  }, [open, everOpened]);
-
-  // Close on Escape
-  useEffect(() => {
-    if (!open) return;
-    function onEsc(e: globalThis.KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
-    document.addEventListener("keydown", onEsc);
-    return () => document.removeEventListener("keydown", onEsc);
-  }, [open, onClose]);
+  useDocumentEscape(open, onClose);
+  useBodyScrollLock(open);
+  useOpenFocus({ active: open, containerRef: panelRef });
 
   // Trap focus inside drawer
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
-      if (e.key === "Tab") {
-        const panel = panelRef.current;
-        if (!panel) return;
-
-        const focusable = panel.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-        );
-        if (focusable.length === 0) return;
-
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
+      trapFocusWithin(panelRef.current, e);
     },
     [],
   );
-
-  // Focus first focusable element on open + scroll lock
-  useEffect(() => {
-    if (!open) return;
-
-    const prev = document.activeElement as HTMLElement | null;
-
-    requestAnimationFrame(() => {
-      const first = panelRef.current?.querySelector<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      first?.focus();
-    });
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      prev?.focus();
-    };
-  }, [open]);
 
   if (!everOpened) return null;
 

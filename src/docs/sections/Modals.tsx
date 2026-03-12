@@ -36,21 +36,20 @@ const [open, setOpen] = useState(false);
   </ModalFooter>
 </Modal>
 
-{/* Modal wizard — footer com align="between" */}
-<Modal open={open} onClose={handleClose} size="md">
-  <ModalHeader title="Construir missão" onClose={handleClose} />
+{/* Modal com largura customizada */}
+<Modal open={open} onClose={handleClose} width="720px">
+  <ModalHeader
+    title="Planejamento trimestral"
+    onClose={handleClose}
+    afterTitle={<a href="#">Ver contexto da missão</a>}
+  />
   <ModalBody>{/* ... */}</ModalBody>
-  <ModalFooter align="between">
-    <Button variant="tertiary" onClick={handleClose}>Cancelar</Button>
-    <div style={{ display: "flex", gap: 8 }}>
-      <Button variant="secondary" leftIcon={FloppyDisk}>
-        Salvar rascunho
-      </Button>
-      <Button variant="primary" rightIcon={ArrowRight}>
-        Próximo
-      </Button>
-    </div>
-  </ModalFooter>
+</Modal>
+
+{/* Modal com header customizado */}
+<Modal open={open} onClose={handleClose} aria-label="Detalhes da tarefa">
+  <div className={styles.customHeader}>{/* ... */}</div>
+  <ModalBody>{/* ... */}</ModalBody>
 </Modal>`;
 
 const departmentOptions = [
@@ -266,12 +265,13 @@ export function Modals() {
   const [largeOpen, setLargeOpen] = useState(false);
   const [formOpen, setFormOpen] = useState(false);
   const [wizardOpen, setWizardOpen] = useState(false);
+  const [customOpen, setCustomOpen] = useState(false);
 
   return (
     <DocSection
       id="modals"
       title="Modals"
-      description="Diálogo modal com overlay, foco preso, Escape para fechar e composição livre via ModalHeader, ModalBody e ModalFooter. Três tamanhos: Small (480px), Medium (640px) e Large (800px)."
+      description="Diálogo modal com overlay, foco preso, Escape para fechar e composição livre via ModalHeader, ModalBody e ModalFooter. A API segue o mesmo padrão do Drawer, com suporte a width customizada, aria-label para headers livres e afterTitle no header. Três tamanhos: Small (480px), Medium (640px) e Large (800px)."
       category={getCategoryForPage("modals")}
     >
       <SubSection
@@ -435,6 +435,56 @@ export function Modals() {
             </Button>
             <Button variant="primary" onClick={() => setFormOpen(false)}>
               Adicionar
+            </Button>
+          </ModalFooter>
+        </Modal>
+      </SubSection>
+
+      <SubSection
+        id="largura-e-header-flexivel"
+        title="Largura e header flexível"
+        description="Assim como o Drawer, o Modal aceita width customizada, aria-label para headers livres e afterTitle para conteúdo complementar abaixo do título."
+      >
+        <div className={s.buttonRow}>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => setCustomOpen(true)}
+          >
+            Abrir modal customizado
+          </Button>
+        </div>
+
+        <Modal
+          open={customOpen}
+          onClose={() => setCustomOpen(false)}
+          width="720px"
+        >
+          <ModalHeader
+            title="Planejamento trimestral"
+            description="Revise objetivos, dependências e próximos marcos."
+            onClose={() => setCustomOpen(false)}
+            afterTitle={
+              <button type="button" className={s.missionLink}>
+                Ver contexto da missão
+              </button>
+            }
+          />
+          <ModalBody>
+            <div className={s.demoForm}>
+              <Input label="Objetivo principal" defaultValue="Expandir retenção em 12%" />
+              <Input
+                label="Dependências"
+                defaultValue="Conclusão do novo onboarding e treinamento do time CS"
+              />
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="tertiary" onClick={() => setCustomOpen(false)}>
+              Fechar
+            </Button>
+            <Button variant="primary" onClick={() => setCustomOpen(false)}>
+              Salvar plano
             </Button>
           </ModalFooter>
         </Modal>

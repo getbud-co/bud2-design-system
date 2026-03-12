@@ -137,6 +137,39 @@ function applyDateMask(raw: string): string {
   return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
 }
 
+function findNextEnabledDate(
+  start: CalendarDate,
+  step: number,
+  minDate?: CalendarDate,
+  maxDate?: CalendarDate,
+): CalendarDate | null {
+  let current = start;
+
+  for (let i = 0; i < 366; i += 1) {
+    current = addDays(current, step);
+    if (!isDisabled(current, minDate, maxDate)) {
+      return current;
+    }
+  }
+
+  return null;
+}
+
+function getInitialFocusableDate(
+  preferred: CalendarDate,
+  minDate?: CalendarDate,
+  maxDate?: CalendarDate,
+): CalendarDate | null {
+  if (!isDisabled(preferred, minDate, maxDate)) {
+    return preferred;
+  }
+
+  return (
+    findNextEnabledDate(preferred, 1, minDate, maxDate) ??
+    findNextEnabledDate(preferred, -1, minDate, maxDate)
+  );
+}
+
 /* ——— Component ——— */
 
 export function DatePicker(props: DatePickerProps) {
@@ -348,11 +381,11 @@ export function DatePicker(props: DatePickerProps) {
         setStartText(singleValue ? formatDate(singleValue) : "");
         const nav = singleValue ?? today();
         setViewMonth({ year: nav.year, month: nav.month, day: 1 });
-        setFocusedDay(nav);
+        setFocusedDay(getInitialFocusableDate(nav, minDate, maxDate));
         requestAnimationFrame(() => startInputRef.current?.focus());
       }
     },
-    [disabled, updatePosition, isRange, rangeValue, singleValue],
+    [disabled, updatePosition, isRange, rangeValue, singleValue, minDate, maxDate],
   );
 
   const closePopover = useCallback(() => {
@@ -520,16 +553,19 @@ export function DatePicker(props: DatePickerProps) {
     }
 
     if (next) {
-      if (!isDisabled(next, minDate, maxDate)) {
-        setFocusedDay(next);
-        // Navigate view if needed
-        if (
-          next.year !== viewMonth.year ||
-          next.month !== viewMonth.month
-        ) {
-          setViewMonth({ year: next.year, month: next.month, day: 1 });
-        }
-      }
+       const target = isDisabled(next, minDate, maxDate)
+         ? findNextEnabledDate(next, e.key === "ArrowLeft" || e.key === "ArrowUp" || e.key === "PageUp" ? -1 : 1, minDate, maxDate)
+         : next;
+
+       if (!target) return;
+
+       setFocusedDay(target);
+       if (
+         target.year !== viewMonth.year ||
+         target.month !== viewMonth.month
+       ) {
+         setViewMonth({ year: target.year, month: target.month, day: 1 });
+       }
     }
   };
 
@@ -805,6 +841,7 @@ export function DatePicker(props: DatePickerProps) {
               {grid.map((cell, i) => {
                 const d = cell.date;
                 const key = `${d.year}-${d.month}-${d.day}`;
+                const dayDisabled = isDisabled(d, minDate, maxDate);
                 const isFocused =
                   focusedDay !== null && isSameDay(d, focusedDay);
 
@@ -815,14 +852,23 @@ export function DatePicker(props: DatePickerProps) {
                     role="gridcell"
                     data-date={key}
                     className={getDayClasses(cell)}
-                    tabIndex={isFocused ? 0 : -1}
+                    tabIndex={isFocused && !dayDisabled ? 0 : -1}
+                    disabled={dayDisabled}
                     onClick={() => handleDayClick(d)}
-                    onMouseEnter={() => setHoverDate(d)}
+                    onMouseEnter={() => {
+                      if (!dayDisabled) setHoverDate(d);
+                    }}
                     onMouseLeave={() => setHoverDate(null)}
-                    onFocus={() => setFocusedDay(d)}
+                    onFocus={() => {
+                      if (!dayDisabled) setFocusedDay(d);
+                    }}
                     aria-label={`${d.day} de ${MONTH_LABELS[d.month - 1]} de ${d.year}`}
-                    aria-disabled={
-                      isDisabled(d, minDate, maxDate) || undefined
+                    aria-disabled={dayDisabled || undefined}
+                    aria-selected={
+                      (!isRange && !!singleValue && isSameDay(d, singleValue)) ||
+                      (isRange && rangeValue[0] !== null && isSameDay(d, rangeValue[0])) ||
+                      (isRange && rangeValue[1] !== null && isSameDay(d, rangeValue[1])) ||
+                      undefined
                     }
                   >
                     {d.day}

@@ -1,6 +1,6 @@
 {
   "name": "@mdonangelo/bud-ds",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "type": "module",
   "description": "Bud Design System — componentes React para a plataforma Bud",
   "main": "./dist/index.js",
@@ -22,11 +22,16 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
+  "engines": {
+    "node": ">=24 <25"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:lib": "vite build --config vite.config.lib.ts",
+    "typecheck": "tsc -b --pretty false",
+    "build:lib": "npm run typecheck && vite build --config vite.config.lib.ts",
     "build:docs": "tsc -b && vite build",
+    "verify": "npm run lint && npm run typecheck && npm run build:docs && npm run build:lib",
     "prepublishOnly": "npm run build:lib",
     "lint": "eslint .",
     "preview": "vite preview"

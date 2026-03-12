@@ -61,7 +61,7 @@ export function Table({
   className,
   ...rest
 }: TableProps) {
-  const selected = selectedRows ?? new Set<string>();
+  const selected = useMemo(() => selectedRows ?? new Set<string>(), [selectedRows]);
   const allSelected = rowIds.length > 0 && rowIds.every((id) => selected.has(id));
   const someSelected = !allSelected && rowIds.some((id) => selected.has(id));
 
@@ -226,6 +226,8 @@ interface TableHeaderCellProps extends ThHTMLAttributes<HTMLTableCellElement> {
   sortDirection?: SortDirection;
   onSort?: () => void;
   isCheckbox?: boolean;
+  selectAllLabel?: string;
+  sortLabel?: string;
 }
 
 export function TableHeaderCell({
@@ -233,6 +235,8 @@ export function TableHeaderCell({
   sortDirection,
   onSort,
   isCheckbox = false,
+  selectAllLabel,
+  sortLabel,
   children,
   className,
   ...rest
@@ -252,18 +256,27 @@ export function TableHeaderCell({
           checked={allSelected}
           indeterminate={someSelected}
           onChange={(e) => onSelectAll?.(e.currentTarget.checked)}
-          aria-label="Selecionar todos"
+          aria-label={selectAllLabel ?? "Selecionar todas as linhas"}
         />
       </th>
     );
   }
 
-  const sortLabel = sortable
+  const columnLabel =
+    sortLabel ?? (typeof children === "string" ? children : undefined);
+
+  const sortAriaLabel = sortable
     ? sortDirection === "asc"
-      ? "ordenado crescente"
+      ? columnLabel
+        ? `Ordenado crescente por ${columnLabel}`
+        : "Ordenado crescente"
       : sortDirection === "desc"
-        ? "ordenado decrescente"
-        : "clique para ordenar"
+        ? columnLabel
+          ? `Ordenado decrescente por ${columnLabel}`
+          : "Ordenado decrescente"
+        : columnLabel
+          ? `Ordenar por ${columnLabel}`
+          : "Clique para ordenar"
     : undefined;
 
   return (
@@ -286,7 +299,7 @@ export function TableHeaderCell({
           type="button"
           className={s.sortButton}
           onClick={onSort}
-          aria-label={sortLabel}
+          aria-label={sortAriaLabel}
         >
           <span>{children}</span>
           {sortDirection === "asc" && <ArrowUp size={12} />}
@@ -305,11 +318,13 @@ export function TableHeaderCell({
 interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
   isCheckbox?: boolean;
   rowId?: string;
+  selectionLabel?: string;
 }
 
 export function TableCell({
   isCheckbox = false,
   rowId,
+  selectionLabel,
   children,
   className,
   ...rest
@@ -326,7 +341,7 @@ export function TableCell({
           size="md"
           checked={selectedRows.has(rowId)}
           onChange={(e) => onSelectRow?.(rowId, e.currentTarget.checked)}
-          aria-label={`Selecionar linha ${rowId}`}
+          aria-label={selectionLabel ?? `Selecionar ${rowId}`}
         />
       </td>
     );

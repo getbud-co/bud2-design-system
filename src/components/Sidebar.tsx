@@ -13,6 +13,12 @@ import {
 } from "react";
 import { CaretDown, CaretLineLeft, CaretLineRight, DotsThree, X } from "@phosphor-icons/react";
 import { Tooltip } from "./Tooltip";
+import {
+  trapFocusWithin,
+  useBodyScrollLock,
+  useDocumentEscape,
+  useOpenFocus,
+} from "./overlay-utils";
 import s from "./Sidebar.module.css";
 
 /* ——— Context para estado collapsed ——— */
@@ -45,59 +51,25 @@ export function Sidebar({
 }: SidebarProps) {
   const asideRef = useRef<HTMLElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
-  const previousFocusRef = useRef<HTMLElement | null>(null);
-
-  /* Bloqueia scroll do body quando drawer está aberto */
-  useEffect(() => {
-    if (!mobileOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
-  }, [mobileOpen]);
-
-  /* Focus the close button on open; restore focus on close */
-  useEffect(() => {
-    if (mobileOpen) {
-      previousFocusRef.current = document.activeElement as HTMLElement | null;
-      closeRef.current?.focus();
-    }
-  }, [mobileOpen]);
+  useBodyScrollLock(mobileOpen);
+  const restoreFocus = useOpenFocus({
+    active: mobileOpen,
+    containerRef: asideRef,
+    initialFocusRef: closeRef,
+  });
 
   const handleMobileClose = useCallback(() => {
     onMobileClose?.();
-    previousFocusRef.current?.focus();
-    previousFocusRef.current = null;
-  }, [onMobileClose]);
+    restoreFocus();
+  }, [onMobileClose, restoreFocus]);
+
+  useDocumentEscape(mobileOpen && !!onMobileClose, handleMobileClose);
 
   /* Fecha com Escape + focus trap */
   useEffect(() => {
     if (!mobileOpen || !onMobileClose) return;
     function handleKey(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        handleMobileClose();
-        return;
-      }
-
-      if (e.key === "Tab" && asideRef.current) {
-        const focusable = asideRef.current.querySelectorAll<HTMLElement>(
-          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
-        );
-        if (focusable.length === 0) return;
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-
-        if (e.shiftKey) {
-          if (document.activeElement === first) {
-            e.preventDefault();
-            last.focus();
-          }
-        } else {
-          if (document.activeElement === last) {
-            e.preventDefault();
-            first.focus();
-          }
-        }
-      }
+      trapFocusWithin(asideRef.current, e);
     }
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
@@ -122,7 +94,14 @@ export function Sidebar({
         aria-hidden="true"
       />
 
-      <aside ref={asideRef} className={cls} aria-label="Menu lateral" {...rest}>
+      <aside
+        ref={asideRef}
+        className={cls}
+        aria-label="Menu lateral"
+        role={mobileOpen ? "dialog" : undefined}
+        aria-modal={mobileOpen || undefined}
+        {...rest}
+      >
         {/* Botão fechar mobile */}
         {onMobileClose && (
           <button

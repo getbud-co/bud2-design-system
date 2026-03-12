@@ -159,27 +159,7 @@ export function Toaster() {
       });
     });
     return () => cancelAnimationFrame(raf);
-  }, [toasts]);
-
-  /* Timers de auto-dismiss (pausam no hover) */
-  useEffect(() => {
-    if (expanded) {
-      timers.current.forEach((t) => clearTimeout(t));
-      timers.current.clear();
-      return;
-    }
-
-    toasts.slice(0, VISIBLE).forEach((item) => {
-      if (removing.has(item.id) || timers.current.has(item.id)) return;
-      if (item.duration === Infinity) return;
-
-      const timer = setTimeout(() => {
-        timers.current.delete(item.id);
-        dismiss(item.id);
-      }, item.duration);
-      timers.current.set(item.id, timer);
-    });
-  }, [toasts, expanded, removing]);
+  }, [toasts, mounted]);
 
   /* Dismiss com animação */
   const dismiss = useCallback((id: string) => {
@@ -201,6 +181,26 @@ export function Toaster() {
       heights.current.delete(id);
     }, ANIM_MS);
   }, []);
+
+  /* Timers de auto-dismiss (pausam no hover) */
+  useEffect(() => {
+    if (expanded) {
+      timers.current.forEach((t) => clearTimeout(t));
+      timers.current.clear();
+      return;
+    }
+
+    toasts.slice(0, VISIBLE).forEach((item) => {
+      if (removing.has(item.id) || timers.current.has(item.id)) return;
+      if (item.duration === Infinity) return;
+
+      const timer = setTimeout(() => {
+        timers.current.delete(item.id);
+        dismiss(item.id);
+      }, item.duration);
+      timers.current.set(item.id, timer);
+    });
+  }, [toasts, expanded, removing, dismiss]);
 
   const visible = toasts.slice(0, VISIBLE);
   if (visible.length === 0 && removing.size === 0) return null;

@@ -56,7 +56,7 @@ function adjustSubmenuOverflow(wrapperEl: HTMLElement) {
   submenu.style.maxHeight = "";
 
   // Força reflow para medir com display:block já aplicado pelo :hover
-  submenu.offsetHeight;
+  void submenu.offsetHeight;
 
   const rect = submenu.getBoundingClientRect();
   if (rect.width === 0 && rect.height === 0) return;
@@ -79,7 +79,6 @@ function adjustSubmenuOverflow(wrapperEl: HTMLElement) {
   }
 
   // Se mesmo com ajuste vertical não cabe, limita a altura
-  const finalTop = rect.top + topAdjust;
   const availableHeight = window.innerHeight - gap * 2;
   if (rect.height > availableHeight) {
     submenu.style.maxHeight = `${availableHeight}px`;
@@ -107,6 +106,7 @@ export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverP
   const popoverRef = useRef<HTMLDivElement>(null);
   const [submenuFlip, setSubmenuFlip] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
+  const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
   const previousFocusRef = useRef<Element | null>(null);
 
   const getMenuItems = useCallback((): HTMLElement[] => {
@@ -154,6 +154,17 @@ export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverP
     applyPosition();
   }, [open, applyPosition]);
 
+  const getSubmenuFocusable = useCallback((wrapperEl: HTMLElement): HTMLElement[] => {
+    const submenu = wrapperEl.querySelector(`.${s.submenu}`);
+    if (!submenu) return [];
+
+    return Array.from(
+      submenu.querySelectorAll<HTMLElement>(
+        '[role="menuitem"], button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ),
+    );
+  }, []);
+
   // Store previously focused element and focus first item on open
   useEffect(() => {
     if (!open) return;
@@ -162,6 +173,7 @@ export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverP
     const raf = requestAnimationFrame(() => {
       const menuItems = getMenuItems();
       if (menuItems.length > 0) {
+        setOpenSubmenuId(null);
         setFocusedIndex(0);
         menuItems[0].focus();
       }
@@ -239,6 +251,67 @@ export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverP
   // Arrow key navigation on the popover container
   const handlePopoverKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
+      const activeWrapper =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement.closest(`.${s.submenuWrapper}`)
+          : null;
+
+      if (e.key === "ArrowRight" && activeWrapper instanceof HTMLElement) {
+        const submenuItems = getSubmenuFocusable(activeWrapper);
+        if (submenuItems.length > 0) {
+          e.preventDefault();
+          const triggerId = activeWrapper.dataset.submenuTrigger;
+          if (triggerId) setOpenSubmenuId(triggerId);
+          requestAnimationFrame(() => {
+            adjustSubmenuOverflow(activeWrapper);
+            submenuItems[0]?.focus();
+          });
+        }
+        return;
+      }
+
+      if (e.key === "ArrowLeft") {
+        const activeSubmenu =
+          document.activeElement instanceof HTMLElement
+            ? document.activeElement.closest(`.${s.submenu}`)
+            : null;
+
+        if (activeSubmenu instanceof HTMLElement) {
+          e.preventDefault();
+          const wrapper = activeSubmenu.closest(`.${s.submenuWrapper}`);
+          if (wrapper instanceof HTMLElement) {
+            const triggerId = wrapper.dataset.submenuTrigger;
+            if (triggerId) {
+              setOpenSubmenuId(null);
+              const trigger = wrapper.querySelector<HTMLElement>(`[data-submenu-trigger="${triggerId}"]`);
+              trigger?.focus();
+            }
+          }
+        }
+        return;
+      }
+
+      if (e.key === "Escape") {
+        const activeSubmenu =
+          document.activeElement instanceof HTMLElement
+            ? document.activeElement.closest(`.${s.submenu}`)
+            : null;
+
+        if (activeSubmenu instanceof HTMLElement) {
+          e.preventDefault();
+          const wrapper = activeSubmenu.closest(`.${s.submenuWrapper}`);
+          if (wrapper instanceof HTMLElement) {
+            const triggerId = wrapper.dataset.submenuTrigger;
+            setOpenSubmenuId(null);
+            if (triggerId) {
+              const trigger = wrapper.querySelector<HTMLElement>(`[data-submenu-trigger="${triggerId}"]`);
+              trigger?.focus();
+            }
+          }
+          return;
+        }
+      }
+
       const menuItems = getMenuItems();
       const count = menuItems.length;
       if (count === 0) return;
@@ -268,7 +341,7 @@ export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverP
 
       setFocusedIndex(nextIndex);
     },
-    [focusedIndex, getMenuItems],
+    [focusedIndex, getMenuItems, getSubmenuFocusable],
   );
 
   if (!open) return null;
@@ -285,15 +358,42 @@ export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverP
         item.submenu ? (
           <div
             key={item.id}
-            className={`${s.submenuWrapper}${submenuFlip ? ` ${s.submenuFlip}` : ""}`}
-            onMouseEnter={(e) => adjustSubmenuOverflow(e.currentTarget)}
-            onFocus={(e) => adjustSubmenuOverflow(e.currentTarget)}
+            className={`${s.submenuWrapper}${submenuFlip ? ` ${s.submenuFlip}` : ""}${openSubmenuId === item.id ? ` ${s.submenuWrapperOpen}` : ""}`}
+            data-submenu-trigger={item.id}
+            onBlur={(e) => {
+              requestAnimationFrame(() => {
+                if (!e.currentTarget.contains(document.activeElement)) {
+                  setOpenSubmenuId((current) => (current === item.id ? null : current));
+                }
+              });
+            }}
           >
             <button
               type="button"
               className={s.item}
               role="menuitem"
               tabIndex={index === focusedIndex ? 0 : -1}
+              aria-haspopup="menu"
+              aria-expanded={openSubmenuId === item.id}
+              aria-controls={`${item.id}-submenu`}
+              data-submenu-trigger={item.id}
+              onClick={(e) => {
+                e.preventDefault();
+                const wrapper = e.currentTarget.closest(`.${s.submenuWrapper}`);
+                setOpenSubmenuId((current) => {
+                  const nextOpen = current === item.id ? null : item.id;
+
+                  if (nextOpen === item.id && wrapper instanceof HTMLElement) {
+                    requestAnimationFrame(() => {
+                      adjustSubmenuOverflow(wrapper);
+                      const submenuItems = getSubmenuFocusable(wrapper);
+                      submenuItems[0]?.focus();
+                    });
+                  }
+
+                  return nextOpen;
+                });
+              }}
             >
               {item.image ? (
                 <img src={item.image} alt="" className={s.itemImage} />
@@ -306,7 +406,14 @@ export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverP
               )}
               <CaretRight size={12} className={s.itemCaret} />
             </button>
-            <div className={s.submenu}>{item.submenu}</div>
+            <div
+              id={`${item.id}-submenu`}
+              className={s.submenu}
+              role="menu"
+              aria-label={`${item.label} submenu`}
+            >
+              {item.submenu}
+            </div>
           </div>
         ) : (
           <button

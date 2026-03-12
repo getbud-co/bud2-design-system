@@ -212,10 +212,12 @@ export function Popovers() {
       {/* Com submenu */}
       <SubSection id="com-submenu" title="Com submenu">
         <p>
-          Itens com a prop <code>submenu</code> renderizam um flyout lateral ao
-          passar o mouse. O posicionamento é inteligente — analisa o espaço
-          disponível e ajusta para nunca ultrapassar os limites da tela.
-          O conteúdo do flyout é livre (ReactNode).
+          Itens com a prop <code>submenu</code> renderizam um flyout lateral que
+          abre por ação explícita no item pai. Clique no item ou use
+          <kbd>ArrowRight</kbd> para abrir; dentro do flyout, controles como
+          busca e checkbox permanecem interativos sem fechar o submenu. O
+          posicionamento é inteligente e ajusta o painel para não ultrapassar
+          os limites da tela.
         </p>
         <div className={s.demoArea}>
           <SubmenuDemo />
@@ -252,6 +254,10 @@ export function Popovers() {
         </li>
         <li className={s.a11yItem}>
           Cada item usa <code>role="menuitem"</code>
+        </li>
+        <li className={s.a11yItem}>
+          Submenus usam <code>aria-haspopup</code>, <code>aria-expanded</code> e
+          podem abrir com clique ou <kbd>ArrowRight</kbd>
         </li>
         <li className={s.a11yItem}>
           <kbd>ESC</kbd> fecha o popover

@@ -1,9 +1,8 @@
 import {
   type ReactNode,
+  type CSSProperties,
   type KeyboardEvent,
-  useEffect,
   useRef,
-  useState,
   useCallback,
   useId,
   createContext,
@@ -12,6 +11,13 @@ import {
 import { createPortal } from "react-dom";
 import { X } from "@phosphor-icons/react";
 import { Button } from "./Button";
+import {
+  trapFocusWithin,
+  useBodyScrollLock,
+  useDocumentEscape,
+  useHasOpened,
+  useOpenFocus,
+} from "./overlay-utils";
 import s from "./Modal.module.css";
 
 type ModalSize = "sm" | "md" | "lg";
@@ -20,90 +26,52 @@ const ModalTitleIdContext = createContext<string | undefined>(undefined);
 
 /* ——— Modal ——— */
 
-interface ModalProps {
+export interface ModalProps {
   open: boolean;
   onClose: () => void;
   size?: ModalSize;
   children: ReactNode;
   sidePanel?: ReactNode;
+  width?: string;
+  className?: string;
+  "aria-label"?: string;
 }
 
-export function Modal({ open, onClose, size = "md", children, sidePanel }: ModalProps) {
+export function Modal({
+  open,
+  onClose,
+  size = "md",
+  children,
+  sidePanel,
+  width,
+  className,
+  "aria-label": ariaLabel,
+}: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [everOpened, setEverOpened] = useState(false);
+  const everOpened = useHasOpened(open);
   const titleId = useId();
 
-  useEffect(() => {
-    if (open && !everOpened) setEverOpened(true);
-  }, [open, everOpened]);
-
-  // Close on Escape (document-level so it works regardless of focus)
-  useEffect(() => {
-    if (!open) return;
-    function onEsc(e: globalThis.KeyboardEvent) {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    }
-    document.addEventListener("keydown", onEsc);
-    return () => document.removeEventListener("keydown", onEsc);
-  }, [open, onClose]);
+  useDocumentEscape(open, onClose);
+  useBodyScrollLock(open);
+  useOpenFocus({ active: open, containerRef });
 
   // Trap focus inside modal
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
-      if (e.key === "Tab") {
-        const container = containerRef.current;
-        if (!container) return;
-
-        const focusable = container.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        if (focusable.length === 0) return;
-
-        const first = focusable[0];
-        const last = focusable[focusable.length - 1];
-
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
+      trapFocusWithin(containerRef.current, e);
     },
-    []
+    [],
   );
-
-  // Focus first focusable element on open
-  useEffect(() => {
-    if (!open) return;
-
-    const prev = document.activeElement as HTMLElement | null;
-
-    requestAnimationFrame(() => {
-      const first = containerRef.current?.querySelector<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-      );
-      first?.focus();
-    });
-
-    // Lock body scroll
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      prev?.focus();
-    };
-  }, [open]);
 
   if (!everOpened) return null;
 
+  const sizeClass = width ? "" : s[size];
+  const containerStyle: CSSProperties | undefined = width ? { width } : undefined;
+  const containerClasses = [s.container, sizeClass, className].filter(Boolean).join(" ");
+
   const content = (
-    <div className={`${s.container} ${s[size]}`}>
+    <div className={containerClasses} style={containerStyle}>
       {children}
     </div>
   );
@@ -117,24 +85,33 @@ export function Modal({ open, onClose, size = "md", children, sidePanel }: Modal
       }}
       onKeyDown={open ? handleKeyDown : undefined}
     >
-      <ModalTitleIdContext.Provider value={titleId}>
-        {sidePanel !== undefined ? (
-          <div ref={containerRef} className={s.doubleLayout} role="dialog" aria-modal="true" aria-labelledby={titleId}>
+        <ModalTitleIdContext.Provider value={titleId}>
+          {sidePanel !== undefined ? (
+          <div
+            ref={containerRef}
+            className={s.doubleLayout}
+            role="dialog"
+            aria-modal="true"
+            aria-label={ariaLabel}
+            aria-labelledby={ariaLabel ? undefined : titleId}
+          >
             {content}
             <div className={`${s.sidePanel} ${sidePanel ? s.sidePanelOpen : ""}`}>
               {sidePanel}
             </div>
           </div>
         ) : (
-          <div
-            ref={containerRef}
-            className={`${s.container} ${s[size]}`}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby={titleId}
-          >
-            {children}
-          </div>
+            <div
+              ref={containerRef}
+              className={containerClasses}
+              style={containerStyle}
+              role="dialog"
+              aria-modal="true"
+              aria-label={ariaLabel}
+              aria-labelledby={ariaLabel ? undefined : titleId}
+            >
+              {children}
+            </div>
         )}
       </ModalTitleIdContext.Provider>
     </div>,
@@ -149,6 +126,7 @@ interface ModalHeaderProps {
   description?: ReactNode;
   onClose?: () => void;
   children?: ReactNode;
+  afterTitle?: ReactNode;
 }
 
 export function ModalHeader({
@@ -156,6 +134,7 @@ export function ModalHeader({
   description,
   onClose,
   children,
+  afterTitle,
 }: ModalHeaderProps) {
   const titleId = useContext(ModalTitleIdContext);
 
@@ -181,6 +160,7 @@ export function ModalHeader({
           </div>
         )}
       </div>
+      {afterTitle}
     </div>
   );
 }

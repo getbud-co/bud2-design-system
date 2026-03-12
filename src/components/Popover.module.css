@@ -107,8 +107,7 @@
   display: none;
 }
 
-.submenuWrapper:hover .submenu,
-.submenuWrapper:focus-within .submenu {
+.submenuWrapperOpen .submenu {
   display: block;
 }
 
