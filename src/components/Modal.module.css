@@ -193,6 +193,10 @@
     width: calc(100vw - 32px);
   }
 
+  .container {
+    max-width: calc(100vw - 32px);
+  }
+
   .header {
     padding: var(--sp-sm);
   }
