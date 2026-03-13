@@ -263,20 +263,6 @@
   text-overflow: ellipsis;
 }
 
-.chipLabelBtn {
-  all: unset;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  cursor: pointer;
-}
-
-.chipLabelBtn:focus-visible {
-  outline: 2px solid var(--color-caramel-700);
-  outline-offset: 2px;
-  border-radius: var(--radius-2xs);
-}
-
 .chipStatic {
   cursor: default;
 }

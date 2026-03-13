@@ -62,19 +62,24 @@ export function FilterChip({
     .join(" ");
 
   return (
-    <div className={chipClasses}>
+    <div
+      className={chipClasses}
+      onClick={onClick}
+      onKeyDown={
+        onClick
+          ? (e: React.KeyboardEvent) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onClick();
+              }
+            }
+          : undefined
+      }
+      tabIndex={onClick ? 0 : undefined}
+      role={onClick ? "button" : undefined}
+    >
       {Icon && <Icon size={14} className={s.chipIcon} />}
-      {onClick ? (
-        <button
-          type="button"
-          className={s.chipLabelBtn}
-          onClick={onClick}
-        >
-          {label}
-        </button>
-      ) : (
-        <span className={s.chipLabel}>{label}</span>
-      )}
+      <span className={s.chipLabel}>{label}</span>
       {onRemove && (
         <button
           type="button"
