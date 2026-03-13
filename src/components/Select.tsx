@@ -18,6 +18,14 @@ import {
   CheckCircle,
 } from "@phosphor-icons/react";
 import { Checkbox } from "./Checkbox";
+import {
+  clampToViewport,
+  useDocumentClickOutside,
+  useDocumentEscape,
+  useInitialReposition,
+  useOpenFocus,
+  useViewportReposition,
+} from "./overlay-utils";
 import s from "./Select.module.css";
 
 type MessageType = "error" | "attention" | "success";
@@ -189,11 +197,18 @@ export function Select(props: SelectProps) {
     const trigger = triggerRef.current;
     if (!trigger) return;
     const rect = trigger.getBoundingClientRect();
+    const margin = 8;
+    const gap = 4;
     const spaceBelow = window.innerHeight - rect.bottom - 8;
     setDropdownStyle({
       position: "fixed",
-      top: rect.bottom + 4,
-      left: rect.left,
+      top: rect.bottom + gap,
+      left: clampToViewport({
+        value: rect.left,
+        size: rect.width,
+        viewportSize: window.innerWidth,
+        margin,
+      }),
       width: rect.width,
       maxHeight: Math.max(spaceBelow, 120),
     });
@@ -215,57 +230,27 @@ export function Select(props: SelectProps) {
   const closeDropdown = useCallback(() => {
     setOpen(false);
     setSearch("");
-    triggerRef.current?.focus();
   }, []);
 
-  // ——— Reposition on scroll/resize (mobile viewport changes) ———
-  useEffect(() => {
-    if (!open) return;
-    const onReposition = () => updatePosition();
-    window.addEventListener("scroll", onReposition, true);
-    window.addEventListener("resize", onReposition);
-    return () => {
-      window.removeEventListener("scroll", onReposition, true);
-      window.removeEventListener("resize", onReposition);
-    };
-  }, [open, updatePosition]);
+  useOpenFocus({
+    active: open,
+    containerRef: dropdownRef,
+    initialFocusRef: searchable ? searchRef : undefined,
+  });
+
+  // ——— Reposition on open/scroll/resize ———
+  useInitialReposition(open, updatePosition);
+  useViewportReposition(open, updatePosition);
 
   // ——— Close on click outside ———
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(target) &&
-        (!dropdownRef.current || !dropdownRef.current.contains(target))
-      ) {
-        setOpen(false);
-        setSearch("");
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [open]);
+  useDocumentClickOutside({
+    active: open,
+    refs: [wrapperRef, dropdownRef],
+    onOutside: closeDropdown,
+  });
 
   // ——— Close on Escape (document-level) ———
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: globalThis.KeyboardEvent) => {
-      if (e.key === "Escape") {
-        closeDropdown();
-      }
-    };
-    document.addEventListener("keydown", handler);
-    return () => document.removeEventListener("keydown", handler);
-  }, [open, closeDropdown]);
-
-  // ——— Focus search input when dropdown opens ———
-  useEffect(() => {
-    if (open && searchable) {
-      requestAnimationFrame(() => searchRef.current?.focus());
-    }
-  }, [open, searchable]);
+  useDocumentEscape(open, closeDropdown);
 
   // ——— Scroll focused option into view (within list only) ———
   useEffect(() => {
@@ -320,6 +305,18 @@ export function Select(props: SelectProps) {
           }
         } else if (!open) {
           openDropdown();
+        }
+        break;
+      case "Home":
+        if (open) {
+          e.preventDefault();
+          setFocusedIndex(filtered.length > 0 ? 0 : -1);
+        }
+        break;
+      case "End":
+        if (open) {
+          e.preventDefault();
+          setFocusedIndex(filtered.length > 0 ? filtered.length - 1 : -1);
         }
         break;
       case " ":

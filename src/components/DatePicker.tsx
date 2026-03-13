@@ -38,6 +38,11 @@ import {
   formatDate,
   parseDate,
 } from "./date-utils";
+import {
+  useDocumentClickOutside,
+  useDocumentEscape,
+  useViewportReposition,
+} from "./overlay-utils";
 import s from "./DatePicker.module.css";
 
 /* ——— Types ——— */
@@ -600,34 +605,19 @@ export function DatePicker(props: DatePickerProps) {
   }, [isRange, rangeValue]);
 
   // Click outside
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(target) &&
-        (!popoverRef.current || !popoverRef.current.contains(target))
-      ) {
-        setOpen(false);
-        setFocusedDay(null);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [open]);
+  useDocumentClickOutside({
+    active: open,
+    refs: [wrapperRef, popoverRef],
+    onOutside: () => {
+      setOpen(false);
+      setFocusedDay(null);
+    },
+  });
+
+  useDocumentEscape(open, closePopover);
 
   // Reposition on scroll/resize
-  useEffect(() => {
-    if (!open) return;
-    const onReposition = () => updatePosition();
-    window.addEventListener("scroll", onReposition, true);
-    window.addEventListener("resize", onReposition);
-    return () => {
-      window.removeEventListener("scroll", onReposition, true);
-      window.removeEventListener("resize", onReposition);
-    };
-  }, [open, updatePosition]);
+  useViewportReposition(open, updatePosition);
 
   // Focus day button when focusedDay changes
   useEffect(() => {

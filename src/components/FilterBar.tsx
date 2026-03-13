@@ -6,7 +6,6 @@ import {
   useRef,
   useEffect,
   useCallback,
-  useLayoutEffect,
   useMemo,
   useId,
 } from "react";
@@ -18,6 +17,16 @@ import {
   Broom,
   FloppyDisk,
 } from "@phosphor-icons/react";
+import {
+  clampToViewport,
+  resolveSidePosition,
+  resolveVerticalPosition,
+  useDocumentClickOutside,
+  useDocumentEscape,
+  useInitialReposition,
+  useOpenFocus,
+  useViewportReposition,
+} from "./overlay-utils";
 import s from "./FilterBar.module.css";
 
 /* ——— Shared icon props ——— */
@@ -128,6 +137,11 @@ export function FilterDropdown({
   noOverlay,
 }: FilterDropdownProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const outsideRefs = useMemo(
+    () => [anchorRef, dropdownRef, ...(ignoreRefs ?? [])],
+    [anchorRef, ignoreRefs],
+  );
+  useOpenFocus({ active: open, containerRef: dropdownRef });
 
   const applyPosition = useCallback(() => {
     const anchor = anchorRef.current;
@@ -142,84 +156,61 @@ export function FilterDropdown({
     const margin = 8;
 
     el.style.position = "fixed";
-
-    if (placement === "right-start") {
-      el.style.left = `${ar.right + gap}px`;
-      el.style.top = `${ar.top}px`;
-      el.style.bottom = "auto";
-    } else {
-      el.style.left = `${ar.left}px`;
-      el.style.top = `${ar.bottom + gap}px`;
-      el.style.bottom = "auto";
-    }
-
     const dr = el.getBoundingClientRect();
 
-    if (dr.bottom > window.innerHeight - margin) {
-      el.style.top = "auto";
-      el.style.bottom = `${margin}px`;
-    }
+    if (placement === "right-start") {
+      const { left } = resolveSidePosition({
+        anchorLeft: ar.left,
+        anchorRight: ar.right,
+        overlayWidth: dr.width,
+        viewportWidth: window.innerWidth,
+        gap,
+        margin,
+        preferred: "right",
+      });
 
-    if (dr.right > window.innerWidth - margin) {
-      if (placement === "right-start") {
-        // Flip to left side
-        el.style.left = `${Math.max(margin, ar.left - dr.width - gap)}px`;
-      } else {
-        el.style.left = `${Math.max(margin, window.innerWidth - dr.width - margin)}px`;
-      }
+      el.style.left = `${left}px`;
+      el.style.top = `${clampToViewport({
+        value: ar.top,
+        size: dr.height,
+        viewportSize: window.innerHeight,
+        margin,
+      })}px`;
+      el.style.bottom = "auto";
+    } else {
+      const { top } = resolveVerticalPosition({
+        anchorTop: ar.top,
+        anchorBottom: ar.bottom,
+        overlayHeight: dr.height,
+        viewportHeight: window.innerHeight,
+        gap,
+        margin,
+        preferred: "bottom",
+      });
+
+      el.style.left = `${clampToViewport({
+        value: ar.left,
+        size: dr.width,
+        viewportSize: window.innerWidth,
+        margin,
+      })}px`;
+      el.style.top = `${top}px`;
+      el.style.bottom = "auto";
     }
   }, [anchorRef, placement]);
 
-  useLayoutEffect(() => {
-    if (!open) return;
-    applyPosition();
-  }, [open, applyPosition]);
+  useInitialReposition(open, applyPosition);
+  useViewportReposition(open, applyPosition);
 
-  useEffect(() => {
-    if (!open) return;
-    window.addEventListener("scroll", applyPosition, true);
-    window.addEventListener("resize", applyPosition);
-    return () => {
-      window.removeEventListener("scroll", applyPosition, true);
-      window.removeEventListener("resize", applyPosition);
-    };
-  }, [open, applyPosition]);
+  useDocumentClickOutside({
+    active: open,
+    refs: outsideRefs,
+    onOutside: onClose,
+    relatedAnchorRef: anchorRef,
+    relatedPortalSelectors: ["[data-filter-dropdown]"],
+  });
 
-  useEffect(() => {
-    if (!open) return;
-    function handleMouseDown(e: MouseEvent) {
-      const target = e.target as Node;
-      if (
-        anchorRef.current &&
-        !anchorRef.current.contains(target) &&
-        dropdownRef.current &&
-        !dropdownRef.current.contains(target)
-      ) {
-        // Check if click landed on an ignored element
-        if (ignoreRefs?.some((ref) => ref.current?.contains(target))) return;
-        // Check if click landed on another FilterDropdown portal
-        if (target instanceof Element && target.closest("[data-filter-dropdown]")) return;
-        // Check if click landed on a portaled dialog spawned by this dropdown (e.g. DatePicker calendar)
-        // but NOT on an unrelated dialog like a parent Modal
-        if (target instanceof Element) {
-          const dialog = target.closest('[role="dialog"]');
-          if (dialog && !dialog.contains(anchorRef.current)) return;
-        }
-        onClose();
-      }
-    }
-    document.addEventListener("mousedown", handleMouseDown);
-    return () => document.removeEventListener("mousedown", handleMouseDown);
-  }, [open, onClose, anchorRef, ignoreRefs]);
-
-  useEffect(() => {
-    if (!open) return;
-    function handleKeyDown(e: globalThis.KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, onClose]);
+  useDocumentEscape(open, onClose);
 
   if (!open) return null;
 
@@ -330,36 +321,30 @@ export function FilterBar({
     const margin = 8;
 
     el.style.position = "fixed";
-    el.style.left = `${tr.left}px`;
-    el.style.top = `${tr.bottom + gap}px`;
-    el.style.bottom = "auto";
-
     const pr = el.getBoundingClientRect();
 
-    if (pr.bottom > window.innerHeight - margin) {
-      el.style.top = "auto";
-      el.style.bottom = `${window.innerHeight - tr.top + gap}px`;
-    }
+    const { top } = resolveVerticalPosition({
+      anchorTop: tr.top,
+      anchorBottom: tr.bottom,
+      overlayHeight: pr.height,
+      viewportHeight: window.innerHeight,
+      gap,
+      margin,
+      preferred: "bottom",
+    });
 
-    if (pr.right > window.innerWidth - margin) {
-      el.style.left = `${Math.max(margin, window.innerWidth - pr.width - margin)}px`;
-    }
+    el.style.left = `${clampToViewport({
+      value: tr.left,
+      size: pr.width,
+      viewportSize: window.innerWidth,
+      margin,
+    })}px`;
+    el.style.top = `${top}px`;
+    el.style.bottom = "auto";
   }, []);
 
-  useLayoutEffect(() => {
-    if (!open) return;
-    applyPosition();
-  }, [open, applyPosition]);
-
-  useEffect(() => {
-    if (!open) return;
-    window.addEventListener("scroll", applyPosition, true);
-    window.addEventListener("resize", applyPosition);
-    return () => {
-      window.removeEventListener("scroll", applyPosition, true);
-      window.removeEventListener("resize", applyPosition);
-    };
-  }, [open, applyPosition]);
+  useInitialReposition(open, applyPosition);
+  useViewportReposition(open, applyPosition);
 
   /* ——— Open / Close ——— */
 
@@ -373,8 +358,9 @@ export function FilterBar({
     setOpen(false);
     setSearch("");
     setFocusedIndex(-1);
-    triggerRef.current?.focus();
   }, []);
+
+  useDocumentEscape(open, closePopover);
 
   const handleSelectFilter = useCallback(
     (filterId: string) => {
@@ -384,34 +370,18 @@ export function FilterBar({
     [onAddFilter, closePopover]
   );
 
-  /* ——— Focus search on open ——— */
-
-  useEffect(() => {
-    if (open) {
-      requestAnimationFrame(() =>
-        searchRef.current?.focus({ preventScroll: true })
-      );
-    }
-  }, [open]);
+  useOpenFocus({
+    active: open,
+    containerRef: popoverRef,
+    initialFocusRef: searchRef,
+  });
 
   /* ——— Click outside ——— */
-
-  useEffect(() => {
-    if (!open) return;
-    function handleMouseDown(e: MouseEvent) {
-      const target = e.target as Node;
-      if (
-        triggerRef.current &&
-        !triggerRef.current.contains(target) &&
-        popoverRef.current &&
-        !popoverRef.current.contains(target)
-      ) {
-        closePopover();
-      }
-    }
-    document.addEventListener("mousedown", handleMouseDown);
-    return () => document.removeEventListener("mousedown", handleMouseDown);
-  }, [open, closePopover]);
+  useDocumentClickOutside({
+    active: open,
+    refs: [triggerRef, popoverRef],
+    onOutside: closePopover,
+  });
 
   /* ——— Keyboard ——— */
 
@@ -433,6 +403,14 @@ export function FilterBar({
         case "ArrowUp":
           e.preventDefault();
           setFocusedIndex((i) => (i > 0 ? i - 1 : filtered.length - 1));
+          break;
+        case "Home":
+          e.preventDefault();
+          setFocusedIndex(filtered.length > 0 ? 0 : -1);
+          break;
+        case "End":
+          e.preventDefault();
+          setFocusedIndex(filtered.length > 0 ? filtered.length - 1 : -1);
           break;
         case "Enter":
           e.preventDefault();

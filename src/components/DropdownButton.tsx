@@ -6,11 +6,19 @@ import {
   useRef,
   useEffect,
   useCallback,
-  useLayoutEffect,
   useId,
 } from "react";
 import { createPortal } from "react-dom";
 import { CaretDown, MagnifyingGlass } from "@phosphor-icons/react";
+import {
+  clampToViewport,
+  resolveVerticalPosition,
+  useDocumentClickOutside,
+  useDocumentEscape,
+  useInitialReposition,
+  useOpenFocus,
+  useViewportReposition,
+} from "./overlay-utils";
 import s from "./DropdownButton.module.css";
 
 interface IconProps {
@@ -103,38 +111,32 @@ export function DropdownButton({
     // Default: open below, left-aligned
     menu.style.position = "fixed";
     menu.style.minWidth = `${tr.width}px`;
-    menu.style.left = `${tr.left}px`;
-    menu.style.top = `${tr.bottom + gap}px`;
-    menu.style.bottom = "auto";
-
     const mr = menu.getBoundingClientRect();
 
-    // If overflows bottom → open above
-    if (mr.bottom > window.innerHeight - margin) {
-      menu.style.top = "auto";
-      menu.style.bottom = `${window.innerHeight - tr.top + gap}px`;
-    }
+    const { top } = resolveVerticalPosition({
+      anchorTop: tr.top,
+      anchorBottom: tr.bottom,
+      overlayHeight: mr.height,
+      viewportHeight: window.innerHeight,
+      gap,
+      margin,
+      preferred: "bottom",
+    });
 
-    // If overflows right → shift left
-    if (mr.right > window.innerWidth - margin) {
-      menu.style.left = `${Math.max(margin, window.innerWidth - mr.width - margin)}px`;
-    }
+    const left = clampToViewport({
+      value: tr.left,
+      size: Math.max(mr.width, tr.width),
+      viewportSize: window.innerWidth,
+      margin,
+    });
+
+    menu.style.left = `${left}px`;
+    menu.style.top = `${top}px`;
+    menu.style.bottom = "auto";
   }, []);
 
-  useLayoutEffect(() => {
-    if (!open) return;
-    applyPosition();
-  }, [open, applyPosition]);
-
-  useEffect(() => {
-    if (!open) return;
-    window.addEventListener("scroll", applyPosition, true);
-    window.addEventListener("resize", applyPosition);
-    return () => {
-      window.removeEventListener("scroll", applyPosition, true);
-      window.removeEventListener("resize", applyPosition);
-    };
-  }, [open, applyPosition]);
+  useInitialReposition(open, applyPosition);
+  useViewportReposition(open, applyPosition);
 
   /* ——— Open / Close ——— */
 
@@ -147,7 +149,6 @@ export function DropdownButton({
   const closeMenu = useCallback(() => {
     setOpen(false);
     setFocusedIndex(-1);
-    triggerRef.current?.focus();
   }, []);
 
   const handleSelect = useCallback(
@@ -158,32 +159,19 @@ export function DropdownButton({
     [onSelect, closeMenu],
   );
 
-  /* ——— Focus search on open ——— */
-
-  useEffect(() => {
-    if (open && searchable) {
-      requestAnimationFrame(() => searchRef.current?.focus());
-    }
-  }, [open, searchable]);
+  useDocumentEscape(open, closeMenu);
+  useOpenFocus({
+    active: open,
+    containerRef: menuRef,
+    initialFocusRef: searchable ? searchRef : undefined,
+  });
 
   /* ——— Click outside ——— */
-
-  useEffect(() => {
-    if (!open) return;
-    function handleMouseDown(e: MouseEvent) {
-      const target = e.target as Node;
-      if (
-        triggerRef.current &&
-        !triggerRef.current.contains(target) &&
-        menuRef.current &&
-        !menuRef.current.contains(target)
-      ) {
-        closeMenu();
-      }
-    }
-    document.addEventListener("mousedown", handleMouseDown);
-    return () => document.removeEventListener("mousedown", handleMouseDown);
-  }, [open, closeMenu]);
+  useDocumentClickOutside({
+    active: open,
+    refs: [triggerRef, menuRef],
+    onOutside: closeMenu,
+  });
 
   /* ——— Keyboard navigation ——— */
 
@@ -206,6 +194,14 @@ export function DropdownButton({
           e.preventDefault();
           setFocusedIndex((i) => (i > 0 ? i - 1 : filtered.length - 1));
           break;
+        case "Home":
+          e.preventDefault();
+          setFocusedIndex(filtered.length > 0 ? 0 : -1);
+          break;
+        case "End":
+          e.preventDefault();
+          setFocusedIndex(filtered.length > 0 ? filtered.length - 1 : -1);
+          break;
         case "Enter":
           e.preventDefault();
           if (focusedIndex >= 0 && focusedIndex < filtered.length) {
@@ -223,6 +219,11 @@ export function DropdownButton({
     },
     [open, openMenu, closeMenu, handleSelect, filtered, focusedIndex],
   );
+
+  useEffect(() => {
+    if (!open) return;
+    setFocusedIndex(filtered.length > 0 ? 0 : -1);
+  }, [open, filtered.length]);
 
   /* ——— Scroll focused item into view ——— */
 
@@ -257,10 +258,11 @@ export function DropdownButton({
         disabled={disabled}
         onClick={() => (open ? closeMenu() : openMenu())}
         onKeyDown={handleKeyDown}
-        aria-haspopup="listbox"
+        aria-haspopup="menu"
         aria-expanded={open}
+        aria-controls={open ? listId : undefined}
         aria-activedescendant={
-          open && focusedIndex >= 0 && !searchable
+          open && focusedIndex >= 0
             ? `${triggerId}-opt-${focusedIndex}`
             : undefined
         }
@@ -275,7 +277,8 @@ export function DropdownButton({
           <div
             ref={menuRef}
             className={s.menu}
-            role="listbox"
+            role="menu"
+            aria-label="Opções"
             aria-labelledby={triggerId}
             onKeyDown={handleKeyDown}
           >
@@ -286,6 +289,9 @@ export function DropdownButton({
                   ref={searchRef}
                   className={s.searchInput}
                   type="text"
+                  role="combobox"
+                  aria-expanded="true"
+                  aria-haspopup="menu"
                   placeholder={searchPlaceholder}
                   value={search}
                   aria-label="Buscar itens"
@@ -303,14 +309,13 @@ export function DropdownButton({
                 />
               </div>
             )}
-            <ul ref={listRef} id={listId} className={s.list}>
+            <ul ref={listRef} id={listId} className={s.list} role="presentation">
               {filtered.map((item, i) => (
                 <li
                   key={item.id}
                   id={`${triggerId}-opt-${i}`}
                   className={`${s.item} ${i === focusedIndex ? s.focused : ""}`}
-                  role="option"
-                  aria-selected={false}
+                  role="menuitem"
                   onMouseEnter={() => setFocusedIndex(i)}
                   onClick={() => handleSelect(item)}
                 >

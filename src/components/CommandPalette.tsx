@@ -10,6 +10,11 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { MagnifyingGlass } from "@phosphor-icons/react";
+import {
+  trapFocusWithin,
+  useDocumentEscape,
+  useOpenFocus,
+} from "./overlay-utils";
 import s from "./CommandPalette.module.css";
 
 /* ——— Types ——— */
@@ -78,6 +83,12 @@ export function CommandPalette({
   const containerRef = useRef<HTMLDivElement>(null);
   const uid = useId();
   const listboxId = `${uid}-listbox`;
+  useDocumentEscape(open, onClose);
+  useOpenFocus({
+    active: open,
+    containerRef,
+    initialFocusRef: inputRef,
+  });
 
   /* ——— Item id helper ——— */
 
@@ -85,29 +96,6 @@ export function CommandPalette({
     (flatIdx: number) => `${uid}-item-${flatIdx}`,
     [uid]
   );
-
-  /* ——— Focus trap ——— */
-
-  function handleFocusTrap(e: React.KeyboardEvent) {
-    if (e.key !== "Tab" || !containerRef.current) return;
-    const focusable = containerRef.current.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    );
-    if (focusable.length === 0) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
-    if (e.shiftKey) {
-      if (document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      }
-    } else {
-      if (document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-  }
 
   /* ——— Filtered & flattened ——— */
 
@@ -133,9 +121,6 @@ export function CommandPalette({
     if (open) {
       setQuery("");
       setSelectedIndex(0);
-      requestAnimationFrame(() =>
-        inputRef.current?.focus({ preventScroll: true })
-      );
     }
   }, [open]);
 
@@ -157,8 +142,8 @@ export function CommandPalette({
 
   /* ——— Keyboard ——— */
 
-  function handleKeyDown(e: React.KeyboardEvent) {
-    handleFocusTrap(e);
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    trapFocusWithin(containerRef.current, e);
     switch (e.key) {
       case "ArrowDown":
         e.preventDefault();
@@ -176,7 +161,6 @@ export function CommandPalette({
         break;
       case "Escape":
         e.preventDefault();
-        onClose();
         break;
     }
   }

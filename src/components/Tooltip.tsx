@@ -3,11 +3,16 @@ import {
   useCallback,
   useEffect,
   useId,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import {
+  clampToViewport,
+  useDocumentEscape,
+  useInitialReposition,
+  useViewportReposition,
+} from "./overlay-utils";
 import s from "./Tooltip.module.css";
 
 type Placement = "top" | "bottom" | "left" | "right";
@@ -93,7 +98,12 @@ export function Tooltip({
       // Center tooltip horizontally over anchor
       left = anchorCx - tr.width / 2;
       // Clamp to viewport edges
-      left = Math.max(VIEWPORT_MARGIN, Math.min(left, vw - tr.width - VIEWPORT_MARGIN));
+      left = clampToViewport({
+        value: left,
+        size: tr.width,
+        viewportSize: vw,
+        margin: VIEWPORT_MARGIN,
+      });
 
       top = chosen === "top"
         ? ar.top - tr.height - GAP
@@ -108,7 +118,12 @@ export function Tooltip({
       // Center tooltip vertically beside anchor
       top = anchorCy - tr.height / 2;
       // Clamp to viewport edges
-      top = Math.max(VIEWPORT_MARGIN, Math.min(top, vh - tr.height - VIEWPORT_MARGIN));
+      top = clampToViewport({
+        value: top,
+        size: tr.height,
+        viewportSize: vh,
+        margin: VIEWPORT_MARGIN,
+      });
 
       left = chosen === "left"
         ? ar.left - tr.width - GAP
@@ -125,29 +140,10 @@ export function Tooltip({
     tip.style.left = `${left}px`;
   }, [placement]);
 
-  useLayoutEffect(() => {
-    if (!visible) return;
-    applyPosition();
-  }, [visible, applyPosition]);
+  useInitialReposition(visible, applyPosition);
+  useViewportReposition(visible, applyPosition);
 
-  useEffect(() => {
-    if (!visible) return;
-    window.addEventListener("scroll", applyPosition, true);
-    window.addEventListener("resize", applyPosition);
-    return () => {
-      window.removeEventListener("scroll", applyPosition, true);
-      window.removeEventListener("resize", applyPosition);
-    };
-  }, [visible, applyPosition]);
-
-  useEffect(() => {
-    if (!visible) return;
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") hide();
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [visible, hide]);
+  useDocumentEscape(visible, hide);
 
   return (
     <>

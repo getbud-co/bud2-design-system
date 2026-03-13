@@ -3,12 +3,17 @@ import {
   type ReactNode,
   useCallback,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
 import { CaretRight } from "@phosphor-icons/react";
+import {
+  useDocumentClickOutside,
+  useDocumentEscape,
+  useInitialReposition,
+  useViewportReposition,
+} from "./overlay-utils";
 import s from "./Popover.module.css";
 
 interface IconProps {
@@ -151,10 +156,7 @@ export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverP
   }, [anchorRef]);
 
   // Position synchronously after DOM mount (before paint)
-  useLayoutEffect(() => {
-    if (!open) return;
-    applyPosition();
-  }, [open, applyPosition]);
+  useInitialReposition(open, applyPosition);
 
   const getSubmenuFocusable = useCallback((wrapperEl: HTMLElement): HTMLElement[] => {
     const submenu = wrapperEl.querySelector(`.${s.submenu}`);
@@ -210,45 +212,17 @@ export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverP
   }, [onClose, restoreFocus]);
 
   // Reposition on scroll/resize
-  useEffect(() => {
-    if (!open) return;
-    window.addEventListener("scroll", applyPosition, true);
-    window.addEventListener("resize", applyPosition);
-    return () => {
-      window.removeEventListener("scroll", applyPosition, true);
-      window.removeEventListener("resize", applyPosition);
-    };
-  }, [open, applyPosition]);
+  useViewportReposition(open, applyPosition);
 
   // Click outside
-  useEffect(() => {
-    if (!open) return;
-    function handleMouseDown(e: MouseEvent) {
-      const target = e.target as Node;
-      if (
-        anchorRef.current &&
-        !anchorRef.current.contains(target) &&
-        popoverRef.current &&
-        !popoverRef.current.contains(target)
-      ) {
-        handleClose();
-      }
-    }
-    document.addEventListener("mousedown", handleMouseDown);
-    return () => document.removeEventListener("mousedown", handleMouseDown);
-  }, [open, handleClose, anchorRef]);
+  useDocumentClickOutside({
+    active: open,
+    refs: [anchorRef, popoverRef],
+    onOutside: handleClose,
+  });
 
   // ESC
-  useEffect(() => {
-    if (!open) return;
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        handleClose();
-      }
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, handleClose]);
+  useDocumentEscape(open, handleClose);
 
   // Arrow key navigation on the popover container
   const handlePopoverKeyDown = useCallback(

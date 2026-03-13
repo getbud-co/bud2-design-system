@@ -2,12 +2,20 @@ import {
   type ComponentType,
   type ReactNode,
   useCallback,
-  useEffect,
-  useLayoutEffect,
   useRef,
 } from "react";
 import { createPortal } from "react-dom";
 import { BellSlash } from "@phosphor-icons/react";
+import {
+  clampToViewport,
+  resolveVerticalPosition,
+  useDocumentClickOutside,
+  useInitialReposition,
+  trapFocusWithin,
+  useDocumentEscape,
+  useOpenFocus,
+  useViewportReposition,
+} from "./overlay-utils";
 import s from "./NotificationPanel.module.css";
 
 /** Extract plain text from a ReactNode for aria-labels */
@@ -20,9 +28,6 @@ function getTextContent(node: ReactNode): string {
   }
   return "";
 }
-
-const FOCUSABLE_SELECTOR =
-  'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 /* ——— Types ——— */
 
@@ -88,8 +93,9 @@ export function NotificationPanel({
   className,
 }: NotificationPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
-  const previousFocusRef = useRef<HTMLElement | null>(null);
   const hasUnread = notifications.some((n) => n.unread);
+  useDocumentEscape(open, onClose);
+  useOpenFocus({ active: open, containerRef: panelRef });
 
   /* ——— Positioning ——— */
 
@@ -110,125 +116,48 @@ export function NotificationPanel({
     el.style.bottom = "auto";
 
     // Align right edge with anchor right edge
-    const right = window.innerWidth - ar.right;
-    el.style.right = `${right}px`;
-    el.style.left = "auto";
-
     const pr = el.getBoundingClientRect();
 
-    // Flip above if no space below
-    if (pr.bottom > window.innerHeight - margin) {
-      el.style.top = "auto";
-      el.style.bottom = `${window.innerHeight - ar.top + gap}px`;
-    }
-
-    // Push left if overflows left edge
-    if (pr.left < margin) {
-      el.style.right = "auto";
-      el.style.left = `${margin}px`;
-    }
-  }, [anchorRef]);
-
-  useLayoutEffect(() => {
-    if (!open) return;
-    applyPosition();
-  }, [open, applyPosition]);
-
-  useEffect(() => {
-    if (!open) return;
-    window.addEventListener("scroll", applyPosition, true);
-    window.addEventListener("resize", applyPosition);
-    return () => {
-      window.removeEventListener("scroll", applyPosition, true);
-      window.removeEventListener("resize", applyPosition);
-    };
-  }, [open, applyPosition]);
-
-  /* ——— Click outside ——— */
-
-  useEffect(() => {
-    if (!open) return;
-    function handleMouseDown(e: MouseEvent) {
-      const target = e.target as Node;
-      if (
-        anchorRef.current &&
-        !anchorRef.current.contains(target) &&
-        panelRef.current &&
-        !panelRef.current.contains(target)
-      ) {
-        onClose();
-      }
-    }
-    document.addEventListener("mousedown", handleMouseDown);
-    return () => document.removeEventListener("mousedown", handleMouseDown);
-  }, [open, onClose, anchorRef]);
-
-  /* ——— Escape ——— */
-
-  useEffect(() => {
-    if (!open) return;
-    function handleKeyDown(e: globalThis.KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [open, onClose]);
-
-  /* ——— Focus management ——— */
-
-  useEffect(() => {
-    if (!open) return;
-
-    // Store previously focused element
-    previousFocusRef.current = document.activeElement as HTMLElement | null;
-
-    // Focus first focusable element inside the panel
-    requestAnimationFrame(() => {
-      const el = panelRef.current;
-      if (!el) return;
-      const first = el.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
-      first?.focus();
+    const { top } = resolveVerticalPosition({
+      anchorTop: ar.top,
+      anchorBottom: ar.bottom,
+      overlayHeight: pr.height,
+      viewportHeight: window.innerHeight,
+      gap,
+      margin,
+      preferred: "bottom",
     });
 
-    return () => {
-      // Restore focus on close
-      previousFocusRef.current?.focus();
-      previousFocusRef.current = null;
-    };
-  }, [open]);
+    const left = clampToViewport({
+      value: ar.right - pr.width,
+      size: pr.width,
+      viewportSize: window.innerWidth,
+      margin,
+    });
+
+    el.style.left = `${left}px`;
+    el.style.top = `${top}px`;
+    el.style.right = "auto";
+    el.style.bottom = "auto";
+  }, [anchorRef]);
+
+  useInitialReposition(open, applyPosition);
+  useViewportReposition(open, applyPosition);
+
+  /* ——— Click outside ——— */
+  useDocumentClickOutside({
+    active: open,
+    refs: [anchorRef, panelRef],
+    onOutside: onClose,
+  });
 
   /* ——— Focus trap (Tab / Shift+Tab) ——— */
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key !== "Tab") return;
-      const el = panelRef.current;
-      if (!el) return;
-
-      const focusable = Array.from(
-        el.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
-      );
-      if (focusable.length === 0) {
-        e.preventDefault();
-        return;
-      }
-
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-
-      if (e.shiftKey) {
-        if (document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        }
-      } else {
-        if (document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
+      trapFocusWithin(panelRef.current, e);
     },
-    []
+    [],
   );
 
   if (!open) return null;
