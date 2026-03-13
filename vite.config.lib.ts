@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     dts({
       tsconfigPath: "./tsconfig.lib.json",
-      rollupTypes: true,
+      rollupTypes: false,
     }),
   ],
   publicDir: false,
