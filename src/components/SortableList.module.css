@@ -23,6 +23,7 @@
   background: var(--color-white);
   cursor: grab;
   user-select: none;
+  touch-action: none;
   transition: background-color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
 }
 
@@ -86,6 +87,42 @@
   min-width: 0;
 }
 
+/* ——— Move buttons (up/down) ——— */
+
+.moveButtons {
+  display: none;
+  flex-shrink: 0;
+  gap: var(--sp-3xs);
+}
+
+.moveBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-xs);
+  background: var(--color-white);
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.moveBtn:hover:not(:disabled) {
+  background: var(--color-caramel-100);
+  border-color: var(--color-caramel-300);
+}
+
+.moveBtn:active:not(:disabled) {
+  background: var(--color-caramel-200);
+}
+
+.moveBtn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 /* ——— Small size ——— */
 
 .sm .item {
@@ -101,12 +138,39 @@
   font-size: var(--text-xs);
 }
 
-/* ——— Responsive ——— */
+.sm .moveBtn {
+  width: 28px;
+  height: 28px;
+}
+
+/* ——— Mobile: show move buttons, increase touch targets ——— */
 
 @media (max-width: 480px) {
   .item {
-    padding: var(--sp-xs) var(--sp-xs);
+    padding: var(--sp-xs);
     gap: var(--sp-xs);
-    min-height: 44px;
+    min-height: 48px;
+  }
+
+  .moveButtons {
+    display: flex;
+  }
+
+  .moveBtn {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Hide drag handle on mobile — buttons are the interaction */
+  .handle {
+    display: none;
+  }
+}
+
+/* ——— Tablet: show move buttons as well ——— */
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .moveButtons {
+    display: flex;
   }
 }
