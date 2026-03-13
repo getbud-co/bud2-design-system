@@ -11,8 +11,7 @@ import {
 import { createPortal } from "react-dom";
 import { CaretDown, MagnifyingGlass } from "@phosphor-icons/react";
 import {
-  clampToViewport,
-  resolveVerticalPosition,
+  resolveAnchoredOverlayPosition,
   useDocumentClickOutside,
   useDocumentEscape,
   useInitialReposition,
@@ -113,21 +112,19 @@ export function DropdownButton({
     menu.style.minWidth = `${tr.width}px`;
     const mr = menu.getBoundingClientRect();
 
-    const { top } = resolveVerticalPosition({
+    const { top, left } = resolveAnchoredOverlayPosition({
       anchorTop: tr.top,
       anchorBottom: tr.bottom,
+      anchorLeft: tr.left,
+      anchorRight: tr.right,
+      overlayWidth: Math.max(mr.width, tr.width),
       overlayHeight: mr.height,
+      viewportWidth: window.innerWidth,
       viewportHeight: window.innerHeight,
       gap,
       margin,
-      preferred: "bottom",
-    });
-
-    const left = clampToViewport({
-      value: tr.left,
-      size: Math.max(mr.width, tr.width),
-      viewportSize: window.innerWidth,
-      margin,
+      horizontalAlign: "start",
+      preferredVertical: "bottom",
     });
 
     menu.style.left = `${left}px`;

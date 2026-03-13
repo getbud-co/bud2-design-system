@@ -341,8 +341,9 @@ export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverP
                 className={`${s.submenuWrapper}${submenuFlip ? ` ${s.submenuFlip}` : ""}${openSubmenuId === item.id ? ` ${s.submenuWrapperOpen}` : ""}`}
                 data-submenu-trigger={item.id}
                 onBlur={(e) => {
+                  const currentTarget = e.currentTarget;
                   requestAnimationFrame(() => {
-                    if (!e.currentTarget.contains(document.activeElement)) {
+                    if (!currentTarget.contains(document.activeElement)) {
                       setOpenSubmenuId((current) => (current === item.id ? null : current));
                     }
                   });

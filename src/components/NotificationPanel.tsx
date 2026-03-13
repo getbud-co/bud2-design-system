@@ -7,8 +7,7 @@ import {
 import { createPortal } from "react-dom";
 import { BellSlash } from "@phosphor-icons/react";
 import {
-  clampToViewport,
-  resolveVerticalPosition,
+  resolveAnchoredOverlayPosition,
   useDocumentClickOutside,
   useInitialReposition,
   trapFocusWithin,
@@ -118,21 +117,19 @@ export function NotificationPanel({
     // Align right edge with anchor right edge
     const pr = el.getBoundingClientRect();
 
-    const { top } = resolveVerticalPosition({
+    const { top, left } = resolveAnchoredOverlayPosition({
       anchorTop: ar.top,
       anchorBottom: ar.bottom,
+      anchorLeft: ar.left,
+      anchorRight: ar.right,
+      overlayWidth: pr.width,
       overlayHeight: pr.height,
+      viewportWidth: window.innerWidth,
       viewportHeight: window.innerHeight,
       gap,
       margin,
-      preferred: "bottom",
-    });
-
-    const left = clampToViewport({
-      value: ar.right - pr.width,
-      size: pr.width,
-      viewportSize: window.innerWidth,
-      margin,
+      horizontalAlign: "end",
+      preferredVertical: "bottom",
     });
 
     el.style.left = `${left}px`;

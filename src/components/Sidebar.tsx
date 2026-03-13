@@ -1,12 +1,12 @@
 import {
   type ReactNode,
   type ComponentType,
+  type KeyboardEvent as ReactKeyboardEvent,
   type HTMLAttributes,
   createContext,
   forwardRef,
   useContext,
   useState,
-  useEffect,
   useRef,
   useCallback,
   useId,
@@ -65,15 +65,13 @@ export function Sidebar({
 
   useDocumentEscape(mobileOpen && !!onMobileClose, handleMobileClose);
 
-  /* Fecha com Escape + focus trap */
-  useEffect(() => {
-    if (!mobileOpen || !onMobileClose) return;
-    function handleKey(e: KeyboardEvent) {
+  const handleAsideKeyDown = useCallback(
+    (e: ReactKeyboardEvent<HTMLElement>) => {
+      if (!mobileOpen) return;
       trapFocusWithin(asideRef.current, e);
-    }
-    document.addEventListener("keydown", handleKey);
-    return () => document.removeEventListener("keydown", handleKey);
-  }, [mobileOpen, onMobileClose, handleMobileClose]);
+    },
+    [mobileOpen],
+  );
 
   const cls = [
     s.root,
@@ -100,6 +98,7 @@ export function Sidebar({
         aria-label="Menu lateral"
         role={mobileOpen ? "dialog" : undefined}
         aria-modal={mobileOpen || undefined}
+        onKeyDown={handleAsideKeyDown}
         {...rest}
       >
         {/* Botão fechar mobile */}

@@ -18,9 +18,8 @@ import {
   FloppyDisk,
 } from "@phosphor-icons/react";
 import {
-  clampToViewport,
-  resolveSidePosition,
-  resolveVerticalPosition,
+  resolveAnchoredOverlayPosition,
+  resolveSideStartOverlayPosition,
   useDocumentClickOutside,
   useDocumentEscape,
   useInitialReposition,
@@ -159,41 +158,39 @@ export function FilterDropdown({
     const dr = el.getBoundingClientRect();
 
     if (placement === "right-start") {
-      const { left } = resolveSidePosition({
+      const { left, top } = resolveSideStartOverlayPosition({
+        anchorTop: ar.top,
         anchorLeft: ar.left,
         anchorRight: ar.right,
         overlayWidth: dr.width,
-        viewportWidth: window.innerWidth,
-        gap,
-        margin,
-        preferred: "right",
-      });
-
-      el.style.left = `${left}px`;
-      el.style.top = `${clampToViewport({
-        value: ar.top,
-        size: dr.height,
-        viewportSize: window.innerHeight,
-        margin,
-      })}px`;
-      el.style.bottom = "auto";
-    } else {
-      const { top } = resolveVerticalPosition({
-        anchorTop: ar.top,
-        anchorBottom: ar.bottom,
         overlayHeight: dr.height,
+        viewportWidth: window.innerWidth,
         viewportHeight: window.innerHeight,
         gap,
         margin,
-        preferred: "bottom",
+        preferredSide: "right",
       });
 
-      el.style.left = `${clampToViewport({
-        value: ar.left,
-        size: dr.width,
-        viewportSize: window.innerWidth,
+      el.style.left = `${left}px`;
+      el.style.top = `${top}px`;
+      el.style.bottom = "auto";
+    } else {
+      const { top, left } = resolveAnchoredOverlayPosition({
+        anchorTop: ar.top,
+        anchorBottom: ar.bottom,
+        anchorLeft: ar.left,
+        anchorRight: ar.right,
+        overlayWidth: dr.width,
+        overlayHeight: dr.height,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
+        gap,
         margin,
-      })}px`;
+        horizontalAlign: "start",
+        preferredVertical: "bottom",
+      });
+
+      el.style.left = `${left}px`;
       el.style.top = `${top}px`;
       el.style.bottom = "auto";
     }
@@ -323,22 +320,22 @@ export function FilterBar({
     el.style.position = "fixed";
     const pr = el.getBoundingClientRect();
 
-    const { top } = resolveVerticalPosition({
+    const { top, left } = resolveAnchoredOverlayPosition({
       anchorTop: tr.top,
       anchorBottom: tr.bottom,
+      anchorLeft: tr.left,
+      anchorRight: tr.right,
+      overlayWidth: pr.width,
       overlayHeight: pr.height,
+      viewportWidth: window.innerWidth,
       viewportHeight: window.innerHeight,
       gap,
       margin,
-      preferred: "bottom",
+      horizontalAlign: "start",
+      preferredVertical: "bottom",
     });
 
-    el.style.left = `${clampToViewport({
-      value: tr.left,
-      size: pr.width,
-      viewportSize: window.innerWidth,
-      margin,
-    })}px`;
+    el.style.left = `${left}px`;
     el.style.top = `${top}px`;
     el.style.bottom = "auto";
   }, []);

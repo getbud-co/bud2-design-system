@@ -128,6 +128,34 @@ interface SidePositionOptions {
   preferred?: "right" | "left";
 }
 
+interface AnchoredOverlayPositionOptions {
+  anchorTop: number;
+  anchorBottom: number;
+  anchorLeft: number;
+  anchorRight: number;
+  overlayWidth: number;
+  overlayHeight: number;
+  viewportWidth: number;
+  viewportHeight: number;
+  gap: number;
+  margin: number;
+  horizontalAlign?: "start" | "end";
+  preferredVertical?: "bottom" | "top";
+}
+
+interface SideStartOverlayPositionOptions {
+  anchorTop: number;
+  anchorLeft: number;
+  anchorRight: number;
+  overlayWidth: number;
+  overlayHeight: number;
+  viewportWidth: number;
+  viewportHeight: number;
+  gap: number;
+  margin: number;
+  preferredSide?: "right" | "left";
+}
+
 export function useOpenFocus<
   TContainer extends HTMLElement = HTMLElement,
   TInitial extends HTMLElement = HTMLElement,
@@ -325,4 +353,81 @@ export function resolveSidePosition({
   });
 
   return { left: clampedLeft, side: preferred };
+}
+
+export function resolveAnchoredOverlayPosition({
+  anchorTop,
+  anchorBottom,
+  anchorLeft,
+  anchorRight,
+  overlayWidth,
+  overlayHeight,
+  viewportWidth,
+  viewportHeight,
+  gap,
+  margin,
+  horizontalAlign = "start",
+  preferredVertical = "bottom",
+}: AnchoredOverlayPositionOptions): {
+  top: number;
+  left: number;
+  verticalPlacement: "bottom" | "top";
+} {
+  const { top, placement } = resolveVerticalPosition({
+    anchorTop,
+    anchorBottom,
+    overlayHeight,
+    viewportHeight,
+    gap,
+    margin,
+    preferred: preferredVertical,
+  });
+
+  const rawLeft =
+    horizontalAlign === "end" ? anchorRight - overlayWidth : anchorLeft;
+
+  const left = clampToViewport({
+    value: rawLeft,
+    size: overlayWidth,
+    viewportSize: viewportWidth,
+    margin,
+  });
+
+  return { top, left, verticalPlacement: placement };
+}
+
+export function resolveSideStartOverlayPosition({
+  anchorTop,
+  anchorLeft,
+  anchorRight,
+  overlayWidth,
+  overlayHeight,
+  viewportWidth,
+  viewportHeight,
+  gap,
+  margin,
+  preferredSide = "right",
+}: SideStartOverlayPositionOptions): {
+  top: number;
+  left: number;
+  side: "right" | "left";
+} {
+  const { left, side } = resolveSidePosition({
+    anchorLeft,
+    anchorRight,
+    overlayWidth,
+    viewportWidth,
+    gap,
+    margin,
+    preferred: preferredSide,
+  });
+
+  const top = clampToViewport({
+    value: anchorTop,
+    size: overlayHeight,
+    viewportSize: viewportHeight,
+    margin,
+  });
+
+  return { top, left, side };
 }
