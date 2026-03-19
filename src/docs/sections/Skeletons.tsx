@@ -237,7 +237,9 @@ import { FileVideo } from "@phosphor-icons/react";
         <div className={s.placeholderDemo}>
           <SkeletonContainer>
             <div className={s.testimonialPlaceholder}>
-              <UserCircle size={56} weight="regular" color="var(--color-neutral-400)" />
+              <div className={s.testimonialAvatar}>
+                <UserCircle size={32} weight="regular" />
+              </div>
               <div style={{ width: '100%', maxWidth: 640, display: 'flex', flexDirection: 'column', gap: 'var(--sp-2xs)', alignItems: 'center' }}>
                 <Skeleton variant="text" width="100%" height={14} />
                 <Skeleton variant="text" width="80%" height={14} />
@@ -255,12 +257,40 @@ import { UserCircle } from "@phosphor-icons/react";
 
 <SkeletonContainer>
   <div className={styles.testimonialPlaceholder}>
-    <UserCircle size={56} weight="regular" />
+    <div className={styles.testimonialAvatar}>
+      <UserCircle size={32} weight="regular" />
+    </div>
     <Skeleton variant="text" width="100%" height={14} />
     <Skeleton variant="text" width="80%" height={14} />
     <Skeleton variant="text" width={160} height={12} />
   </div>
-</SkeletonContainer>`}
+</SkeletonContainer>
+
+/* CSS */
+.testimonialAvatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--color-caramel-200);
+  background-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    transparent 40%,
+    var(--color-caramel-100) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-attachment: fixed;
+  animation: shimmer 1.5s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.testimonialAvatar svg {
+  color: var(--color-neutral-400);
+}`}
           language="tsx"
         />
       </SubSection>

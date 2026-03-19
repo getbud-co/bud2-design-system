@@ -198,3 +198,37 @@
   text-align: center;
   padding: var(--sp-xl) var(--sp-md);
 }
+
+.testimonialAvatar {
+  width: 56px; /* valor estrutural */
+  height: 56px; /* valor estrutural */
+  border-radius: 50%;
+  background-color: var(--color-caramel-200);
+  background-image: linear-gradient(
+    100deg,
+    transparent 0%,
+    transparent 40%,
+    var(--color-caramel-100) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  background-attachment: fixed;
+  animation: shimmer 1.5s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.testimonialAvatar svg {
+  color: var(--color-neutral-400);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
