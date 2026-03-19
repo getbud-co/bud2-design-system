@@ -31,10 +31,13 @@ export {
 export { CommandPalette } from "./components/CommandPalette";
 export { Input } from "./components/Input";
 export { Drawer, DrawerHeader, DrawerBody, DrawerFooter } from "./components/Drawer";
+export { DragToCloseDrawer } from "./components/DragToCloseDrawer";
 export { Modal, ModalHeader, ModalBody, ModalFooter } from "./components/Modal";
 export { Popover } from "./components/Popover";
+export { PopoverSelect, formatMultiLabel } from "./components/PopoverSelect/PopoverSelect";
 export { Radar } from "./components/Radar";
 export { Radio } from "./components/Radio";
+export { RowActionsPopover } from "./components/RowActionsPopover";
 export { Select } from "./components/Select";
 export { ScaleInput } from "./components/ScaleInput";
 export { Skeleton } from "./components/Skeleton";
@@ -76,10 +79,15 @@ export type { HeatmapCell, HeatmapProps } from "./components/Heatmap";
 export type { RadarDataPoint } from "./components/Radar";
 export type { NotificationItem } from "./components/NotificationPanel";
 export type { PopoverItem } from "./components/Popover";
+export type { PopoverSelectProps, PopoverSelectOption } from "./components/PopoverSelect/PopoverSelect";
 export type { ScaleInputProps } from "./components/ScaleInput";
 export type { SelectOption } from "./components/Select";
 export type { SortableItem, SortableListProps } from "./components/SortableList";
 export type { TabItem, TabBarProps } from "./components/TabBar";
+
+// Hooks
+export { useDataTable } from "./hooks/useDataTable";
+export { useFilterChips } from "./hooks/useFilterChips";
 
 // Utilities
 export {

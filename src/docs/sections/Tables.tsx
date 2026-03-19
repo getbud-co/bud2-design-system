@@ -1,11 +1,13 @@
 import { useState, useCallback } from "react";
-import { DotsThreeVertical, Circle } from "@phosphor-icons/react";
+import { DotsThreeVertical, Circle, PencilSimple, Trash } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Badge } from "../../components/Badge";
 import { Avatar } from "../../components/Avatar";
+import { RowActionsPopover } from "../../components/RowActionsPopover";
+import type { PopoverItem } from "../../components/Popover";
 import {
   Table,
   TableCardHeader,
@@ -19,7 +21,7 @@ import {
   TablePagination,
 } from "../../components/Table";
 import { Button } from "../../components/Button";
-import { Trash, Export } from "@phosphor-icons/react";
+import { Export } from "@phosphor-icons/react";
 import s from "./Tables.module.css";
 
 /* ——— Demo data ——— */
@@ -354,6 +356,133 @@ export function Tables() {
       <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
       </SubSection>
+
+      <SubSection id="row-actions" title="RowActionsPopover">
+        <p>
+          Wrapper padronizado para ações de linha de tabela. Combina botão "⋯" + popover,
+          eliminando código repetitivo em tabelas CRUD.
+        </p>
+
+        <RowActionsDemo />
+
+        <CodeSnippet
+          language="tsx"
+          code={`import { RowActionsPopover } from "@mdonangelo/bud-ds";
+import { PencilSimple, Trash } from "@phosphor-icons/react";
+
+const [openRowId, setOpenRowId] = useState<string | null>(null);
+
+function getActions(rowId: string): PopoverItem[] {
+  return [
+    { 
+      id: "edit", 
+      label: "Editar", 
+      icon: PencilSimple, 
+      onClick: () => handleEdit(rowId) 
+    },
+    { 
+      id: "delete", 
+      label: "Excluir", 
+      icon: Trash, 
+      onClick: () => handleDelete(rowId) 
+    },
+  ];
+}
+
+// Na célula da tabela:
+<TableCell align="right">
+  <RowActionsPopover
+    items={getActions(row.id)}
+    open={openRowId === row.id}
+    onToggle={() => setOpenRowId(openRowId === row.id ? null : row.id)}
+    onClose={() => setOpenRowId(null)}
+  />
+</TableCell>
+
+// Props:
+// - items: PopoverItem[] (lista de ações)
+// - open: boolean (se o popover está aberto)
+// - onToggle: () => void (callback para alternar aberto/fechado)
+// - onClose: () => void (callback quando deve fechar)
+// - className?: string (classe CSS adicional)
+// - buttonAriaLabel?: string (default: "Abrir ações")`}
+        />
+      </SubSection>
     </DocSection>
+  );
+}
+
+/* ——— Demo: RowActionsPopover ——— */
+
+function RowActionsDemo() {
+  const [openRowId, setOpenRowId] = useState<string | null>(null);
+
+  function getActions(rowId: string): PopoverItem[] {
+    return [
+      {
+        id: "edit",
+        label: "Editar",
+        icon: PencilSimple,
+        onClick: () => {
+          alert(`Editar: ${rowId}`);
+          setOpenRowId(null);
+        },
+      },
+      {
+        id: "delete",
+        label: "Excluir",
+        icon: Trash,
+        onClick: () => {
+          alert(`Excluir: ${rowId}`);
+          setOpenRowId(null);
+        },
+      },
+    ];
+  }
+
+  return (
+    <div className={s.demoContainer}>
+      <Table variant="divider">
+        <TableContent>
+          <TableHead>
+            <TableRow>
+              <TableHeaderCell>Nome</TableHeaderCell>
+              <TableHeaderCell>E-mail</TableHeaderCell>
+              <TableHeaderCell>Status</TableHeaderCell>
+              <TableHeaderCell align="right">Ações</TableHeaderCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {MEMBERS.slice(0, 3).map((member) => (
+              <TableRow key={member.id}>
+                <TableCell>
+                  <div className={s.nameCell}>
+                    <Avatar initials={member.name.slice(0, 2)} size="xs" />
+                    <div>
+                      <div className={s.memberName}>{member.name}</div>
+                      <div className={s.memberHandle}>{member.handle}</div>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>{member.email}</TableCell>
+                <TableCell>
+                  <StatusBadge status={member.status} />
+                </TableCell>
+                <TableCell align="right">
+                  <RowActionsPopover
+                    items={getActions(member.id)}
+                    open={openRowId === member.id}
+                    onToggle={() =>
+                      setOpenRowId(openRowId === member.id ? null : member.id)
+                    }
+                    onClose={() => setOpenRowId(null)}
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </TableContent>
+      </Table>
+    </div>
   );
 }

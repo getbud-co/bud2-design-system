@@ -36,6 +36,7 @@ import { GoalProgress } from "./docs/sections/GoalProgress";
 import { Charts } from "./docs/sections/Charts";
 import { Paginations } from "./docs/sections/Paginations";
 import { Popovers } from "./docs/sections/Popovers";
+import { PopoverSelects } from "./docs/sections/PopoverSelects";
 import { TabBars } from "./docs/sections/TabBars";
 import { Tables } from "./docs/sections/Tables";
 import { Tooltips } from "./docs/sections/Tooltips";
@@ -87,6 +88,7 @@ const SECTIONS: Record<string, React.ComponentType> = {
   "charts": Charts,
   "pagination": Paginations,
   "popovers": Popovers,
+  "popover-select": PopoverSelects,
   "sidebars": Sidebars,
   "tab-bar": TabBars,
   "tables": Tables,

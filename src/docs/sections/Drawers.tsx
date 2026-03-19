@@ -13,6 +13,7 @@ import {
   DrawerBody,
   DrawerFooter,
 } from "../../components/Drawer";
+import { DragToCloseDrawer } from "../../components/DragToCloseDrawer";
 import { Users, FloppyDisk, ArrowRight, X, PencilSimple } from "@phosphor-icons/react";
 import s from "./Drawers.module.css";
 
@@ -90,6 +91,7 @@ export function Drawers() {
   const [customWidthOpen, setCustomWidthOpen] = useState(false);
   const [customHeaderOpen, setCustomHeaderOpen] = useState(false);
   const [afterTitleOpen, setAfterTitleOpen] = useState(false);
+  const [dragToCloseOpen, setDragToCloseOpen] = useState(false);
 
   return (
     <DocSection
@@ -530,6 +532,75 @@ export function Drawers() {
 
       <SubSection id="como-usar" title="Como usar">
         <CodeSnippet code={usageCode} language="tsx" />
+      </SubSection>
+
+      <SubSection id="drag-to-close" title="DragToCloseDrawer — Mobile">
+        <p>
+          Wrapper do Drawer que adiciona gesto de <strong>"arrastar para baixo para fechar"</strong> em dispositivos móveis.
+          Funciona apenas com touch events (mobile/tablet).
+        </p>
+
+        <div className={s.demoGrid}>
+          <div className={s.demoItem}>
+            <span className={s.demoLabel}>Drag to close (mobile)</span>
+            <Button variant="secondary" onClick={() => setDragToCloseOpen(true)}>
+              Abrir drawer
+            </Button>
+          </div>
+        </div>
+
+        <DragToCloseDrawer
+          open={dragToCloseOpen}
+          onClose={() => setDragToCloseOpen(false)}
+          dragThreshold={100}
+          velocityThreshold={0.5}
+          dragZoneHeight={80}
+        >
+          <DrawerHeader
+            title="Arraste para fechar"
+            description="Em dispositivos móveis, arraste o topo do drawer para baixo para fechar."
+            onClose={() => setDragToCloseOpen(false)}
+          />
+          <DrawerBody>
+            <p>
+              Este drawer pode ser fechado arrastando para baixo na área do topo
+              (primeiros 80px). Tente em um dispositivo móvel ou emulador.
+            </p>
+            <p>
+              O gesto só funciona com touch events — em desktop, use o botão de fechar.
+            </p>
+          </DrawerBody>
+        </DragToCloseDrawer>
+
+        <CodeSnippet
+          language="tsx"
+          code={`import { DragToCloseDrawer, DrawerHeader, DrawerBody } from "@mdonangelo/bud-ds";
+
+<DragToCloseDrawer
+  open={open}
+  onClose={() => setOpen(false)}
+  dragThreshold={100}        // distância mínima para fechar (default: 80px)
+  velocityThreshold={0.5}    // velocidade mínima para fechar (default: 0.5 px/ms)
+  dragZoneHeight={80}        // altura da zona arrastável no topo (default: 60px)
+>
+  <DrawerHeader title="Detalhes" onClose={() => setOpen(false)} />
+  <DrawerBody>Conteúdo</DrawerBody>
+</DragToCloseDrawer>
+
+// Props:
+// - dragToCloseEnabled?: boolean (default: true)
+// - dragThreshold?: number (default: 80)
+// - velocityThreshold?: number (default: 0.5)
+// - dragZoneHeight?: number (default: 60)
+// + todas as props do Drawer
+
+// Comportamento:
+// - Detecta toque nos primeiros \`dragZoneHeight\` pixels do topo
+// - Aplica feedback visual (translateY + opacity)
+// - Fecha se: distância > threshold OU velocidade > threshold
+// - Reseta suavemente se não atingir thresholds
+// - Funciona APENAS em mobile (touch events)`}
+        />
       </SubSection>
     </DocSection>
   );

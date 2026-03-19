@@ -262,6 +262,132 @@ Em telas ≤768px o Sidebar se transforma em drawer lateral via CSS `@media`. Pr
 ### Modal — alinhamento de ações no header
 Botões de ação (fechar, assistente) ficam dentro de `.headerActions` no `.headerTop` com `align-items: flex-start`. Isso garante alinhamento com o título do modal, sem descer por causa da descrição. O `children` do `ModalHeader` é renderizado antes do botão de fechar, permitindo botões adicionais (ex: Assistente) ao lado do X.
 
+### FilterBar + PopoverSelect — padrão de filtros dinâmicos
+
+Padrão oficial para barras de filtro com chips dinâmicos + popovers de seleção. Use os hooks `useFilterChips` e `useDataTable` para gerenciar estado.
+
+**Estrutura típica:**
+```tsx
+const teamChipRef = useRef<HTMLDivElement>(null);
+const roleChipRef = useRef<HTMLDivElement>(null);
+
+const {
+  activeFilters,
+  openFilter,
+  addFilterAndOpen,
+  removeFilter,
+  clearAllFilters,
+  toggleFilterDropdown,
+  getAvailableFilters,
+  ignoreChipRefs,
+} = useFilterChips({
+  chipRefs: { team: teamChipRef, role: roleChipRef },
+  onResetFilter: (id) => { /* limpar valores */ },
+});
+
+<FilterBar>
+  {activeFilters.includes('team') && (
+    <div ref={teamChipRef} style={{ display: "inline-flex" }}>
+      <FilterChip
+        label={formatMultiLabel(selectedTeams, teamOptions, "Time")}
+        active={openFilter === 'team'}
+        onClick={() => toggleFilterDropdown('team')}
+        onRemove={() => removeFilter('team')}
+      />
+    </div>
+  )}
+  <Button
+    variant="tertiary"
+    leftIcon={Plus}
+    onClick={() => setShowAddMenu(true)}
+  >
+    Filtro
+  </Button>
+</FilterBar>
+
+<PopoverSelect
+  mode="multiple"
+  open={openFilter === 'team'}
+  onClose={() => {}}
+  anchorRef={teamChipRef}
+  ignoreRefs={ignoreChipRefs}
+  options={teamOptions}
+  value={selectedTeams}
+  onChange={setSelectedTeams}
+  searchable
+/>
+```
+
+**Regras:**
+- Use `useFilterChips` para gerenciar estado de chips ativos e dropdown aberto
+- **FilterChip NÃO aceita ref** — envolver em `<div ref={...} style={{ display: "inline-flex" }}>`
+- Use `active` (não `open`) para indicar estado de dropdown aberto
+- Passe `ignoreChipRefs` para todos os `PopoverSelect` — evita race condition ao clicar em chips vizinhos
+- Use `addFilterAndOpen` com double rAF ao adicionar novo chip — garante que o DOM existe antes de abrir dropdown
+- `PopoverSelect` suporta modo `single` (Radio) e `multiple` (Checkbox)
+- `PopoverSelect` suporta busca (`searchable`), criação inline (`creatable`), avatares e ícones por opção
+- Helper `formatMultiLabel(ids, options, fallback)` formata label do chip (ex: "Maria +2")
+
+### DragToCloseDrawer — funcionalidade mobile
+
+Wrapper do Drawer que adiciona gesto de "arrastar para baixo para fechar" em dispositivos móveis.
+
+**Uso:**
+```tsx
+import { DragToCloseDrawer, DrawerHeader, DrawerBody } from "@mdonangelo/bud-ds";
+
+<DragToCloseDrawer
+  open={open}
+  onClose={() => setOpen(false)}
+  dragThreshold={100}        // distância mínima para fechar (default: 80px)
+  velocityThreshold={0.5}    // velocidade mínima para fechar (default: 0.5 px/ms)
+  dragZoneHeight={80}        // altura da zona arrastável no topo (default: 60px)
+>
+  <DrawerHeader title="Detalhes" onClose={() => setOpen(false)} />
+  <DrawerBody>Conteúdo</DrawerBody>
+</DragToCloseDrawer>
+```
+
+**Comportamento:**
+- Detecta toque inicial nos primeiros `dragZoneHeight` pixels do topo do drawer
+- Aplica feedback visual durante o arraste (translação + opacidade)
+- Fecha o drawer se: arraste > `dragThreshold` OU velocidade > `velocityThreshold`
+- Reseta com animação suave se o arraste não atingir os thresholds
+- Usa `passive: false` em `touchmove` para prevenir scroll do body
+- Marca o painel com `data-drag-handled` para prevenir múltiplos handlers
+
+**Importante:** Este componente funciona APENAS em mobile (gestos touch). Em desktop, comporta-se como Drawer normal.
+
+### RowActionsPopover — padrão de ações em tabelas
+
+Wrapper padronizado para botão "⋯" + popover de ações em linhas de tabela.
+
+**Uso:**
+```tsx
+import { RowActionsPopover } from "@mdonangelo/bud-ds";
+import { PencilSimple, Trash } from "@phosphor-icons/react";
+
+const [openRowId, setOpenRowId] = useState<string | null>(null);
+
+function getActions(rowId: string): PopoverItem[] {
+  return [
+    { id: "edit", label: "Editar", icon: PencilSimple, onClick: () => handleEdit(rowId) },
+    { id: "delete", label: "Excluir", icon: Trash, onClick: () => handleDelete(rowId) },
+  ];
+}
+
+<TableCell align="right">
+  <RowActionsPopover
+    items={getActions(row.id)}
+    open={openRowId === row.id}
+    onToggle={() => setOpenRowId(openRowId === row.id ? null : row.id)}
+    onClose={() => setOpenRowId(null)}
+  />
+</TableCell>
+```
+
+**Padrão:** Simplifica o código repetitivo de botão + popover em tabelas CRUD, garantindo consistência visual em todas as ações de linha.
+
 ### Gráficos (Charts)
 Usar **Recharts** para gráficos de dados (Bar, Line, Area, Pie). O componente `ChartTooltipContent` é o tooltip padrão do DS para Recharts. Configurações obrigatórias nos gráficos:
 - **Tooltip**: `animationDuration={150}`, `animationEasing="ease-out"` — evita animação de slide longa

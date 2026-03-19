@@ -1,0 +1,56 @@
+/* ——— Demo Grid ——— */
+
+.demoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--sp-lg);
+  margin-bottom: var(--sp-lg);
+}
+
+.demoItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+}
+
+.demoLabel {
+  font-family: var(--font-label);
+  font-size: var(--text-xs);
+  font-weight: 500; /* sem token de weight */
+  color: var(--color-neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.5px; /* valor estrutural */
+}
+
+/* ——— Props Table ——— */
+
+.propsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--sp-md);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+}
+
+.propsTable th {
+  text-align: left;
+  padding: var(--sp-xs);
+  border-bottom: 1px solid var(--color-caramel-300); /* border-width estrutural */
+  font-weight: 600; /* sem token de weight */
+  color: var(--color-neutral-950);
+}
+
+.propsTable td {
+  padding: var(--sp-xs);
+  border-bottom: 1px solid var(--color-caramel-200); /* border-width estrutural */
+  color: var(--color-neutral-950);
+}
+
+.propsTable code {
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace; /* sem token de font-family para mono */
+  font-size: var(--text-xs);
+  background-color: var(--color-caramel-100);
+  padding: 2px 6px; /* valores estruturais */
+  border-radius: var(--radius-2xs);
+  color: var(--color-neutral-800);
+}
