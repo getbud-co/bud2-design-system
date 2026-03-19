@@ -262,6 +262,60 @@ Em telas ≤768px o Sidebar se transforma em drawer lateral via CSS `@media`. Pr
 ### Modal — alinhamento de ações no header
 Botões de ação (fechar, assistente) ficam dentro de `.headerActions` no `.headerTop` com `align-items: flex-start`. Isso garante alinhamento com o título do modal, sem descer por causa da descrição. O `children` do `ModalHeader` é renderizado antes do botão de fechar, permitindo botões adicionais (ex: Assistente) ao lado do X.
 
+### Skeleton — acessibilidade e composições
+
+**Uso obrigatório de SkeletonContainer:**
+
+SEMPRE envolver composições de skeletons em `SkeletonContainer` para acessibilidade:
+
+```tsx
+import { Skeleton, SkeletonContainer, SKELETON_HEIGHTS } from "@mdonangelo/bud-ds";
+
+// ✅ CORRETO - com SkeletonContainer
+<SkeletonContainer>
+  <Skeleton variant="text" width={200} height={SKELETON_HEIGHTS.text} />
+  <Skeleton variant="circular" width={40} height={40} />
+</SkeletonContainer>
+
+// ❌ INCORRETO - sem SkeletonContainer
+<div>
+  <Skeleton variant="text" width={200} height={14} />
+</div>
+```
+
+**Por quê?**
+- Adiciona `role="status"` para notificar tecnologias assistivas
+- Inclui texto "Carregando..." com `.sr-only` para screen readers
+- Segue padrão WCAG de acessibilidade
+
+**Constantes SKELETON_HEIGHTS:**
+
+Use presets para alturas consistentes:
+
+```tsx
+SKELETON_HEIGHTS = {
+  text: 14,
+  heading: 24,
+  subheading: 18,
+  button: 40,
+  input: 40,
+  avatar: 40,
+  avatarLg: 48,
+}
+
+// Exemplo de uso:
+<Skeleton variant="text" height={SKELETON_HEIGHTS.heading} />
+<Skeleton variant="rounded" height={SKELETON_HEIGHTS.button} />
+```
+
+**Placeholders disponíveis:**
+
+1. **Image Placeholder** - ícone Image do Phosphor centralizado
+2. **Video Placeholder** - ícone FileVideo do Phosphor centralizado
+3. **Widget/Chart Placeholder** - barras verticais simulando gráfico
+4. **Testimonial Placeholder** - avatar + texto centralizado
+5. **Card, Lista, Tabela, Formulário, Dashboard** - composições prontas
+
 ### FilterBar + PopoverSelect — padrão de filtros dinâmicos
 
 Padrão oficial para barras de filtro com chips dinâmicos + popovers de seleção. Use os hooks `useFilterChips` e `useDataTable` para gerenciar estado.

@@ -40,7 +40,7 @@ export { Radio } from "./components/Radio";
 export { RowActionsPopover } from "./components/RowActionsPopover";
 export { Select } from "./components/Select";
 export { ScaleInput } from "./components/ScaleInput";
-export { Skeleton } from "./components/Skeleton";
+export { Skeleton, SkeletonContainer, SKELETON_HEIGHTS } from "./components/Skeleton";
 export { SortableList } from "./components/SortableList";
 export { Sparkline } from "./components/Sparkline";
 export {

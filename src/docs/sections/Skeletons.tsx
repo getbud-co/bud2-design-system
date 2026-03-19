@@ -2,12 +2,24 @@ import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
-import { Skeleton } from "../../components/Skeleton";
+import { Skeleton, SkeletonContainer, SKELETON_HEIGHTS } from "../../components/Skeleton";
+import { Image, FileVideo, UserCircle } from "@phosphor-icons/react";
 import s from "./Skeletons.module.css";
 
 /* ——— Código de uso ——— */
 
-const usageCode = `import { Skeleton } from "@mdonangelo/bud-ds";
+const usageCode = `import { 
+  Skeleton, 
+  SkeletonContainer, 
+  SKELETON_HEIGHTS 
+} from "@mdonangelo/bud-ds";
+
+{/* Sempre envolver skeletons em SkeletonContainer para acessibilidade */}
+<SkeletonContainer>
+  <Skeleton variant="text" width={200} height={SKELETON_HEIGHTS.text} />
+  <Skeleton variant="circular" width={40} height={40} />
+  <Skeleton variant="rounded" width={200} height={120} />
+</SkeletonContainer>
 
 {/* Variantes */}
 <Skeleton variant="text" width={200} height={16} />
@@ -16,7 +28,10 @@ const usageCode = `import { Skeleton } from "@mdonangelo/bud-ds";
 <Skeleton variant="rounded" width={200} height={120} />
 
 {/* Sem animação */}
-<Skeleton variant="rectangular" width={200} height={40} animation={false} />`;
+<Skeleton variant="rectangular" width={200} height={40} animation={false} />
+
+{/* Preset heights */}
+const heights = SKELETON_HEIGHTS; // { text: 14, heading: 24, button: 40, ... }`;
 
 const cardCode = `{/* Skeleton de card */}
 <div style={{ width: 280, padding: 16, border: "1px solid #eee", borderRadius: 8 }}>
@@ -92,9 +107,9 @@ export function Skeletons() {
       >
         <div className={s.row}>
           <div className={s.column}>
-            <Skeleton variant="text" width={160} height={14} />
-            <Skeleton variant="text" width={120} height={14} />
-            <Skeleton variant="text" width={200} height={14} />
+            <Skeleton variant="text" width={160} height={SKELETON_HEIGHTS.text} />
+            <Skeleton variant="text" width={120} height={SKELETON_HEIGHTS.text} />
+            <Skeleton variant="text" width={200} height={SKELETON_HEIGHTS.text} />
             <span style={{ fontFamily: "var(--font-label)", fontSize: "var(--text-xs)", color: "var(--color-neutral-500)", marginTop: "var(--sp-3xs)" }}>text</span>
           </div>
           <div className={s.column} style={{ alignItems: "center" }}>
@@ -110,6 +125,144 @@ export function Skeletons() {
             <span style={{ fontFamily: "var(--font-label)", fontSize: "var(--text-xs)", color: "var(--color-neutral-500)", marginTop: "var(--sp-3xs)" }}>rounded</span>
           </div>
         </div>
+      </SubSection>
+
+      {/* Image placeholder */}
+      <SubSection
+        id="image-placeholder"
+        title="Image Placeholder"
+        description="Placeholder para imagem com ícone centralizado."
+      >
+        <div className={s.placeholderDemo}>
+          <SkeletonContainer>
+            <div className={s.imagePlaceholder}>
+              <Image size={44} weight="regular" />
+            </div>
+          </SkeletonContainer>
+        </div>
+        <CodeSnippet
+          code={`import { SkeletonContainer } from "@mdonangelo/bud-ds";
+import { Image } from "@phosphor-icons/react";
+
+<SkeletonContainer>
+  <div className={styles.imagePlaceholder}>
+    <Image size={44} weight="regular" />
+  </div>
+</SkeletonContainer>
+
+/* CSS */
+.imagePlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 192px;
+  background-color: var(--color-caramel-200);
+  border-radius: var(--radius-sm);
+}
+
+.imagePlaceholder svg {
+  color: var(--color-neutral-400);
+}`}
+          language="tsx"
+        />
+      </SubSection>
+
+      {/* Video placeholder */}
+      <SubSection
+        id="video-placeholder"
+        title="Video Placeholder"
+        description="Placeholder para vídeo com ícone centralizado."
+      >
+        <div className={s.placeholderDemo}>
+          <SkeletonContainer>
+            <div className={s.videoPlaceholder}>
+              <FileVideo size={44} weight="regular" />
+            </div>
+          </SkeletonContainer>
+        </div>
+        <CodeSnippet
+          code={`import { SkeletonContainer } from "@mdonangelo/bud-ds";
+import { FileVideo } from "@phosphor-icons/react";
+
+<SkeletonContainer>
+  <div className={styles.videoPlaceholder}>
+    <FileVideo size={44} weight="regular" />
+  </div>
+</SkeletonContainer>`}
+          language="tsx"
+        />
+      </SubSection>
+
+      {/* Widget/Chart placeholder */}
+      <SubSection
+        id="widget-placeholder"
+        title="Widget / Chart Placeholder"
+        description="Placeholder para gráficos e widgets com barras verticais."
+      >
+        <div className={s.placeholderDemo}>
+          <SkeletonContainer>
+            <div className={s.chartPlaceholder}>
+              <div className={s.chartBar} style={{ height: '100%' }} />
+              <div className={s.chartBar} style={{ height: '70%' }} />
+              <div className={s.chartBar} style={{ height: '85%' }} />
+              <div className={s.chartBar} style={{ height: '60%' }} />
+              <div className={s.chartBar} style={{ height: '90%' }} />
+              <div className={s.chartBar} style={{ height: '75%' }} />
+              <div className={s.chartBar} style={{ height: '95%' }} />
+            </div>
+          </SkeletonContainer>
+        </div>
+        <CodeSnippet
+          code={`import { SkeletonContainer } from "@mdonangelo/bud-ds";
+
+<SkeletonContainer>
+  <div className={styles.chartPlaceholder}>
+    <div className={styles.chartBar} style={{ height: '100%' }} />
+    <div className={styles.chartBar} style={{ height: '70%' }} />
+    <div className={styles.chartBar} style={{ height: '85%' }} />
+    {/* ... mais barras */}
+  </div>
+</SkeletonContainer>`}
+          language="tsx"
+        />
+      </SubSection>
+
+      {/* Testimonial placeholder */}
+      <SubSection
+        id="testimonial-placeholder"
+        title="Testimonial Placeholder"
+        description="Placeholder para depoimentos com avatar e texto centralizado."
+      >
+        <div className={s.placeholderDemo}>
+          <SkeletonContainer>
+            <div className={s.testimonialPlaceholder}>
+              <UserCircle size={56} weight="regular" color="var(--color-neutral-400)" />
+              <div style={{ width: '100%', maxWidth: 640, display: 'flex', flexDirection: 'column', gap: 'var(--sp-2xs)', alignItems: 'center' }}>
+                <Skeleton variant="text" width="100%" height={14} />
+                <Skeleton variant="text" width="80%" height={14} />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-3xs)', alignItems: 'center' }}>
+                <Skeleton variant="text" width={160} height={12} />
+                <Skeleton variant="text" width={120} height={12} />
+              </div>
+            </div>
+          </SkeletonContainer>
+        </div>
+        <CodeSnippet
+          code={`import { Skeleton, SkeletonContainer } from "@mdonangelo/bud-ds";
+import { UserCircle } from "@phosphor-icons/react";
+
+<SkeletonContainer>
+  <div className={styles.testimonialPlaceholder}>
+    <UserCircle size={56} weight="regular" />
+    <Skeleton variant="text" width="100%" height={14} />
+    <Skeleton variant="text" width="80%" height={14} />
+    <Skeleton variant="text" width={160} height={12} />
+  </div>
+</SkeletonContainer>`}
+          language="tsx"
+        />
       </SubSection>
 
       {/* Card skeleton */}
