@@ -4,7 +4,7 @@ import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
-import { FrameworkSwitcher } from "../FrameworkSwitcher";
+import { FrameworkSwitcher, FrameworkOnly } from "../FrameworkSwitcher";
 import { Button } from "../../components/Button";
 import {
   PopoverSelect,
@@ -312,6 +312,7 @@ export function PopoverSelects() {
           Use o hook <code>useFilterChips</code> para gerenciar estado de filtros dinâmicos.
           Consulte a documentação do FilterBar para exemplos completos de integração.
         </p>
+        <FrameworkOnly framework={0}>
         <CodeSnippet
           language="tsx"
           code={`import { useFilterChips } from "@mdonangelo/bud-ds";
@@ -343,6 +344,7 @@ const {
   onChange={setSelectedTeams}
 />`}
         />
+        </FrameworkOnly>
       </SubSection>
 
       <SubSection id="props" title="Props">

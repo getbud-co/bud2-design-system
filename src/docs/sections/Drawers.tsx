@@ -15,7 +15,7 @@ import {
 } from "../../components/Drawer";
 import { DragToCloseDrawer } from "../../components/DragToCloseDrawer";
 import { Users, FloppyDisk, ArrowRight, X, PencilSimple } from "@phosphor-icons/react";
-import { FrameworkSwitcher } from "../FrameworkSwitcher";
+import { FrameworkSwitcher, FrameworkOnly } from "../FrameworkSwitcher";
 import s from "./Drawers.module.css";
 
 const usageCode = `import {
@@ -602,6 +602,7 @@ export function Drawers() {
           </DrawerBody>
         </DragToCloseDrawer>
 
+        <FrameworkOnly framework={0}>
         <CodeSnippet
           language="tsx"
           code={`import { DragToCloseDrawer, DrawerHeader, DrawerBody } from "@mdonangelo/bud-ds";
@@ -631,6 +632,7 @@ export function Drawers() {
 // - Reseta suavemente se não atingir thresholds
 // - Funciona APENAS em mobile (touch events)`}
         />
+        </FrameworkOnly>
       </SubSection>
     </DocSection>
   );

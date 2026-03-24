@@ -4,7 +4,7 @@ import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
-import { FrameworkSwitcher } from "../FrameworkSwitcher";
+import { FrameworkSwitcher, FrameworkOnly } from "../FrameworkSwitcher";
 import { Badge } from "../../components/Badge";
 import { Avatar } from "../../components/Avatar";
 import { RowActionsPopover } from "../../components/RowActionsPopover";
@@ -394,6 +394,7 @@ export function Tables() {
 
         <RowActionsDemo />
 
+        <FrameworkOnly framework={0}>
         <CodeSnippet
           language="tsx"
           code={`import { RowActionsPopover } from "@mdonangelo/bud-ds";
@@ -436,6 +437,7 @@ function getActions(rowId: string): PopoverItem[] {
 // - className?: string (classe CSS adicional)
 // - buttonAriaLabel?: string (default: "Abrir ações")`}
         />
+        </FrameworkOnly>
       </SubSection>
     </DocSection>
   );
