@@ -48,6 +48,7 @@ import { Accordions } from "./docs/sections/Accordions";
 import { Skeletons } from "./docs/sections/Skeletons";
 import { AiAssistantSection } from "./docs/sections/AiAssistant";
 import { AiDocs } from "./docs/sections/AiDocs";
+import { WebComponents } from "./docs/sections/WebComponents";
 import { PagePagination } from "./docs/PagePagination";
 import { getAdjacentPages } from "./docs/nav-data";
 import { Toaster } from "./components/Toast";
@@ -101,6 +102,7 @@ const SECTIONS: Record<string, React.ComponentType> = {
   "skeletons": Skeletons,
   "ai-assistant": AiAssistantSection,
   "ia-automacao": AiDocs,
+  "web-components": WebComponents,
 };
 
 function getInitialSection(): string {

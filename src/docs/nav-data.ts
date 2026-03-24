@@ -51,6 +51,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { id: "border-radius", label: "Border Radius" },
       { id: "sombras", label: "Sombras" },
       { id: "icones", label: "Ícones" },
+      { id: "web-components", label: "Web Components" },
     ],
   },
   {
