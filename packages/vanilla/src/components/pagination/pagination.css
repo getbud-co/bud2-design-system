@@ -1,0 +1,75 @@
+:host { display: block; }
+
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
+  justify-content: center;
+}
+
+/* ——— Prev / Next areas ——— */
+.prev { flex: 1; display: flex; justify-content: flex-start; }
+.next { flex: 1; display: flex; justify-content: flex-end; }
+
+/* ——— Number buttons ——— */
+.numbers {
+  display: flex;
+  gap: 2px; /* structural — micro spacing between page numbers */
+}
+
+.number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 34px; /* component sizing */
+  padding: var(--sp-2xs);
+  border-radius: var(--radius-xs);
+  border: none;
+  background: transparent;
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-950);
+  cursor: pointer;
+  transition: background-color 120ms ease;
+}
+
+.number:hover { background-color: var(--color-caramel-50); }
+
+.number:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 2px;
+}
+
+.number-active {
+  background-color: var(--color-caramel-100);
+  font-weight: 600;
+}
+
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 34px; /* component sizing */
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-500);
+}
+
+/* ——— Button label ——— */
+.btn-label { display: inline; }
+.mobile-label { display: none; }
+
+@media (max-width: 640px) {
+  .numbers { display: none; }
+  .mobile-label { display: inline; }
+  .btn-label { display: none; }
+  .prev, .next { flex-basis: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .number { transition: none; }
+}

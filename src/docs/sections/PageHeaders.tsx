@@ -17,6 +17,7 @@ import {
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import {
   PageHeader,
   SearchButton,
@@ -581,6 +582,27 @@ function AssistantButtonDemo() {
   );
 }
 
+/* ——— Usage code ——— */
+
+const htmlUsageCode = `<!-- Page Header -->
+<bud-page-header title="Dashboard">
+  <bud-button variant="tertiary" size="md" icon-left="magnifying-glass" aria-label="Buscar"></bud-button>
+  <bud-button variant="primary" size="md" icon-left="plus">Novo</bud-button>
+</bud-page-header>`;
+
+const usageCode = `<PageHeader title="Todas as missões">
+  <SearchButton onClick={() => setSearchOpen(true)} />
+  <NotificationButton
+    ref={notifBtnRef}
+    hasUnread={hasUnread}
+    onClick={() => setNotifOpen(v => !v)}
+  />
+  <AssistantButton active={assistantOpen} onClick={() => setAssistantOpen(v => !v)} />
+</PageHeader>
+
+<CommandPalette open={searchOpen} onClose={closeSearch} ... />
+<NotificationPanel open={notifOpen} onClose={closeNotif} ... />`;
+
 /* ═══════════════════════════════════════════════════════════════
    Section
    ═══════════════════════════════════════════════════════════════ */
@@ -604,20 +626,10 @@ export function PageHeaders() {
         <div className={s.demoStack}>
           <FullDemo />
         </div>
-        <CodeSnippet
-          code={`<PageHeader title="Todas as missões">
-  <SearchButton onClick={() => setSearchOpen(true)} />
-  <NotificationButton
-    ref={notifBtnRef}
-    hasUnread={hasUnread}
-    onClick={() => setNotifOpen(v => !v)}
-  />
-  <AssistantButton active={assistantOpen} onClick={() => setAssistantOpen(v => !v)} />
-</PageHeader>
-
-<CommandPalette open={searchOpen} onClose={closeSearch} ... />
-<NotificationPanel open={notifOpen} onClose={closeNotif} ... />`}
-        />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
 
       <SubSection id="page-header-title-only" title="Apenas título">

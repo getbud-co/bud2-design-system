@@ -1,0 +1,109 @@
+# Bud Design System
+
+> Sistema de design para a plataforma Bud — gestão de desempenho contínua. Componentes React + Web Components vanilla, design tokens CSS, tipografia com Inter/Plus Jakarta Sans/Crimson Pro, ícones Phosphor. Grid de 4px, cores semânticas, acessibilidade WCAG AA.
+
+## Documentação
+
+- [Documentação completa para LLMs](/llms-full.txt): Arquivo único com todos os tokens, componentes, props, exemplos e regras (~50K tokens)
+- [Registry JSON](/bud-ds.json): Catálogo estruturado de componentes como dados JSON
+- [CLAUDE.md](https://raw.githubusercontent.com/mdonangelo/bud-ds/main/CLAUDE.md): Regras de desenvolvimento para agentes de código
+
+## Instalação
+
+### React
+```
+npm install @mdonangelo/bud-ds @phosphor-icons/react
+```
+
+### HTML (Web Components)
+```
+npm install @mdonangelo/bud-ds-vanilla
+```
+```html
+<link rel="stylesheet" href="bud-ds.css" />
+<script type="module" src="bud-ds.js"></script>
+```
+
+## Componentes
+
+### Ações
+- **Button** (`<Button>` / `<bud-button>`): 4 variantes (primary, secondary, tertiary, danger), 3 tamanhos, ícones, loading
+- **DropdownButton** (`<DropdownButton>` / `<bud-dropdown-button>`): Botão com menu dropdown, searchable
+
+### Formulários
+- **Input** (`<Input>` / `<bud-input>`): Campo de texto com label, ícones, validação (error/attention/success)
+- **Textarea** (`<Textarea>` / `<bud-textarea>`): Área de texto multi-linha com validação
+- **Select** (`<Select>` / `<bud-select>`): Dropdown de seleção com busca, teclado, portal
+- **Checkbox** (`<Checkbox>` / `<bud-checkbox>`): 2 tamanhos, indeterminate, label + descrição
+- **Radio** (`<Radio>` / `<bud-radio>`): 2 tamanhos, grupos com name
+- **Toggle** (`<Toggle>` / `<bud-toggle>`): Switch com role=switch
+- **ScaleInput** (`<ScaleInput>` / `<bud-scale-input>`): Escala numérica (0-10), navegação por teclado
+- **ChoiceBox** (`<ChoiceBoxGroup>` / `<bud-choice-box-group>`): Cards selecionáveis single/multi
+- **DatePicker** (`<DatePicker>` / `<bud-date-picker>`): Calendário com input mascarado DD/MM/AAAA
+- **PopoverSelect** (`<PopoverSelect>` / `<bud-popover-select>`): Seleção com avatar, busca, criação inline
+
+### Dados & Navegação
+- **Card** (`<Card>` / `<bud-card>`): Compound (Header, Body, Footer, Divider), padding, shadow
+- **Table** (`<Table>` / `<bud-table>`): Compound (Head, Body, Row, HeaderCell, Cell), sort, seleção
+- **Badge** (`<Badge>` / `<bud-badge>`): 7 cores semânticas, ícones
+- **Avatar** (`<Avatar>` / `<bud-avatar>`): 6 tamanhos, imagem/iniciais/placeholder, online, badge
+- **Breadcrumb** (`<Breadcrumb>` / `<bud-breadcrumb>`): Navegação hierárquica
+- **TabBar** (`<TabBar>` / `<bud-tab-bar>`): Abas com teclado, scroll overflow
+- **Pagination** (`<Pagination>` / `<bud-pagination>`): Navegação de páginas, mobile responsive
+- **Accordion** (`<Accordion>` / `<bud-accordion>`): Painéis colapsáveis animados
+- **Sidebar** (`<Sidebar>` / `<bud-sidebar>`): Menu lateral, collapsed, mobile drawer
+- **PageHeader** (`<PageHeader>` / `<bud-page-header>`): Header de página com ações
+- **FilterBar** (`<FilterBar>` / `<bud-filter-bar>`): Barra de filtros com chips dinâmicos
+- **SortableList** (`<SortableList>` / `<bud-sortable-list>`): Lista reordenável drag-and-drop
+
+### Feedback
+- **Alert** (`<Alert>` / `<bud-alert>`): 4 variantes semânticas, dismiss, ação
+- **Modal** (`<Modal>` / `<bud-modal>`): Compound (Header, Body, Footer), focus trap, ESC
+- **Drawer** (`<Drawer>` / `<bud-drawer>`): Painel lateral, left/right, mobile bottom sheet
+- **Toast** (`toast()` / `toast()`): API global, 5 variantes, auto-dismiss
+- **Tooltip** (`<Tooltip>` / `<bud-tooltip>`): 4 placements, delay, auto-reposiciona
+- **Popover** (`<Popover>` / `<bud-popover>`): Menu de contexto, submenu, keyboard nav
+- **Skeleton** (`<Skeleton>` / `<bud-skeleton>`): Loading placeholder, shimmer, a11y container
+
+### Charts (SVG puro)
+- **Chart** (`<Chart>` / `<bud-chart>`): Gauge circular (full/half)
+- **Sparkline** (`<Sparkline>` / `<bud-sparkline>`): Linha de tendência inline
+- **Heatmap** (`<Heatmap>` / `<bud-heatmap>`): Grid de intensidade com legenda
+- **Radar** (`<Radar>` / `<bud-radar>`): Gráfico spider/radar
+- **Funnel** (`<Funnel>` / `<bud-funnel>`): Funil com trapezóides
+- **GoalProgress** (`<GoalProgressBar>` / `<bud-goal-progress>`): Barra de progresso com meta
+
+## Tokens
+
+### Cores
+- Neutro: `--color-neutral-{0..950}` (#ffffff → #0a0a0a)
+- Caramel: `--color-caramel-{50..950}` (#faf8f2 → #75683d) — warm neutral, assinatura do DS
+- Orange: `--color-orange-{50..950}` (#ffefeb → #601c06) — cor primária, CTAs
+- Wine: `--color-wine-{50..950}` — institucional
+- Green: `--color-green-{50..950}` — sucesso
+- Red: `--color-red-{50..950}` — erro
+- Yellow: `--color-yellow-{50..950}` — alerta
+
+### Tipografia
+- `--font-display`: Crimson Pro (hero, marketing)
+- `--font-heading`: Plus Jakarta Sans (headings, 600-700)
+- `--font-body`: Inter (corpo de texto, 400-600)
+- `--font-label`: Inter (botões, inputs, labels, 500)
+
+### Espaçamento (grid 4px)
+- `--sp-3xs` (4px) → `--sp-4xl` (64px)
+
+### Border Radius
+- `--radius-2xs` (4px) → `--radius-full` (9999px)
+
+### Sombras
+- `--shadow-xs` → `--shadow-xl` (warm brown base rgba(24,18,12))
+
+## Regras Críticas
+
+1. **Tokens obrigatórios**: Nunca usar hex/rgb/px direto quando existe token equivalente
+2. **Cores semânticas**: Seguir mapeamento (texto=neutral-950, link=orange-500, borda=caramel-300, etc.)
+3. **Ícones**: Apenas Phosphor Icons 2.1, peso regular. Nunca bold/fill/light
+4. **Font-label para controles**: Botões e inputs usam `--font-label` (500), nunca `--font-body`
+5. **Grid 4px**: Todo espaçamento múltiplo de 4px
+6. **Conteúdo em PT-BR**

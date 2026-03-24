@@ -4,6 +4,7 @@ import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Button } from "../../components/Button";
 import {
   PopoverSelect,
@@ -207,32 +208,9 @@ function SearchableDemo() {
   );
 }
 
-/* ——— Page ——— */
+/* ——— Usage code ——— */
 
-export function PopoverSelects() {
-  const categoryInfo = getCategoryForPage("PopoverSelect") as { label: string } | undefined;
-
-  return (
-    <DocSection
-      id="popover-select"
-      title="PopoverSelect"
-      category={categoryInfo?.label || "Componentes"}
-      description="Componente de seleção com popover. Suporta modo single/multiple, busca, criação inline, avatares e ícones."
-    >
-      <SubSection id="demo" title="Demonstração">
-        <div className={s.demoGrid}>
-          <MultiSelectDemo />
-          <SingleSelectDemo />
-          <IconDemo />
-          <CreatableDemo />
-          <SearchableDemo />
-        </div>
-      </SubSection>
-
-      <SubSection id="usage" title="Uso">
-        <CodeSnippet
-          language="tsx"
-          code={`import { useState, useRef } from "react";
+const usageCode = `import { useState, useRef } from "react";
 import { PopoverSelect, formatMultiLabel } from "@mdonangelo/bud-ds";
 
 const options = [
@@ -265,8 +243,68 @@ function Example() {
       />
     </>
   );
-}`}
-        />
+}`;
+
+const htmlUsageCode = `<!-- Popover Select (single mode) -->
+<bud-popover-select
+  mode="single"
+  options='[{"id":"1","label":"Maria"},{"id":"2","label":"João"},{"id":"3","label":"Ana"}]'
+  value="1"
+  searchable
+  open
+>
+  <button data-anchor>Selecionar pessoa</button>
+</bud-popover-select>
+
+<!-- Multiple mode -->
+<bud-popover-select
+  mode="multiple"
+  options='[{"id":"a","label":"Design"},{"id":"b","label":"Engenharia"},{"id":"c","label":"Produto"}]'
+  value='["a","c"]'
+  searchable
+  open
+>
+  <button data-anchor>Filtrar times</button>
+</bud-popover-select>
+
+<script>
+  document.querySelector("bud-popover-select")
+    .addEventListener("bud-change", (e) => {
+      console.log(e.detail.value);
+    });
+  document.querySelector("bud-popover-select")
+    .addEventListener("bud-close", () => {
+      el.removeAttribute("open");
+    });
+<\/script>`;
+
+/* ——— Page ——— */
+
+export function PopoverSelects() {
+  const categoryInfo = getCategoryForPage("PopoverSelect") as { label: string } | undefined;
+
+  return (
+    <DocSection
+      id="popover-select"
+      title="PopoverSelect"
+      category={categoryInfo?.label || "Componentes"}
+      description="Componente de seleção com popover. Suporta modo single/multiple, busca, criação inline, avatares e ícones."
+    >
+      <SubSection id="demo" title="Demonstração">
+        <div className={s.demoGrid}>
+          <MultiSelectDemo />
+          <SingleSelectDemo />
+          <IconDemo />
+          <CreatableDemo />
+          <SearchableDemo />
+        </div>
+      </SubSection>
+
+      <SubSection id="usage" title="Uso">
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
 
       <SubSection id="filterbar-pattern" title="Padrão FilterBar">

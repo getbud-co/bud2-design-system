@@ -1,7 +1,7 @@
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { DatePicker } from "../../components/DatePicker";
 import { Button } from "../../components/Button";
 import dpStyles from "../../components/DatePicker.module.css";
@@ -28,6 +28,27 @@ const usageCode = `import { DatePicker } from "@mdonangelo/bud-ds";
   label="Período"
   onChange={([start, end]) => console.log(start, end)}
 />`;
+
+const htmlUsageCode = `<!-- Date Picker -->
+<bud-date-picker label="Data de início" placeholder="DD/MM/AAAA" size="md"></bud-date-picker>
+
+<!-- Com valor pré-selecionado -->
+<bud-date-picker label="Nascimento" value="15/03/1990"></bud-date-picker>
+
+<!-- Desabilitado -->
+<bud-date-picker label="Bloqueado" disabled></bud-date-picker>
+
+<!-- Com mensagem de erro -->
+<bud-date-picker label="Prazo" message="Data obrigatória" message-type="error"></bud-date-picker>
+
+<!-- Eventos -->
+<script>
+  document.querySelector("bud-date-picker")
+    .addEventListener("bud-change", (e) => {
+      // e.detail.value = { year, month, day } ou null
+      console.log(e.detail.value);
+    });
+<\/script>`;
 
 const states = ["Placeholder", "Filled", "Hover", "Focused", "Disabled"] as const;
 
@@ -172,7 +193,10 @@ export function DatePickers() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bud DS — Web Components Playground</title>
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      padding: 40px;
+      background: #faf8f2;
+      color: #0a0a0a;
+    }
+    h1 { font-family: "Plus Jakarta Sans", sans-serif; margin-bottom: 24px; }
+    h2 { font-family: "Plus Jakarta Sans", sans-serif; margin: 32px 0 16px; font-size: 20px; }
+    .row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .section { margin-bottom: 40px; }
+    hr { border: none; border-top: 1px solid #eae3cd; margin: 32px 0; }
+  </style>
+  <script type="module" src="./src/index.ts"></script>
+</head>
+<body>
+  <h1>Bud DS — Web Components</h1>
+
+  <div class="section">
+    <h2>Button</h2>
+
+    <div class="row">
+      <bud-button variant="primary">Primary</bud-button>
+      <bud-button variant="secondary">Secondary</bud-button>
+      <bud-button variant="tertiary">Tertiary</bud-button>
+      <bud-button variant="danger">Danger</bud-button>
+    </div>
+
+    <div class="row">
+      <bud-button size="sm">Small</bud-button>
+      <bud-button size="md">Medium</bud-button>
+      <bud-button size="lg">Large</bud-button>
+    </div>
+
+    <div class="row">
+      <bud-button icon-left="plus">Adicionar</bud-button>
+      <bud-button icon-right="caret-down">Menu</bud-button>
+      <bud-button icon-left="plus"></bud-button>
+      <bud-button loading>Salvando...</bud-button>
+      <bud-button disabled>Desabilitado</bud-button>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="section">
+    <h2>Badge</h2>
+
+    <div class="row">
+      <bud-badge color="neutral">Neutro</bud-badge>
+      <bud-badge color="orange">Orange</bud-badge>
+      <bud-badge color="wine">Wine</bud-badge>
+      <bud-badge color="caramel">Caramel</bud-badge>
+      <bud-badge color="error">Erro</bud-badge>
+      <bud-badge color="warning">Alerta</bud-badge>
+      <bud-badge color="success">Sucesso</bud-badge>
+    </div>
+
+    <div class="row">
+      <bud-badge size="sm">Small</bud-badge>
+      <bud-badge size="md">Medium</bud-badge>
+      <bud-badge size="lg">Large</bud-badge>
+    </div>
+
+    <div class="row">
+      <bud-badge icon-left="check" color="success">Aprovado</bud-badge>
+      <bud-badge icon-left="warning-circle" color="error">Erro</bud-badge>
+      <bud-badge icon-left="check"></bud-badge>
+    </div>
+  </div>
+</body>
+</html>

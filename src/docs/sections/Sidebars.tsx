@@ -3,6 +3,7 @@ import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { List } from "@phosphor-icons/react";
 import {
   Sidebar,
@@ -32,6 +33,38 @@ import {
 import s from "./Sidebars.module.css";
 
 /* ——— Código de uso ——— */
+
+const htmlUsageCode = `<!-- Sidebar -->
+<bud-sidebar>
+  <bud-sidebar-header>
+    <img src="logo.svg" alt="Logo" height="24" />
+  </bud-sidebar-header>
+  <bud-sidebar-nav>
+    <bud-sidebar-item icon="info" label="Dashboard" href="/" active></bud-sidebar-item>
+    <bud-sidebar-item icon="magnifying-glass" label="Busca" href="/busca"></bud-sidebar-item>
+    <bud-sidebar-group label="Gestão">
+      <bud-sidebar-item icon="check" label="Objetivos" href="/objetivos"></bud-sidebar-item>
+      <bud-sidebar-item icon="plus" label="Avaliações" href="/avaliacoes"></bud-sidebar-item>
+    </bud-sidebar-group>
+    <bud-sidebar-divider></bud-sidebar-divider>
+    <bud-sidebar-item icon="info" label="Configurações" href="/config"></bud-sidebar-item>
+  </bud-sidebar-nav>
+  <bud-sidebar-footer>
+    <bud-button variant="tertiary" size="sm">Sair</bud-button>
+  </bud-sidebar-footer>
+</bud-sidebar>
+
+<!-- Collapsed (56px) -->
+<bud-sidebar collapsed>...</bud-sidebar>
+
+<!-- Mobile drawer -->
+<bud-sidebar mobile-open>...</bud-sidebar>
+<script>
+  document.querySelector("bud-sidebar")
+    .addEventListener("bud-close", () => {
+      sidebar.removeAttribute("mobile-open");
+    });
+<\/script>`;
 
 const usageCode = `import { useState, useRef } from "react";
 import {
@@ -481,7 +514,10 @@ export function Sidebars() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

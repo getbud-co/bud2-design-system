@@ -1,8 +1,8 @@
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
 import { Breadcrumb } from "../../components/Breadcrumb";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import s from "./Breadcrumbs.module.css";
 
 const wizardItems = [
@@ -41,6 +41,22 @@ const usageCode = `import { Breadcrumb } from "@mdonangelo/bud-ds";
     { label: "Avaliação 360° Q1 2026" },
   ]}
 />`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<!-- Items via JSON no atributo items -->
+<bud-breadcrumb
+  items='[{"label":"Home","href":"/"},{"label":"Produtos"},{"label":"Detalhes"}]'
+  current="2"
+></bud-breadcrumb>
+
+<!-- Eventos -->
+<script>
+  document.querySelector("bud-breadcrumb")
+    .addEventListener("bud-navigate", (e) => {
+      console.log("Navegou para index:", e.detail.index);
+    });
+<\/script>`;
 
 export function Breadcrumbs() {
   return (
@@ -88,7 +104,10 @@ export function Breadcrumbs() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

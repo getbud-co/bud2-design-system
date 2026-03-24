@@ -1,8 +1,9 @@
 import { EnvelopeSimple, EyeSlash } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
+import { PropsTable } from "../PropsTable";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 import inputStyles from "../../components/Input.module.css";
@@ -39,6 +40,34 @@ import { EnvelopeSimple, EyeSlash } from "@phosphor-icons/react";
   message="Formato de e-mail inválido."
   messageType="error"
 />`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<bud-input label="Email" placeholder="seu@email.com" size="md"></bud-input>
+
+<bud-input label="Senha" type="password" placeholder="••••••••"></bud-input>
+
+<!-- Com ícone -->
+<bud-input label="Busca" icon-left="magnifying-glass" placeholder="Buscar..."></bud-input>
+
+<!-- Com mensagem de erro -->
+<bud-input
+  label="Email"
+  message="Campo obrigatório"
+  message-type="error"
+  placeholder="seu@email.com"
+></bud-input>
+
+<!-- Desabilitado -->
+<bud-input label="Desabilitado" disabled placeholder="..."></bud-input>
+
+<!-- Eventos -->
+<script>
+  document.querySelector("bud-input")
+    .addEventListener("bud-change", (e) => {
+      console.log(e.detail.value);
+    });
+<\/script>`;
 
 const states = ["Placeholder", "Filled", "Hover", "Focused", "Disabled"] as const;
 
@@ -169,8 +198,25 @@ export function Inputs() {
         </div>
       </SubSection>
 
+      <SubSection id="api-input" title="API">
+        <PropsTable rows={[
+          { prop: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Tamanho do input" },
+          { prop: "label", type: "string", description: "Label do campo" },
+          { prop: "leftIcon", attr: "icon-left", type: "ComponentType | string", description: "Ícone à esquerda" },
+          { prop: "rightIcon", attr: "icon-right", type: "ComponentType | string", description: "Ícone à direita" },
+          { prop: "message", type: "string", description: "Texto da mensagem de feedback" },
+          { prop: "messageType", attr: "message-type", type: '"error" | "attention" | "success"', description: "Tipo da mensagem" },
+          { prop: "placeholder", type: "string", description: "Texto placeholder" },
+          { prop: "disabled", type: "boolean", default: "false", description: "Desabilita o campo" },
+          { prop: "name", type: "string", description: "Nome para formulário nativo (HTML)" },
+        ]} />
+      </SubSection>
+
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

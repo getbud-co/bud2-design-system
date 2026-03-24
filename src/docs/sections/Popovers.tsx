@@ -9,7 +9,7 @@ import {
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Checkbox } from "../../components/Checkbox";
 import { Popover, type PopoverItem } from "../../components/Popover";
 import s from "./Popovers.module.css";
@@ -177,6 +177,33 @@ function Example() {
   );
 }`;
 
+const htmlUsageCode = `<!-- Popover (JSON-driven items) -->
+<bud-popover
+  id="meuPopover"
+  items='[{"id":"edit","label":"Editar","icon":"plus"},{"id":"sep","divider":true},{"id":"delete","label":"Excluir","danger":true}]'
+  aria-label="Ações"
+>
+  <button data-popover-anchor onclick="togglePopover()">Abrir menu</button>
+</bud-popover>
+
+<script>
+  const popover = document.getElementById("meuPopover");
+
+  function togglePopover() {
+    const isOpen = popover.hasAttribute("open");
+    if (isOpen) popover.removeAttribute("open");
+    else popover.setAttribute("open", "");
+  }
+
+  popover.addEventListener("bud-select", (e) => {
+    console.log("Selecionou:", e.detail.id);
+  });
+
+  popover.addEventListener("bud-close", () => {
+    popover.removeAttribute("open");
+  });
+<\/script>`;
+
 /* ——— Seção principal ——— */
 
 export function Popovers() {
@@ -270,7 +297,10 @@ export function Popovers() {
 
       {/* Como usar */}
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

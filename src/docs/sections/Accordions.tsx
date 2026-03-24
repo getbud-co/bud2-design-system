@@ -4,6 +4,7 @@ import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Accordion, AccordionItem } from "../../components/Accordion";
 import { Badge } from "../../components/Badge";
 import s from "./Accordions.module.css";
@@ -23,6 +24,34 @@ const usageCode = `import { Accordion, AccordionItem } from "@mdonangelo/bud-ds"
     Conteúdo já aberto por padrão.
   </AccordionItem>
 </Accordion>`;
+
+const htmlUsageCode = `<!-- Accordion -->
+<bud-accordion>
+  <bud-accordion-item title="Seção 1" description="Descrição opcional">
+    <p>Conteúdo da primeira seção.</p>
+  </bud-accordion-item>
+  <bud-accordion-item title="Seção 2" open>
+    <p>Esta seção inicia aberta.</p>
+  </bud-accordion-item>
+  <bud-accordion-item title="Desabilitado" disabled>
+    <p>Não acessível.</p>
+  </bud-accordion-item>
+</bud-accordion>
+
+<!-- Com header (fundo sutil nos triggers) -->
+<bud-accordion header>
+  <bud-accordion-item title="FAQ 1" icon="info">
+    <p>Resposta aqui.</p>
+  </bud-accordion-item>
+</bud-accordion>
+
+<!-- Eventos -->
+<script>
+  document.querySelector("bud-accordion-item")
+    .addEventListener("bud-toggle", (e) => {
+      console.log(e.detail.open);
+    });
+<\/script>`;
 
 const controlledCode = `const [open, setOpen] = useState(false);
 
@@ -238,7 +267,10 @@ export function Accordions() {
       </SubSection>
 
       <SubSection id="accordion-como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
         <div style={{ marginTop: "var(--sp-sm)" }}>
           <CodeSnippet code={controlledCode} language="tsx" />
         </div>

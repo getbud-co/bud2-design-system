@@ -19,6 +19,7 @@ import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Chart } from "../../components/Chart";
 import { ChartTooltipContent } from "../../components/ChartTooltip";
 import { Heatmap } from "../../components/Heatmap";
@@ -330,6 +331,43 @@ const data = [
 <Funnel data={data} />
 <Funnel data={data} showPercentage={false} />
 <Funnel data={data} formatValue={(v) => v.toLocaleString("pt-BR")} />`;
+
+const gaugeHtmlCode = `<!-- Chart Gauge (SVG puro, sem Recharts) -->
+<bud-chart value="75" size="40"></bud-chart>
+<bud-chart value="50" size="60"></bud-chart>
+<bud-chart value="90" size="80"></bud-chart>
+
+<!-- Half variant (semicírculo) -->
+<bud-chart value="65" variant="half" size="40"></bud-chart>
+<bud-chart value="85" variant="half" size="80"></bud-chart>`;
+
+const heatmapHtmlCode = `<!-- Heatmap (JSON-driven) -->
+<bud-heatmap
+  rows='["Jan","Fev","Mar"]'
+  columns='["Seg","Ter","Qua"]'
+  data='[{"row":"Jan","col":"Seg","value":10},{"row":"Jan","col":"Ter","value":50},{"row":"Jan","col":"Qua","value":90}]'
+  color="orange"
+  cell-size="40"
+></bud-heatmap>`;
+
+const sparklineHtmlCode = `<!-- Sparkline (SVG puro) -->
+<bud-sparkline data="[10,20,15,30,25,40,35]" width="80" height="24" color="orange"></bud-sparkline>
+<bud-sparkline data="[40,35,30,25,20]" color="red"></bud-sparkline>
+<bud-sparkline data="[10,20,30]" color="green" filled></bud-sparkline>`;
+
+const radarHtmlCode = `<!-- Radar (SVG puro) -->
+<bud-radar
+  data='[{"label":"Comunicação","value":80},{"label":"Liderança","value":60},{"label":"Técnica","value":90},{"label":"Colaboração","value":70},{"label":"Criatividade","value":50}]'
+  size="200"
+  color="orange"
+  show-values
+></bud-radar>`;
+
+const funnelHtmlCode = `<!-- Funnel (SVG puro) -->
+<bud-funnel
+  data='[{"label":"Visitantes","value":1000},{"label":"Leads","value":600},{"label":"Oportunidades","value":200},{"label":"Clientes","value":80}]'
+  height="300"
+></bud-funnel>`;
 
 export function Charts() {
   const [gaugeValue, setGaugeValue] = useState(64);
@@ -791,7 +829,10 @@ export function Charts() {
             <Chart value={gaugeValue} />
           </div>
         </div>
-        <CodeSnippet code={gaugeCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: gaugeCode },
+          { label: "HTML", language: "html", code: gaugeHtmlCode },
+        ]} />
       </SubSection>
 
       {/* ——— 11. Half Gauge (semicírculo 180°) ——— */}
@@ -916,7 +957,10 @@ export function Charts() {
         <div className={s.chartFrame}>
           <Heatmap data={heatmapData} rows={heatmapDays} columns={heatmapHours} />
         </div>
-        <CodeSnippet code={heatmapCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: heatmapCode },
+          { label: "HTML", language: "html", code: heatmapHtmlCode },
+        ]} />
       </SubSection>
 
       {/* ——— 15. Heatmap — Paletas ——— */}
@@ -1048,7 +1092,10 @@ export function Charts() {
             <span className={s.stateLabel}>160×40 filled</span>
           </div>
         </div>
-        <CodeSnippet code={sparklineCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: sparklineCode },
+          { label: "HTML", language: "html", code: sparklineHtmlCode },
+        ]} />
       </SubSection>
 
       {/* ——— 20. Radar ——— */}
@@ -1086,7 +1133,10 @@ export function Charts() {
             <span className={s.stateLabel}>Neutral</span>
           </div>
         </div>
-        <CodeSnippet code={radarCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: radarCode },
+          { label: "HTML", language: "html", code: radarHtmlCode },
+        ]} />
       </SubSection>
 
       {/* ——— 22. Funnel ——— */}
@@ -1098,7 +1148,10 @@ export function Charts() {
         <div className={s.chartFrame}>
           <Funnel data={funnelData} />
         </div>
-        <CodeSnippet code={funnelCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: funnelCode },
+          { label: "HTML", language: "html", code: funnelHtmlCode },
+        ]} />
       </SubSection>
 
       {/* ——— 23. Funnel — Formatado ——— */}

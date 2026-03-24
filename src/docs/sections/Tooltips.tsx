@@ -2,10 +2,10 @@ import { Info, WarningCircle, Trash, Plus } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
 import { Tooltip } from "../../components/Tooltip";
 import { Button } from "../../components/Button";
 import { Badge } from "../../components/Badge";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import s from "./Tooltips.module.css";
 
 const usageCode = `import { Tooltip } from "@mdonangelo/bud-ds";
@@ -35,6 +35,37 @@ const usageCode = `import { Tooltip } from "@mdonangelo/bud-ds";
 <Tooltip content={<><strong>Atenção:</strong> ação irreversível</>}>
   <Button variant="secondary" leftIcon={Trash}>Excluir</Button>
 </Tooltip>`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<!-- Tooltip básico (placement padrão: top) -->
+<bud-tooltip content="Texto de ajuda">
+  <bud-button variant="tertiary" size="sm">Hover me</bud-button>
+</bud-tooltip>
+
+<!-- Placements -->
+<bud-tooltip content="Acima" placement="top">
+  <span>Top</span>
+</bud-tooltip>
+<bud-tooltip content="Abaixo" placement="bottom">
+  <span>Bottom</span>
+</bud-tooltip>
+<bud-tooltip content="Esquerda" placement="left">
+  <span>Left</span>
+</bud-tooltip>
+<bud-tooltip content="Direita" placement="right">
+  <span>Right</span>
+</bud-tooltip>
+
+<!-- Delay customizado (ms) -->
+<bud-tooltip content="Delay longo" delay="500">
+  <span>500ms</span>
+</bud-tooltip>
+
+<!-- Desabilitado -->
+<bud-tooltip content="Não aparece" disabled>
+  <span>Disabled</span>
+</bud-tooltip>`;
 
 export function Tooltips() {
   return (
@@ -178,7 +209,10 @@ export function Tooltips() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

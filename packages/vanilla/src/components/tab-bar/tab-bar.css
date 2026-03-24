@@ -1,0 +1,101 @@
+:host { display: block; }
+
+.wrapper { position: relative; }
+
+/* ——— Scroll fade hints ——— */
+.wrapper::before,
+.wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-white), transparent);
+}
+
+.wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-white), transparent);
+}
+
+.overflow-left::before { opacity: 1; }
+.overflow-right::after { opacity: 1; }
+
+/* ——— Tab list ——— */
+.tab-list {
+  display: flex;
+  gap: var(--sp-lg);
+  padding: 0 var(--sp-sm);
+  border-bottom: 1px solid var(--color-caramel-300);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tab-list::-webkit-scrollbar { display: none; }
+
+/* ——— Tab ——— */
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+  padding: var(--sp-xs) 0;
+  background: none;
+  border: none;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 120ms ease;
+  line-height: 1.05;
+}
+
+.tab::after {
+  content: "";
+  position: absolute;
+  bottom: -1px; /* structural — aligns with border */
+  left: 0;
+  right: 0;
+  height: 3px; /* structural — active indicator */
+  background-color: transparent;
+  transition: background-color 120ms ease;
+}
+
+.tab:hover:not(.tab-disabled) { color: var(--color-neutral-950); }
+
+.tab:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: 2px;
+  border-radius: var(--radius-2xs);
+}
+
+.tab-active {
+  font-weight: 700;
+  color: var(--color-neutral-950);
+}
+
+.tab-active::after { background-color: var(--color-caramel-300); }
+
+.tab-disabled {
+  color: var(--color-neutral-300);
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .tab-list { gap: var(--sp-md); padding: 0 var(--sp-xs); }
+  .tab { min-height: 44px; /* Apple HIG touch target */ }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrapper::before, .wrapper::after, .tab, .tab::after { transition: none; }
+}

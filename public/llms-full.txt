@@ -1,0 +1,305 @@
+# Bud Design System — Documentação Completa para LLMs
+
+> Sistema de design para a plataforma Bud. React 19 + TypeScript strict + CSS Modules. Web Components vanilla (Custom Elements + Shadow DOM). Conteúdo em PT-BR. Grid de 4px. Ícones Phosphor regular weight only.
+
+---
+
+## Regras Obrigatórias
+
+1. **Tokens obrigatórios**: NUNCA usar hex, rgb, hsl, px ou font-family literal. Usar `var(--token)`.
+2. **Cores semânticas**: Não escolher cor pela aparência — seguir o mapeamento semântico abaixo.
+3. **Ícones**: APENAS `@phosphor-icons/react` 2.1, peso regular. Nunca bold, fill, light, thin, duotone.
+4. **Font-label para controles**: Button, Input, Select usam `--font-label` (500). NUNCA `--font-body`.
+5. **Grid 4px**: Todo espaçamento é múltiplo de 4px via tokens `--sp-*`.
+6. **Conteúdo em PT-BR**: Labels, placeholders, mensagens em português brasileiro.
+
+---
+
+## Tokens de Design
+
+### Cores
+
+| Paleta | 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950 |
+|--------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| neutral | #fafafa | #f5f5f5 | #e5e5e5 | #d4d4d4 | #a1a1a1 | #737373 | #525252 | #404040 | #262626 | #171717 | #0a0a0a |
+| caramel | #faf8f2 | #f9f7f0 | #f1edde | #eae3cd | #e1d9bb | #d9ceaa | #d0c49a | #c7b98a | #bdae7a | #a99656 | #75683d |
+| orange | #ffefeb | #ffc5b4 | #ffac92 | #ff936f | #ff7b4c | #fd5f28 | #fa4405 | #d23a06 | #ab3007 | #852607 | #601c06 |
+| green | #f7fee7 | #ecfcca | #d8f999 | — | #9ae600 | #7ccf00 | #5ea500 | #497d00 | #3c6300 | #35530e | #192e03 |
+| red | #fef2f2 | #ffe2e2 | #ffc9c9 | #ffa2a2 | #ff6467 | #fb2c36 | #e7000b | #c10007 | #9f0712 | #82181a | #460809 |
+| yellow | #fffbeb | #fef9c2 | #fff085 | #ffdf20 | #ffb900 | #fe9a00 | #e17100 | #bb4d00 | #973c00 | #7b3306 | #461901 |
+| wine | #ffebf3 | #fdc9de | #fa94bc | #f55694 | #c60c54 | #a60c46 | #860b38 | #67092b | #510923 | #3c091b | #290713 |
+
+Base: `--color-white: #ffffff`, `--color-neutral-0: #ffffff`
+
+### Mapeamento Semântico de Cores
+
+**Texto:**
+- Primário: `--color-neutral-950` (títulos, corpo, labels)
+- Secundário: `--color-neutral-500` (descrições, placeholders)
+- Terciário: `--color-neutral-400` (desabilitado, hints)
+- Invertido: `--color-white` (sobre fundos escuros)
+- Link/Ação: `--color-orange-500`
+
+**Superfícies:**
+- Padrão: `--color-white` (page, cards, modais)
+- Sutil: `--color-caramel-50` (hover, zebra, accordion headers)
+- Elevada: `--color-neutral-100` (badges neutros, disabled inputs)
+- Invertida: `--color-neutral-800` (toast dark, tooltips)
+
+**Bordas:**
+- Padrão: `--color-caramel-300` (inputs, cards, popovers)
+- Sutil: `--color-caramel-200` (divisores internos)
+- Hover: `--color-caramel-500`
+- Foco: `--color-caramel-700`
+- Focus ring: `--color-caramel-200` via `box-shadow: 0 0 0 2px`
+
+**Feedback (padrão por status):**
+
+| Status | Background | Borda | Ícone | Título | Badge | Dismiss | Dismiss hover |
+|--------|-----------|-------|-------|--------|-------|---------|---------------|
+| Sucesso | green-50 | green-200 | green-700 | green-900 | green-700 | green-400 | green-100 |
+| Erro | red-50 | red-200 | red-700 | red-900 | red-700 | red-400 | red-100 |
+| Alerta | yellow-50 | yellow-200 | yellow-700 | yellow-900 | yellow-700 | yellow-400 | yellow-100 |
+| Info | neutral-50 | neutral-200 | neutral-600 | neutral-900 | neutral-700 | neutral-400 | neutral-100 |
+
+### Tipografia
+
+| Token | Fonte | Peso | Uso |
+|-------|-------|------|-----|
+| `--font-display` | Crimson Pro | 600 | Hero, marketing |
+| `--font-heading` | Plus Jakarta Sans | 600-700 | Headings |
+| `--font-body` | Inter | 400, 600 | Corpo de texto, parágrafos |
+| `--font-label` | Inter | 500 | Botões, inputs, labels, controles |
+
+Font sizes: `--text-xs` (12px), `--text-sm` (14px), `--text-md` (16px), `--text-lg` (20px), `--text-xl` (24px), `--text-2xl` (32px), `--text-3xl` (38px)
+
+### Espaçamento (grid 4px)
+
+| Token | Valor |
+|-------|-------|
+| `--sp-3xs` | 4px |
+| `--sp-2xs` | 8px |
+| `--sp-xs` | 12px |
+| `--sp-sm` | 16px |
+| `--sp-md` | 20px |
+| `--sp-lg` | 24px |
+| `--sp-xl` | 32px |
+| `--sp-2xl` | 40px |
+| `--sp-3xl` | 48px |
+| `--sp-4xl` | 64px |
+
+### Border Radius
+
+`--radius-2xs` (4px), `--radius-xs` (6px), `--radius-sm` (8px), `--radius-md` (12px), `--radius-lg` (16px), `--radius-full` (9999px)
+
+### Sombras (base warm brown)
+
+- `--shadow-xs`: cards, popovers
+- `--shadow-sm`: dropdowns, tooltips
+- `--shadow-md`: modals
+- `--shadow-lg`: drawers
+- `--shadow-xl`: large overlays
+
+---
+
+## Componentes — Referência Rápida
+
+### Button
+- **React**: `<Button variant="primary" size="md" leftIcon={Plus}>Label</Button>`
+- **HTML**: `<bud-button variant="primary" size="md" icon-left="plus">Label</bud-button>`
+- **Props**: variant (primary|secondary|tertiary|danger), size (sm|md|lg), leftIcon/icon-left, rightIcon/icon-right, loading, disabled
+- **Regra**: Padding do lado do ícone reduzido em 1 step (ajuste ótico)
+
+### Input
+- **React**: `<Input label="Email" size="md" placeholder="seu@email.com" />`
+- **HTML**: `<bud-input label="Email" size="md" placeholder="seu@email.com"></bud-input>`
+- **Props**: size (sm|md|lg), label, leftIcon/icon-left, rightIcon/icon-right, message, messageType/message-type (error|attention|success), disabled, placeholder
+- **Regra**: `line-height: normal` para não cortar descendentes (ç, g, y)
+- **Eventos WC**: `bud-input` (digitando), `bud-change` (blur)
+
+### Textarea
+- **React**: `<Textarea label="Mensagem" rows={4} />`
+- **HTML**: `<bud-textarea label="Mensagem" rows="4"></bud-textarea>`
+- **Props**: label, rows (default 4), message, messageType/message-type, disabled
+
+### Select
+- **React**: `<Select options={[{value:"a",label:"Alpha"}]} searchable />`
+- **HTML**: `<bud-select options='[{"value":"a","label":"Alpha"}]' searchable></bud-select>`
+- **Props**: options (array), value, searchable, searchPlaceholder/search-placeholder, size, label, placeholder, message, messageType/message-type
+- **Eventos WC**: `bud-change` ({ value })
+
+### Checkbox
+- **React**: `<Checkbox label="Aceito" size="md" />`
+- **HTML**: `<bud-checkbox label="Aceito" size="md"></bud-checkbox>`
+- **Props**: size (sm|md), label, description, indeterminate, checked, disabled
+- **Eventos WC**: `bud-change` ({ checked })
+
+### Radio
+- **React**: `<Radio name="plan" value="pro" label="Pro" />`
+- **HTML**: `<bud-radio name="plan" value="pro" label="Pro"></bud-radio>`
+- **Props**: size (sm|md), label, description, name, value, checked, disabled
+
+### Toggle
+- **React**: `<Toggle label="Notificações" />`
+- **HTML**: `<bud-toggle label="Notificações"></bud-toggle>`
+- **Props**: label, description, checked, disabled
+- **Acessibilidade**: `role="switch"`
+
+### Badge
+- **React**: `<Badge color="success" leftIcon={Check}>OK</Badge>`
+- **HTML**: `<bud-badge color="success" icon-left="check">OK</bud-badge>`
+- **Props**: color (neutral|orange|wine|caramel|error|warning|success), size (sm|md|lg), leftIcon/icon-left, rightIcon/icon-right
+
+### Avatar
+- **React**: `<Avatar src="url" initials="JS" size="md" online />`
+- **HTML**: `<bud-avatar src="url" initials="JS" size="md" online></bud-avatar>`
+- **Props**: size (xs|sm|md|lg|xl|2xl), src, initials, alt, online, companyLogo/company-logo
+
+### Alert
+- **React**: `<Alert variant="success" title="Salvo" onDismiss={fn}>Desc</Alert>`
+- **HTML**: `<bud-alert variant="success" title="Salvo" dismissible>Desc</bud-alert>`
+- **Props**: variant (info|success|warning|error), title, onDismiss/dismissible, action/action-label
+- **Eventos WC**: `bud-dismiss`, `bud-action`
+
+### Card (Compound)
+- **React**: `<Card padding="md" shadow><CardHeader title="T" /><CardBody>...</CardBody><CardFooter>...</CardFooter></Card>`
+- **HTML**: `<bud-card padding="md" shadow><bud-card-header title="T"></bud-card-header><bud-card-body>...</bud-card-body><bud-card-footer>...</bud-card-footer></bud-card>`
+- **Sub-componentes**: CardHeader, CardBody, CardFooter, CardDivider
+
+### Modal (Compound)
+- **React**: `<Modal open={open} onClose={fn} size="md"><ModalHeader title="T" onClose={fn} /><ModalBody>...</ModalBody><ModalFooter>...</ModalFooter></Modal>`
+- **HTML**: `<bud-modal open size="md"><bud-modal-header title="T"></bud-modal-header><bud-modal-body>...</bud-modal-body><bud-modal-footer>...</bud-modal-footer></bud-modal>`
+- **Comportamento**: Focus trap, ESC fecha, click overlay fecha, scroll lock
+- **Eventos WC**: `bud-close`
+
+### Drawer (Compound)
+- **React**: `<Drawer open={open} onClose={fn} side="right" size="md">...</Drawer>`
+- **HTML**: `<bud-drawer open side="right" size="md">...</bud-drawer>`
+- **Props**: side (right|left), size (sm|md|lg)
+- **Mobile**: Bottom sheet automático em ≤768px
+
+### Tooltip
+- **React**: `<Tooltip content="Help" placement="top"><Button>Hover</Button></Tooltip>`
+- **HTML**: `<bud-tooltip content="Help" placement="top"><button>Hover</button></bud-tooltip>`
+- **Props**: content, placement (top|bottom|left|right), delay (ms, default 200), disabled
+
+### Toast
+- **API global** (igual em React e HTML):
+```
+toast("Mensagem")
+toast.success("Salvo!")
+toast.error("Falha", { description: "Detalhes", action: { label: "Retry", onClick: fn } })
+toast.warning("Atenção")
+toast.black("Dark theme")
+toast.dismiss() // remove todos
+```
+- **Setup React**: `<Toaster />` no root
+- **Setup HTML**: `<bud-toaster></bud-toaster>` no body
+
+### Skeleton
+- **React**: `<SkeletonContainer><Skeleton variant="text" width={200} height={14} /></SkeletonContainer>`
+- **HTML**: `<bud-skeleton-container><bud-skeleton variant="text" width="200" height="14"></bud-skeleton></bud-skeleton-container>`
+- **SEMPRE** envolver em SkeletonContainer para acessibilidade (role="status" + sr-only text)
+- **Variants**: text, circular, rectangular, rounded
+
+### Accordion
+- **React**: `<Accordion><AccordionItem title="Section 1">Content</AccordionItem></Accordion>`
+- **HTML**: `<bud-accordion><bud-accordion-item title="Section 1">Content</bud-accordion-item></bud-accordion>`
+- **Props item**: title, description, icon, disabled, open
+- **Eventos WC**: `bud-toggle` ({ open })
+
+### TabBar
+- **React**: `<TabBar tabs={[{value:"a",label:"Tab A"}]} activeTab="a" onTabChange={fn} />`
+- **HTML**: `<bud-tab-bar tabs='[{"value":"a","label":"Tab A"}]' active-tab="a"></bud-tab-bar>`
+- **Teclado**: Arrow Left/Right, Home, End
+- **Eventos WC**: `bud-change` ({ value })
+
+### Pagination
+- **React**: `<Pagination currentPage={3} totalPages={10} onPageChange={fn} />`
+- **HTML**: `<bud-pagination current-page="3" total-pages="10"></bud-pagination>`
+- **Eventos WC**: `bud-change` ({ page })
+
+### Breadcrumb
+- **React**: `<Breadcrumb items={[{label:"Home",href:"/"},{label:"Page"}]} current={1} />`
+- **HTML**: `<bud-breadcrumb items='[{"label":"Home","href":"/"},{"label":"Page"}]' current="1"></bud-breadcrumb>`
+- **Eventos WC**: `bud-navigate` ({ index })
+
+### Table (Compound)
+- **Sub-componentes**: Table, TableContent, TableHead, TableBody, TableRow, TableHeaderCell, TableCell
+- **Props Table**: variant (divider|striped), elevated, bordered, selectable
+- **Props HeaderCell**: sortable, sortDirection (asc|desc), align
+
+### Sidebar (Compound)
+- **Sub-componentes**: Sidebar, SidebarHeader, SidebarNav, SidebarGroup, SidebarItem, SidebarDivider, SidebarFooter
+- **Props Sidebar**: collapsed, mobileOpen/mobile-open
+- **Collapsed**: 56px, labels hidden, flyout on hover
+- **Mobile (≤768px)**: Drawer lateral com overlay
+
+### Charts (SVG puro, sem Recharts)
+- **Chart gauge**: `<Chart value={75} variant="full" size={40} />` / `<bud-chart value="75" size="40"></bud-chart>`
+- **Sparkline**: `<Sparkline data={[10,20,15]} color="orange" />` / `<bud-sparkline data="[10,20,15]" color="orange"></bud-sparkline>`
+- **Heatmap**: Grid de intensidade com 5 steps de cor
+- **Radar**: Gráfico spider com grid concêntrico
+- **Funnel**: Trapezóides com labels e porcentagem
+
+### Outros Componentes
+- **Popover**: Menu de contexto com items JSON, keyboard nav, submenu
+- **DropdownButton**: Botão + dropdown menu searchable
+- **DatePicker**: Calendário com input mascarado DD/MM/AAAA
+- **ScaleInput**: Escala numérica (0-10) com keyboard nav
+- **ChoiceBox**: Cards selecionáveis single/multi
+- **FilterBar + FilterChip**: Barra de filtros com chips dinâmicos
+- **SortableList**: Lista reordenável drag-and-drop + teclado (Alt+Setas)
+- **PopoverSelect**: Seleção com avatar, busca, criação inline
+- **GoalProgress**: Barra de progresso com meta e status (on-track/attention/off-track)
+- **PageHeader**: Header de página com título e ações
+
+---
+
+## Instalação
+
+### React
+```bash
+npm install @mdonangelo/bud-ds @phosphor-icons/react
+npm install @fontsource/inter @fontsource/plus-jakarta-sans @fontsource/crimson-pro
+```
+
+```tsx
+// main.tsx
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/plus-jakarta-sans/600.css";
+import "@fontsource/plus-jakarta-sans/700.css";
+import "@fontsource/crimson-pro/600.css";
+import "@mdonangelo/bud-ds/styles";
+```
+
+### HTML (Web Components)
+```bash
+npm install @mdonangelo/bud-ds-vanilla
+```
+
+```html
+<link rel="stylesheet" href="bud-ds.css" />
+<script type="module" src="bud-ds.js"></script>
+```
+
+Todos os custom elements são registrados automaticamente. Sem build tools necessário.
+
+### Eventos Web Components
+Todos usam `CustomEvent` com `bubbles: true` e `composed: true` (cruzam Shadow DOM):
+- `bud-change` — input, textarea, select, checkbox, radio, toggle, tab-bar, pagination
+- `bud-input` — input, textarea (durante digitação)
+- `bud-close` — modal, drawer, alert, popover, sidebar
+- `bud-dismiss` — alert
+- `bud-action` — alert
+- `bud-navigate` — breadcrumb
+- `bud-select` — popover, dropdown-button
+- `bud-toggle` — accordion
+- `bud-sort` — table header cell
+- `bud-click` — sidebar item, filter chip
+- `bud-remove` — filter chip
+
+### Form Participation
+Controles de formulário (input, textarea, checkbox, radio, toggle, select, date-picker) usam `ElementInternals` para participação nativa em `<form>`. Funcionam com `FormData`, validação e `form.reset()`.

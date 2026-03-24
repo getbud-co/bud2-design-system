@@ -11,7 +11,7 @@ import {
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import {
   FilterBar,
   FilterChip,
@@ -539,6 +539,20 @@ function EmptyDemo() {
 
 /* ——— Code snippet ——— */
 
+const htmlUsageCode = `<!-- Filter Bar com chips -->
+<bud-filter-bar>
+  <bud-filter-chip label="Time: Design" active></bud-filter-chip>
+  <bud-filter-chip label="Status: Ativo"></bud-filter-chip>
+  <bud-button variant="tertiary" size="sm" icon-left="plus">Filtro</bud-button>
+</bud-filter-bar>
+
+<script>
+  document.querySelectorAll("bud-filter-chip").forEach(chip => {
+    chip.addEventListener("bud-click", () => { /* toggle dropdown */ });
+    chip.addEventListener("bud-remove", () => { chip.remove(); });
+  });
+<\/script>`;
+
 const usageCode = `import {
   FilterBar,
   FilterChip,
@@ -679,7 +693,10 @@ export function FilterBars() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { TabBar, getPanelId, getTabId } from "../../components/TabBar";
 import { Badge } from "../../components/Badge";
 import s from "./TabBars.module.css";
@@ -81,6 +81,22 @@ function MyPage() {
     </>
   );
 }`;
+
+const htmlUsageCode = `<!-- Tab Bar (JSON-driven) -->
+<bud-tab-bar
+  tabs='[{"value":"overview","label":"Visão Geral"},{"value":"activity","label":"Atividade"},{"value":"settings","label":"Config","disabled":true}]'
+  active-tab="overview"
+></bud-tab-bar>
+
+<!-- Eventos -->
+<script>
+  document.querySelector("bud-tab-bar")
+    .addEventListener("bud-change", (e) => {
+      console.log(e.detail.value);
+      // Atualizar atributo active-tab para refletir mudança
+      e.target.setAttribute("active-tab", e.detail.value);
+    });
+<\/script>`;
 
 /* ——— Demos ——— */
 
@@ -194,7 +210,10 @@ export function TabBars() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

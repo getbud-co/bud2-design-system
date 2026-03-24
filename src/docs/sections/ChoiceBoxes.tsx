@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { ChoiceBoxGroup, ChoiceBox } from "../../components/ChoiceBox";
 import choiceBoxStyles from "../../components/ChoiceBox.module.css";
 import s from "./ChoiceBoxes.module.css";
@@ -51,6 +51,21 @@ const [features, setFeatures] = useState<string[]>(["okr"]);
   <ChoiceBox value="feedback" title="Feedback" description="Feedback contínuo" />
   <ChoiceBox value="checkin" title="Check-ins" description="Rituais periódicos" />
 </ChoiceBoxGroup>`;
+
+const htmlUsageCode = `<!-- ChoiceBox Group -->
+<bud-choice-box-group label="Selecione um plano">
+  <bud-choice-box value="basic" title="Básico" description="Para pequenas equipes"></bud-choice-box>
+  <bud-choice-box value="pro" title="Profissional" description="Para empresas em crescimento" checked></bud-choice-box>
+  <bud-choice-box value="enterprise" title="Enterprise" description="Para grandes organizações"></bud-choice-box>
+</bud-choice-box-group>
+
+<script>
+  document.querySelectorAll("bud-choice-box").forEach(cb => {
+    cb.addEventListener("bud-change", (e) => {
+      console.log(e.detail.value, e.detail.checked);
+    });
+  });
+<\/script>`;
 
 export function ChoiceBoxes() {
   const [interactive, setInteractive] = useState<string | undefined>("starter");
@@ -357,7 +372,10 @@ export function ChoiceBoxes() {
 
       {/* Usage */}
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

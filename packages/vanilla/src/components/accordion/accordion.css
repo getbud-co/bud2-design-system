@@ -1,0 +1,132 @@
+/* ——— Root ——— */
+:host { display: block; }
+
+.root {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-caramel-300);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+/* ——— Item ——— */
+.item {
+  border-bottom: 1px solid var(--color-caramel-200);
+}
+
+.item:last-child { border-bottom: none; }
+
+/* ——— Trigger ——— */
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  width: 100%;
+  padding: var(--sp-sm);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-label);
+  transition: background-color 120ms ease;
+  text-align: left;
+}
+
+.trigger:hover:not(.trigger-disabled) {
+  background-color: var(--color-caramel-50);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--color-caramel-700);
+  outline-offset: -2px;
+}
+
+.trigger-disabled {
+  cursor: not-allowed;
+  color: var(--color-neutral-400);
+}
+
+/* ——— Header variant ——— */
+:host([header]) .trigger {
+  background-color: var(--color-caramel-50);
+}
+
+:host([header]) .trigger:hover:not(.trigger-disabled) {
+  background-color: var(--color-caramel-100);
+}
+
+/* ——— Trigger content ——— */
+.trigger-icon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  height: 18px; /* structural — aligns with title line-height */
+  color: var(--color-neutral-500);
+}
+
+.trigger-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3xs);
+  flex: 1;
+  min-width: 0;
+}
+
+.trigger-title {
+  font-weight: 500;
+  font-size: var(--text-sm);
+  line-height: 1.25;
+  color: var(--color-neutral-950);
+}
+
+.trigger-description {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  color: var(--color-neutral-500);
+}
+
+.trigger-action {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.caret {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  height: 18px; /* structural */
+  color: var(--color-neutral-500);
+  transition: transform 200ms ease;
+}
+
+.caret-open { transform: rotate(180deg); }
+
+/* ——— Disabled text ——— */
+.trigger-disabled .trigger-icon { color: var(--color-neutral-300); }
+.trigger-disabled .trigger-title { color: var(--color-neutral-400); }
+.trigger-disabled .trigger-description { color: var(--color-neutral-400); }
+.trigger-disabled .caret { color: var(--color-neutral-300); }
+
+/* ——— Panel (animated collapse) ——— */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 200ms ease;
+  overflow: hidden;
+}
+
+.panel-open { grid-template-rows: 1fr; }
+
+.panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.panel-inner > :first-child {
+  padding: 0 var(--sp-sm) var(--sp-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret, .panel { transition: none; }
+}

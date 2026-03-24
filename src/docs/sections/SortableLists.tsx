@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { SortableList } from "../../components/SortableList";
 import type { SortableItem } from "../../components/SortableList";
 import s from "./SortableLists.module.css";
@@ -27,6 +27,25 @@ const [items, setItems] = useState<SortableItem[]>([
 
 {/* Desabilitado */}
 <SortableList items={items} disabled />`;
+
+const htmlUsageCode = `<!-- Sortable List (JSON-driven) -->
+<bud-sortable-list
+  items='[{"id":"1","label":"Comunicação"},{"id":"2","label":"Liderança"},{"id":"3","label":"Técnica"},{"id":"4","label":"Colaboração"}]'
+></bud-sortable-list>
+
+<!-- Tamanho pequeno -->
+<bud-sortable-list items='[...]' size="sm"></bud-sortable-list>
+
+<!-- Desabilitado -->
+<bud-sortable-list items='[...]' disabled></bud-sortable-list>
+
+<!-- Eventos -->
+<script>
+  document.querySelector("bud-sortable-list")
+    .addEventListener("bud-change", (e) => {
+      console.log(e.detail.items); // array reordenado
+    });
+<\/script>`;
 
 const PRIORITIES: SortableItem[] = [
   { id: "p1", label: "Qualidade do código" },
@@ -159,7 +178,10 @@ export function SortableLists() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

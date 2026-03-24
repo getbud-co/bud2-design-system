@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { GoalProgressBar, GoalGaugeBar } from "../../components/GoalProgress";
 import s from "./GoalProgress.module.css";
 
@@ -50,6 +50,14 @@ const usageCode = `import { GoalProgressBar, GoalGaugeBar } from "@mdonangelo/bu
   goalType="below"
   formattedValue="3.2%"
 />`;
+
+const htmlUsageCode = `<!-- Goal Progress Bar -->
+<bud-goal-progress label="Meta trimestral" value="75" target="100" status="on-track" formatted-value="75%"></bud-goal-progress>
+<bud-goal-progress label="Vendas" value="30" target="100" expected="50" status="off-track" formatted-value="R$ 30k"></bud-goal-progress>
+
+<!-- Goal Gauge Bar -->
+<bud-goal-gauge label="NPS" value="72" low="50" high="80" goal-type="between" min="0" max="100" status="on-track"></bud-goal-gauge>
+<bud-goal-gauge label="Churn" value="3" high="5" goal-type="below" min="0" max="10" status="attention" formatted-value="3%"></bud-goal-gauge>`;
 
 export function GoalProgress() {
   const [progressValue, setProgressValue] = useState(64);
@@ -302,7 +310,10 @@ export function GoalProgress() {
 
       {/* ——— 7. Como usar ——— */}
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

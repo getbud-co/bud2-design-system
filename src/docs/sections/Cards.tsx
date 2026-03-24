@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
+import { PropsTable } from "../PropsTable";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Card, CardHeader, CardBody, CardFooter, CardDivider } from "../../components/Card";
 import { Button } from "../../components/Button";
 import { Badge } from "../../components/Badge";
@@ -125,6 +126,27 @@ import { Badge } from "@mdonangelo/bud-ds";
     <Button variant="secondary" size="sm">Ver detalhes</Button>
   </CardFooter>
 </Card>`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<bud-card padding="md" shadow>
+  <bud-card-header title="Título do card" description="Descrição opcional">
+    <!-- Slot para ação no header -->
+    <bud-button variant="tertiary" size="sm">Editar</bud-button>
+  </bud-card-header>
+  <bud-card-body>
+    Conteúdo do card aqui.
+  </bud-card-body>
+  <bud-card-footer>
+    <bud-button variant="secondary" size="sm">Cancelar</bud-button>
+    <bud-button variant="primary" size="sm">Salvar</bud-button>
+  </bud-card-footer>
+</bud-card>
+
+<!-- Card simples (só body) -->
+<bud-card padding="lg">
+  <bud-card-body>Conteúdo simples</bud-card-body>
+</bud-card>`;
 
 export function Cards() {
   const [selectedTeam, setSelectedTeam] = useState(TEAM_ITEMS[0]);
@@ -486,8 +508,21 @@ export function Cards() {
         </div>
       </SubSection>
 
+      <SubSection id="api-card" title="API">
+        <PropsTable rows={[
+          { prop: "padding", type: '"none" | "sm" | "md" | "lg"', default: '"md"', description: "Padding interno do card" },
+          { prop: "shadow", type: "boolean", default: "false", description: "Aplica sombra (shadow-xs)" },
+          { prop: "title", attr: "title (CardHeader)", type: "string", description: "Título do header" },
+          { prop: "description", attr: "description (CardHeader)", type: "string", description: "Descrição do header" },
+          { prop: "align", attr: "align (CardFooter)", type: '"end" | "between"', default: '"end"', description: "Alinhamento do footer" },
+        ]} />
+      </SubSection>
+
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

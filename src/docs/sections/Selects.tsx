@@ -2,7 +2,7 @@ import { MapPin, Users } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Select } from "../../components/Select";
 import { Button } from "../../components/Button";
 import selectStyles from "../../components/Select.module.css";
@@ -67,6 +67,37 @@ const options = [
   searchable
   defaultValue={["eng", "design"]}
 />`;
+
+const htmlUsageCode = `<!-- Select (JSON-driven options) -->
+<bud-select
+  label="Fruta"
+  options='[{"value":"apple","label":"Maçã"},{"value":"banana","label":"Banana"},{"value":"grape","label":"Uva"}]'
+  placeholder="Selecione uma fruta..."
+></bud-select>
+
+<!-- Com busca -->
+<bud-select
+  label="País"
+  options='[{"value":"br","label":"Brasil"},{"value":"us","label":"EUA"},{"value":"pt","label":"Portugal"}]'
+  searchable
+  search-placeholder="Buscar país..."
+></bud-select>
+
+<!-- Com erro -->
+<bud-select
+  label="Obrigatório"
+  options='[{"value":"a","label":"A"}]'
+  message="Campo obrigatório"
+  message-type="error"
+></bud-select>
+
+<!-- Eventos -->
+<script>
+  document.querySelector("bud-select")
+    .addEventListener("bud-change", (e) => {
+      console.log(e.detail.value);
+    });
+<\/script>`;
 
 const states = ["Placeholder", "Filled", "Hover", "Focused", "Disabled"] as const;
 
@@ -277,7 +308,10 @@ export function Selects() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

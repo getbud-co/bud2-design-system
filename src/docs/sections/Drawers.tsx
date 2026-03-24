@@ -15,6 +15,7 @@ import {
 } from "../../components/Drawer";
 import { DragToCloseDrawer } from "../../components/DragToCloseDrawer";
 import { Users, FloppyDisk, ArrowRight, X, PencilSimple } from "@phosphor-icons/react";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import s from "./Drawers.module.css";
 
 const usageCode = `import {
@@ -73,6 +74,32 @@ const [open, setOpen] = useState(false);
   />
   <DrawerBody>{/* ... */}</DrawerBody>
 </Drawer>`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<bud-drawer id="meuDrawer" side="right" size="md">
+  <bud-drawer-header title="Detalhes"
+    description="Informações adicionais">
+  </bud-drawer-header>
+  <bud-drawer-body>
+    Conteúdo do drawer aqui.
+  </bud-drawer-body>
+  <bud-drawer-footer>
+    <bud-button variant="primary">Confirmar</bud-button>
+  </bud-drawer-footer>
+</bud-drawer>
+
+<script>
+  const drawer = document.getElementById("meuDrawer");
+
+  // Abrir
+  drawer.setAttribute("open", "");
+
+  // Fechar
+  drawer.addEventListener("bud-close", () => {
+    drawer.removeAttribute("open");
+  });
+<\/script>`;
 
 const departmentOptions = [
   { value: "eng", label: "Engenharia" },
@@ -531,7 +558,10 @@ export function Drawers() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
 
       <SubSection id="drag-to-close" title="DragToCloseDrawer — Mobile">

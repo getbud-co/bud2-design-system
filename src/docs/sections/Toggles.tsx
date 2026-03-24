@@ -1,7 +1,7 @@
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Toggle } from "../../components/Toggle";
 import tgStyles from "../../components/Toggle.module.css";
 import s from "./Toggles.module.css";
@@ -18,6 +18,23 @@ const usageCode = `import { Toggle } from "@mdonangelo/bud-ds";
 <Toggle defaultChecked label="Visível para o time" />
 
 <Toggle defaultChecked disabled label="Opção bloqueada" />`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<bud-toggle label="Notificações por email"></bud-toggle>
+
+<bud-toggle label="Modo escuro" description="Ativa o tema dark" checked></bud-toggle>
+
+<!-- Desabilitado -->
+<bud-toggle label="Indisponível" disabled></bud-toggle>
+
+<!-- Eventos -->
+<script>
+  document.querySelector("bud-toggle")
+    .addEventListener("bud-change", (e) => {
+      console.log(e.detail.checked);
+    });
+<\/script>`;
 
 const states = ["Default", "Hover", "Focused", "Disabled"] as const;
 
@@ -119,7 +136,10 @@ export function Toggles() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

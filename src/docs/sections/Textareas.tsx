@@ -1,7 +1,7 @@
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Textarea } from "../../components/Textarea";
 import textareaStyles from "../../components/Textarea.module.css";
 import s from "./Textareas.module.css";
@@ -27,6 +27,20 @@ const usageCode = `import { Textarea } from "@mdonangelo/bud-ds";
   message="Feedback salvo com sucesso."
   messageType="success"
 />`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<bud-textarea label="Mensagem" placeholder="Digite sua mensagem..." rows="4"></bud-textarea>
+
+<!-- Com erro -->
+<bud-textarea
+  label="Descrição"
+  message="Campo obrigatório"
+  message-type="error"
+></bud-textarea>
+
+<!-- Desabilitado -->
+<bud-textarea label="Observações" disabled></bud-textarea>`;
 
 const states = [
   "Placeholder",
@@ -116,7 +130,10 @@ export function Textareas() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

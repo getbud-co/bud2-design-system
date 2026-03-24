@@ -3,6 +3,7 @@ import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import s from "./Overview.module.css";
 
 const principles = [
@@ -26,7 +27,9 @@ const principles = [
   },
 ];
 
-const installCode = `# 1. Configurar .npmrc
+/* ——— React ——— */
+
+const installReact = `# 1. Configurar .npmrc
 echo "@mdonangelo:registry=https://npm.pkg.github.com" >> .npmrc
 
 # 2. Instalar pacotes
@@ -35,7 +38,7 @@ npm install @mdonangelo/bud-ds @phosphor-icons/react
 # 3. Instalar fonts
 npm install @fontsource/inter @fontsource/plus-jakarta-sans @fontsource/crimson-pro`;
 
-const setupCode = `// main.tsx — entry point da aplicação
+const setupReact = `// main.tsx — entry point da aplicação
 
 // Fonts (obrigatório)
 import "@fontsource/inter/400.css";
@@ -49,12 +52,46 @@ import "@fontsource/crimson-pro/600.css";
 // Estilos do Design System (obrigatório, uma vez)
 import "@mdonangelo/bud-ds/styles";`;
 
-const usageExampleCode = `import { Button, Input, Modal, ModalHeader, ModalBody, ModalFooter } from "@mdonangelo/bud-ds";
+const usageReact = `import { Button, Input, Modal, ModalHeader, ModalBody, ModalFooter } from "@mdonangelo/bud-ds";
 import { Plus } from "@phosphor-icons/react";
 
 <Button variant="primary" leftIcon={Plus}>Criar objetivo</Button>
 
 <Input label="E-mail" placeholder="nome@empresa.com" />`;
+
+/* ——— HTML / Web Components ——— */
+
+const installHtml = `# Instalar pacote vanilla
+npm install @mdonangelo/bud-ds-vanilla
+
+# Ou usar os arquivos diretamente (CDN / estático):
+# bud-ds.css, bud-ds.js (ES module) ou bud-ds.iife.js (script tag)`;
+
+const setupHtml = `<!-- Opção A: ES Module -->
+<link rel="stylesheet" href="bud-ds.css" />
+<script type="module" src="bud-ds.js"><\/script>
+
+<!-- Opção B: Script tag (IIFE) -->
+<link rel="stylesheet" href="bud-ds.css" />
+<script src="bud-ds.iife.js"><\/script>
+
+<!-- Sem build tools — apenas CSS + JS. -->
+<!-- Todos os custom elements são registrados automaticamente. -->`;
+
+const usageHtml = `<!-- Componentes usam custom elements com Shadow DOM -->
+<bud-button variant="primary" icon-left="plus">Criar objetivo</bud-button>
+
+<bud-input label="E-mail" placeholder="nome@empresa.com"></bud-input>
+
+<!-- Eventos cruzam o Shadow DOM -->
+<script>
+  document.querySelector("bud-input")
+    .addEventListener("bud-change", (e) => {
+      console.log(e.detail.value);
+    });
+<\/script>`;
+
+/* ——— Tokens (compartilhado) ——— */
 
 const tokensCode = `/* Os tokens CSS ficam disponíveis via @mdonangelo/bud-ds/styles */
 .card {
@@ -71,7 +108,7 @@ export function Overview() {
     <DocSection
       id="visao-geral"
       title="Bud Design System"
-      description="Sistema de design para a plataforma Bud — gestão de desempenho contínua. Tokens, componentes e padrões que garantem consistência visual e experiência coesa."
+      description="Sistema de design para a plataforma Bud — gestão de desempenho contínua. Tokens, componentes e padrões que garantem consistência visual e experiência coesa. Disponível como biblioteca React e como Web Components para uso em qualquer framework."
       category={getCategoryForPage("visao-geral")}
     >
       <div className={s.hero}>
@@ -97,31 +134,40 @@ export function Overview() {
         <SubSection
           id="instalacao"
           title="Instalação"
-          description={`O pacote está disponível via GitHub Packages como @mdonangelo/bud-ds.`}
+          description="O pacote está disponível como biblioteca React e como Web Components vanilla."
         >
-          <CodeSnippet code={installCode} language="bash" />
+          <FrameworkSwitcher examples={[
+            { label: "React", language: "bash", code: installReact },
+            { label: "HTML", language: "bash", code: installHtml },
+          ]} />
         </SubSection>
 
         <SubSection
           id="setup"
           title="Setup"
-          description="Importe as fonts e os estilos do DS no entry point da aplicação."
+          description="Configure o entry point da aplicação."
         >
-          <CodeSnippet code={setupCode} language="tsx" />
+          <FrameworkSwitcher examples={[
+            { label: "React", language: "tsx", code: setupReact },
+            { label: "HTML", language: "html", code: setupHtml },
+          ]} />
         </SubSection>
 
         <SubSection
           id="uso"
           title="Uso"
-          description="Importe os componentes diretamente do pacote."
+          description="Importe e use os componentes."
         >
-          <CodeSnippet code={usageExampleCode} language="tsx" />
+          <FrameworkSwitcher examples={[
+            { label: "React", language: "tsx", code: usageReact },
+            { label: "HTML", language: "html", code: usageHtml },
+          ]} />
         </SubSection>
 
         <SubSection
           id="design-tokens"
           title="Design Tokens"
-          description={`Todos os tokens ficam disponíveis como CSS custom properties ao importar @mdonangelo/bud-ds/styles. Use var(--token-name) em qualquer CSS Module.`}
+          description={`Todos os tokens ficam disponíveis como CSS custom properties. Na versão React, importe @mdonangelo/bud-ds/styles. Na versão HTML, inclua bud-ds.css. Use var(--token-name) em qualquer CSS.`}
         >
           <CodeSnippet code={tokensCode} language="css" />
         </SubSection>

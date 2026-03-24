@@ -1,7 +1,7 @@
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Avatar, type AvatarSize } from "../../components/Avatar";
 import {
   AvatarLabelGroup,
@@ -86,6 +86,26 @@ import { AvatarGroup } from "@mdonangelo/bud-ds";
   maxVisible={5}
   showAddButton
 />`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<!-- Com imagem -->
+<bud-avatar src="https://..." alt="João Silva" size="md"></bud-avatar>
+
+<!-- Com iniciais -->
+<bud-avatar initials="JS" size="lg"></bud-avatar>
+
+<!-- Placeholder (sem src nem iniciais) -->
+<bud-avatar size="sm"></bud-avatar>
+
+<!-- Online indicator -->
+<bud-avatar initials="AB" size="md" online></bud-avatar>
+
+<!-- Company badge -->
+<bud-avatar src="https://..." company-logo="https://..." size="xl"></bud-avatar>
+
+<!-- Tamanhos: xs, sm, md, lg, xl, 2xl -->
+<bud-avatar initials="AB" size="2xl"></bud-avatar>`;
 
 export function Avatars() {
   return (
@@ -257,7 +277,10 @@ export function Avatars() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

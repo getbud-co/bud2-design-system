@@ -1,7 +1,7 @@
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Checkbox } from "../../components/Checkbox";
 import cbStyles from "../../components/Checkbox.module.css";
 import s from "./Checkboxes.module.css";
@@ -19,6 +19,28 @@ const usageCode = `import { Checkbox } from "@mdonangelo/bud-ds";
 <Checkbox indeterminate label="Selecionar todos" />
 
 <Checkbox defaultChecked disabled label="Opção bloqueada" />`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<bud-checkbox label="Aceito os termos de uso"></bud-checkbox>
+
+<bud-checkbox label="Newsletter" description="Receber atualizações por email" checked></bud-checkbox>
+
+<bud-checkbox label="Selecionar todos" indeterminate></bud-checkbox>
+
+<!-- Tamanho pequeno -->
+<bud-checkbox size="sm" label="Compacto"></bud-checkbox>
+
+<!-- Desabilitado -->
+<bud-checkbox label="Indisponível" disabled></bud-checkbox>
+
+<!-- Eventos -->
+<script>
+  document.querySelector("bud-checkbox")
+    .addEventListener("bud-change", (e) => {
+      console.log(e.detail.checked);
+    });
+<\/script>`;
 
 const states = ["Default", "Hover", "Focused", "Disabled"] as const;
 
@@ -200,7 +222,10 @@ export function Checkboxes() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

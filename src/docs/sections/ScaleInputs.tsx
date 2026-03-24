@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { ScaleInput } from "../../components/ScaleInput";
 import s from "./ScaleInputs.module.css";
 
@@ -39,6 +39,22 @@ const usageCode = `import { ScaleInput } from "@mdonangelo/bud-ds";
 
 {/* Desabilitado */}
 <ScaleInput min={1} max={5} value={3} disabled />`;
+
+const htmlUsageCode = `<!-- Scale Input (0-10) -->
+<bud-scale-input min="0" max="10" value="7" min-label="Discordo" max-label="Concordo"></bud-scale-input>
+
+<!-- Tamanho pequeno -->
+<bud-scale-input min="1" max="5" size="sm"></bud-scale-input>
+
+<!-- Desabilitado -->
+<bud-scale-input min="0" max="10" value="5" disabled></bud-scale-input>
+
+<script>
+  document.querySelector("bud-scale-input")
+    .addEventListener("bud-change", (e) => {
+      console.log(e.detail.value);
+    });
+<\/script>`;
 
 export function ScaleInputs() {
   const [npsValue, setNpsValue] = useState<number | undefined>(undefined);
@@ -205,7 +221,10 @@ export function ScaleInputs() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

@@ -1,0 +1,60 @@
+## Bud Design System — Regras para IA
+
+Você está trabalhando no Bud Design System. Siga TODAS as regras abaixo.
+
+### Stack
+- React 19 + TypeScript strict + CSS Modules (.module.css)
+- Web Components vanilla em packages/vanilla/ (Custom Elements + Shadow DOM)
+- Vite bundler, Recharts para gráficos de dados
+- Conteúdo sempre em português brasileiro (PT-BR)
+
+### Tokens obrigatórios (src/styles/tokens.css)
+- **Cores**: `var(--color-*)` — NUNCA hex, rgb ou hsl direto
+- **Tipografia**: `var(--font-display|heading|body|label)` — NUNCA font-family literal
+- **Font sizes**: `var(--text-*)` — NUNCA px/rem direto
+- **Espaçamento**: `var(--sp-*)` — grid 4px: 3xs(4) 2xs(8) xs(12) sm(16) md(20) lg(24) xl(32) 2xl(40) 3xl(48) 4xl(64)
+- **Border radius**: `var(--radius-*)` — NUNCA px direto
+- **Sombras**: `var(--shadow-*)` — NUNCA box-shadow literal (exceto focus rings)
+
+### Cores semânticas (OBRIGATÓRIO)
+| Papel | Token |
+|-------|-------|
+| Texto primário | `--color-neutral-950` |
+| Texto secundário | `--color-neutral-500` |
+| Texto desabilitado | `--color-neutral-400` |
+| Link / Ação | `--color-orange-500` |
+| Superfície padrão | `--color-white` |
+| Superfície sutil | `--color-caramel-50` |
+| Borda padrão | `--color-caramel-300` |
+| Borda hover | `--color-caramel-500` |
+| Borda foco | `--color-caramel-700` |
+| Focus ring | `--color-caramel-200` (box-shadow 0 0 0 2px) |
+| Primário (CTA) | `--color-orange-500` |
+| Primário hover | `--color-orange-600` |
+| Sucesso | bg green-50, border green-200, icon green-700, title green-900 |
+| Erro | bg red-50, border red-200, icon red-700, title red-900 |
+| Alerta | bg yellow-50, border yellow-200, icon yellow-700, title yellow-900 |
+| Info | bg neutral-50, border neutral-200, icon neutral-600, title neutral-900 |
+
+### Tipografia
+| Token | Fonte | Uso |
+|-------|-------|-----|
+| `--font-display` | Crimson Pro | Hero, marketing |
+| `--font-heading` | Plus Jakarta Sans | Headings (600-700) |
+| `--font-body` | Inter | Corpo de texto (400, 600) |
+| `--font-label` | Inter | Botões, inputs, labels (500) |
+
+**Regra**: Controles (Button, Input, Select) usam `--font-label` 500. NUNCA `--font-body`.
+
+### Ícones
+- **Apenas** `@phosphor-icons/react` (Phosphor Icons 2.1)
+- **Apenas** peso regular (outline). NUNCA bold, fill, light, thin, duotone
+- Tamanhos: 14px, 16px, 20px, 24px, 32px
+- Web Components: `icon-left="nome"` / `icon-right="nome"` (ícones pré-registrados)
+
+### Padrões de componentes
+- Transições: 120ms ease para estados interativos
+- Focus: `outline: 2px solid` + `outline-offset: 2px` ou `box-shadow: 0 0 0 2px` ring
+- Botão com ícone: padding do lado do ícone reduzido em 1 step
+- Inputs: `line-height: normal` (não cortar descendentes)
+- Breakpoints responsivos: 480px e 768px

@@ -4,6 +4,7 @@ import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Badge } from "../../components/Badge";
 import { Avatar } from "../../components/Avatar";
 import { RowActionsPopover } from "../../components/RowActionsPopover";
@@ -78,6 +79,31 @@ function TeamBadges({ teams }: { teams: string[] }) {
 }
 
 /* ——— Usage code ——— */
+
+const htmlUsageCode = `<!-- Table compound -->
+<bud-table variant="divider" elevated bordered>
+  <bud-table-content>
+    <bud-table-head>
+      <bud-table-row>
+        <bud-table-header-cell>Nome</bud-table-header-cell>
+        <bud-table-header-cell>Email</bud-table-header-cell>
+        <bud-table-header-cell align="right">Ações</bud-table-header-cell>
+      </bud-table-row>
+    </bud-table-head>
+    <bud-table-body>
+      <bud-table-row>
+        <bud-table-cell>João Silva</bud-table-cell>
+        <bud-table-cell>joao@example.com</bud-table-cell>
+        <bud-table-cell align="right">
+          <bud-button variant="tertiary" size="sm">Editar</bud-button>
+        </bud-table-cell>
+      </bud-table-row>
+    </bud-table-body>
+  </bud-table-content>
+</bud-table>
+
+<!-- Header cell com sort -->
+<bud-table-header-cell sortable sort-direction="asc">Nome</bud-table-header-cell>`;
 
 const usageCode = `import {
   Table, TableCardHeader, TableContent,
@@ -354,7 +380,10 @@ export function Tables() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
 
       <SubSection id="row-actions" title="RowActionsPopover">

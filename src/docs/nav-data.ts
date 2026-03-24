@@ -38,6 +38,7 @@ export const NAV_GROUPS: NavGroup[] = [
     items: [
       { id: "acessibilidade", label: "Acessibilidade" },
       { id: "contrato-overlays", label: "Contrato de Overlays" },
+      { id: "ia-automacao", label: "IA & Automação" },
     ],
   },
   {

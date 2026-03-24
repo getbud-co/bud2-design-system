@@ -1,0 +1,38 @@
+{
+  "name": "@mdonangelo/bud-ds-vanilla",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Bud Design System — Web Components para uso multi-framework",
+  "main": "./dist/bud-ds.iife.js",
+  "module": "./dist/bud-ds.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/bud-ds.js",
+      "require": "./dist/bud-ds.iife.js"
+    },
+    "./styles": "./dist/bud-ds.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1",
+    "vitest": "^4.0.8",
+    "jsdom": "^27.2.0"
+  }
+}

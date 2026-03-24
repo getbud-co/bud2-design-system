@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { DropdownButton } from "../../components/DropdownButton";
 import type { DropdownItem } from "../../components/DropdownButton";
 import {
@@ -85,6 +85,27 @@ function Example() {
     </DropdownButton>
   );
 }`;
+
+const htmlUsageCode = `<!-- Dropdown Button -->
+<bud-dropdown-button
+  items='[{"id":"edit","label":"Editar"},{"id":"duplicate","label":"Duplicar"},{"id":"delete","label":"Excluir"}]'
+  variant="secondary"
+  size="md"
+>Ações</bud-dropdown-button>
+
+<!-- Com busca -->
+<bud-dropdown-button
+  items='[{"id":"br","label":"Brasil","description":"América do Sul"},{"id":"us","label":"EUA","description":"América do Norte"}]'
+  searchable
+  search-placeholder="Buscar país..."
+>Selecionar país</bud-dropdown-button>
+
+<script>
+  document.querySelector("bud-dropdown-button")
+    .addEventListener("bud-select", (e) => {
+      console.log(e.detail.id, e.detail.label);
+    });
+<\/script>`;
 
 export function DropdownButtons() {
   const [team, setTeam] = useState(teamItems[0]);
@@ -336,7 +357,10 @@ export function DropdownButtons() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

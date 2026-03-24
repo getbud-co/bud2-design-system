@@ -4,6 +4,7 @@ import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Skeleton, SkeletonContainer, SKELETON_HEIGHTS } from "../../components/Skeleton";
 import { Image, FileVideo, UserCircle } from "@phosphor-icons/react";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import s from "./Skeletons.module.css";
 
 /* ——— Código de uso ——— */
@@ -32,6 +33,20 @@ const usageCode = `import {
 
 {/* Preset heights */}
 const heights = SKELETON_HEIGHTS; // { text: 14, heading: 24, button: 40, ... }`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<!-- Sempre envolver em bud-skeleton-container para acessibilidade -->
+<bud-skeleton-container>
+  <bud-skeleton variant="circular" width="40" height="40"></bud-skeleton>
+  <bud-skeleton variant="text" width="200" height="14"></bud-skeleton>
+  <bud-skeleton variant="text" width="160" height="14"></bud-skeleton>
+  <bud-skeleton variant="rounded" width="100%" height="40"></bud-skeleton>
+</bud-skeleton-container>
+
+<!-- Variantes: text, circular, rectangular, rounded -->
+<!-- Desabilitar animação -->
+<bud-skeleton variant="text" width="100" height="14" animation="false"></bud-skeleton>`;
 
 const cardCode = `{/* Skeleton de card */}
 <div style={{ width: 280, padding: 16, border: "1px solid #eee", borderRadius: 8 }}>
@@ -446,7 +461,10 @@ import { UserCircle } from "@phosphor-icons/react";
 
       {/* Como usar */}
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

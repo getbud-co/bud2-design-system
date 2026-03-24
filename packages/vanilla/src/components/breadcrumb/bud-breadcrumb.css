@@ -1,0 +1,61 @@
+/* ——— Base ——— */
+:host {
+  display: block;
+}
+
+.breadcrumb {
+  border-bottom: 1px solid var(--color-caramel-200);
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  padding: var(--sp-xs) 0;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.list::-webkit-scrollbar { display: none; }
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  white-space: nowrap;
+}
+
+/* ——— Item (text) ——— */
+.item {
+  font-family: var(--font-label);
+  font-weight: 400;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-400);
+  text-decoration: none;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: default;
+}
+
+.item-completed {
+  font-weight: 600;
+  color: var(--color-neutral-950);
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  color: var(--color-orange-600);
+}
+
+/* ——— Separator ——— */
+.separator {
+  color: var(--color-neutral-400);
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}

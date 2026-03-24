@@ -1,0 +1,98 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--sp-sm);
+  margin-top: var(--sp-sm);
+}
+
+.card {
+  padding: var(--sp-lg);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-sm);
+}
+
+.card h4 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-950);
+  margin-bottom: var(--sp-2xs);
+}
+
+.card p {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+  line-height: 1.5;
+}
+
+.fileLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3xs);
+  margin-top: var(--sp-2xs);
+  font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace; /* monospace — code display */
+  font-size: var(--text-xs);
+  color: var(--color-orange-600);
+  text-decoration: none;
+}
+
+.fileLink:hover { text-decoration: underline; }
+
+.promptBox {
+  margin-top: var(--sp-sm);
+  padding: var(--sp-sm);
+  background-color: var(--color-caramel-50);
+  border: 1px solid var(--color-caramel-200);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-700);
+  line-height: 1.6;
+}
+
+.promptLabel {
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-3xs);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  margin-top: var(--sp-sm);
+}
+
+.table th {
+  text-align: left;
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+  padding: var(--sp-2xs) var(--sp-xs);
+  border-bottom: 1px solid var(--color-caramel-300);
+}
+
+.table td {
+  padding: var(--sp-2xs) var(--sp-xs);
+  border-bottom: 1px solid var(--color-caramel-200);
+  vertical-align: top;
+}
+
+.table code {
+  font-size: var(--text-xs);
+  background-color: var(--color-caramel-50);
+  padding: 2px 6px; /* structural */
+  border-radius: var(--radius-2xs);
+}
+
+@media (max-width: 768px) {
+  .cards { grid-template-columns: 1fr; }
+}

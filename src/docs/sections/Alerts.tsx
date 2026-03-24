@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
+import { PropsTable } from "../PropsTable";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Alert } from "../../components/Alert";
 import s from "./Alerts.module.css";
 
@@ -20,6 +21,32 @@ const usageCode = `import { Alert } from "@mdonangelo/bud-ds";
 >
   Verifique sua conexão e tente novamente.
 </Alert>`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<bud-alert variant="info" title="Informação">
+  Sua conta foi atualizada.
+</bud-alert>
+
+<bud-alert variant="success" title="Sucesso" dismissible>
+  Dados salvos com sucesso.
+</bud-alert>
+
+<bud-alert variant="warning" title="Atenção" action-label="Ver detalhes">
+  Sua sessão expira em 5 minutos.
+</bud-alert>
+
+<bud-alert variant="error" title="Erro" dismissible>
+  Não foi possível conectar ao servidor.
+</bud-alert>
+
+<!-- Eventos -->
+<script>
+  document.querySelector("bud-alert")
+    .addEventListener("bud-dismiss", () => { /* fechar */ });
+  document.querySelector("bud-alert")
+    .addEventListener("bud-action", () => { /* ação */ });
+<\/script>`;
 
 const variants = ["info", "success", "warning", "error"] as const;
 
@@ -161,8 +188,21 @@ export function Alerts() {
         </div>
       </SubSection>
 
+      <SubSection id="api-alert" title="API">
+        <PropsTable rows={[
+          { prop: "variant", type: '"info" | "success" | "warning" | "error"', default: '"info"', description: "Variante semântica" },
+          { prop: "title", type: "string", description: "Título do alerta (obrigatório)" },
+          { prop: "children", attr: "slot", type: "ReactNode | slot", description: "Descrição do alerta" },
+          { prop: "onDismiss", attr: "dismissible", type: "() => void | boolean", description: "React: callback. HTML: atributo booleano + evento bud-dismiss" },
+          { prop: "action", attr: "action-label", type: "{ label, onClick } | string", description: "React: objeto. HTML: texto do botão + evento bud-action" },
+        ]} />
+      </SubSection>
+
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

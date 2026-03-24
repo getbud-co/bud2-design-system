@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
+import { PropsTable } from "../PropsTable";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
 import { Button } from "../../components/Button";
@@ -10,6 +11,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from "../../components/Mod
 import { AiAssistant, type MissionItem } from "../../components/AiAssistant";
 import { Users, FloppyDisk, ArrowRight, Warning } from "@phosphor-icons/react";
 import { AssistantButton } from "../../components/PageHeader";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import s from "./Modals.module.css";
 
 const usageCode = `import {
@@ -51,6 +53,33 @@ const [open, setOpen] = useState(false);
   <div className={styles.customHeader}>{/* ... */}</div>
   <ModalBody>{/* ... */}</ModalBody>
 </Modal>`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<bud-modal id="meuModal" size="md">
+  <bud-modal-header title="Editar perfil"
+    description="Atualize suas informações">
+  </bud-modal-header>
+  <bud-modal-body>
+    <bud-input label="Nome" placeholder="Seu nome"></bud-input>
+  </bud-modal-body>
+  <bud-modal-footer>
+    <bud-button variant="secondary">Cancelar</bud-button>
+    <bud-button variant="primary">Salvar</bud-button>
+  </bud-modal-footer>
+</bud-modal>
+
+<script>
+  const modal = document.getElementById("meuModal");
+
+  // Abrir
+  modal.setAttribute("open", "");
+
+  // Fechar (via evento bud-close do header X, overlay ou ESC)
+  modal.addEventListener("bud-close", () => {
+    modal.removeAttribute("open");
+  });
+<\/script>`;
 
 const departmentOptions = [
   { value: "eng", label: "Engenharia" },
@@ -577,8 +606,21 @@ export function Modals() {
         </ul>
       </SubSection>
 
+      <SubSection id="api-modal" title="API">
+        <PropsTable rows={[
+          { prop: "open", type: "boolean", default: "false", description: "Controla visibilidade do modal" },
+          { prop: "onClose", attr: "bud-close", type: "() => void | event", description: "React: callback. HTML: evento bud-close" },
+          { prop: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Largura do modal (480/640/800px)" },
+          { prop: "width", type: "string", description: "Largura customizada (sobrescreve size)" },
+          { prop: "aria-label", type: "string", description: "Label de acessibilidade" },
+        ]} />
+      </SubSection>
+
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

@@ -1,0 +1,39 @@
+:host { display: inline-flex; }
+
+.trigger { display: inline-flex; }
+
+.tooltip {
+  position: fixed;
+  z-index: 9200;
+  max-width: 240px;
+  padding: var(--sp-2xs) var(--sp-xs);
+  background-color: var(--color-neutral-900);
+  color: var(--color-neutral-0);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-xs);
+  line-height: 1.3;
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-sm);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.tooltip.visible { opacity: 1; }
+
+.arrow {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-neutral-900);
+  transform: rotate(45deg);
+}
+
+@media (max-width: 480px) {
+  .tooltip { max-width: calc(100vw - 32px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip { transition: none; }
+}

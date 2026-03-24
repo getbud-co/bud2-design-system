@@ -1,0 +1,78 @@
+/* ——— Wrapper ——— */
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: flex-start;
+  cursor: pointer;
+  user-select: none;
+}
+
+.has-label { gap: var(--sp-2xs); }
+.wrapper.disabled { cursor: not-allowed; }
+
+/* ——— Hidden input ——— */
+.input {
+  position: absolute;
+  width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0,0,0,0); border: 0;
+}
+
+/* ——— Track ——— */
+.track {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  width: 36px;
+  height: 20px;
+  padding: 2px; /* structural */
+  background-color: var(--color-caramel-100);
+  border-radius: var(--radius-full);
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+}
+
+/* ——— Thumb ——— */
+.thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+  transition: transform 120ms ease;
+}
+
+/* ——— Hover ——— */
+.wrapper:hover:not(.disabled) .track { background-color: var(--color-caramel-200); }
+
+/* ——— Focus ——— */
+.input:focus-visible ~ .track { box-shadow: 0 0 0 2px var(--color-caramel-200); }
+
+/* ——— Checked ——— */
+.input:checked ~ .track { background-color: var(--color-orange-500); }
+.input:checked ~ .track .thumb { transform: translateX(16px); }
+
+.wrapper:hover:not(.disabled) .input:checked ~ .track { background-color: var(--color-orange-600); }
+
+.input:checked:focus-visible ~ .track {
+  background-color: var(--color-orange-600);
+  box-shadow: 0 0 0 2px var(--color-orange-200);
+}
+
+/* ——— Disabled ——— */
+.input:disabled ~ .track { background-color: var(--color-caramel-100); }
+.input:disabled ~ .track .thumb { background-color: var(--color-neutral-100); box-shadow: none; }
+
+/* ——— Label text ——— */
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3xs);
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-950);
+}
+
+.title { min-height: 20px; display: flex; align-items: center; line-height: 1.05; }
+.description { line-height: 1.25; color: var(--color-neutral-500); }
+.disabled .text { color: var(--color-neutral-400); }
+.disabled .description { color: var(--color-neutral-400); }

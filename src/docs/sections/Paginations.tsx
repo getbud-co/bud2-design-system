@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { Pagination } from "../../components/Pagination";
 import s from "./Paginations.module.css";
 
@@ -22,6 +22,18 @@ const [page, setPage] = useState(1);
 
 {/* Muitas páginas (com ellipsis) */}
 <Pagination currentPage={5} totalPages={20} onPageChange={setPage} />`;
+
+const htmlUsageCode = `<!-- Pagination -->
+<bud-pagination current-page="3" total-pages="10"></bud-pagination>
+
+<!-- Eventos -->
+<script>
+  document.querySelector("bud-pagination")
+    .addEventListener("bud-change", (e) => {
+      const page = e.detail.page;
+      e.target.setAttribute("current-page", page);
+    });
+<\/script>`;
 
 function BasicDemo() {
   const [page, setPage] = useState(1);
@@ -104,7 +116,10 @@ export function Paginations() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

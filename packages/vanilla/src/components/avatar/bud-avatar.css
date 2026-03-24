@@ -1,0 +1,96 @@
+/* ——— Base ——— */
+.avatar {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-caramel-200);
+  background-color: var(--color-caramel-50);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* ——— Sizes ——— */
+.xs  { width: 24px; height: 24px; }
+.sm  { width: 32px; height: 32px; }
+.md  { width: 40px; height: 40px; }
+.lg  { width: 48px; height: 48px; }
+.xl  { width: 56px; height: 56px; }
+.xxl { width: 64px; height: 64px; }
+
+/* ——— Image ——— */
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-full);
+}
+
+/* ——— Initials ——— */
+.initials {
+  font-family: var(--font-label);
+  font-weight: 500;
+  color: var(--color-neutral-700);
+  text-transform: uppercase;
+  line-height: 1;
+  user-select: none;
+}
+
+.xs .initials  { font-size: 10px; }
+.sm .initials  { font-size: var(--text-xs); }
+.md .initials  { font-size: var(--text-sm); }
+.lg .initials  { font-size: var(--text-md); }
+.xl .initials  { font-size: var(--text-lg); }
+.xxl .initials { font-size: var(--text-xl); }
+
+/* ——— Placeholder icon ——— */
+.placeholder-icon {
+  color: var(--color-neutral-400);
+}
+
+.xs .placeholder-icon  { width: 14px; height: 14px; }
+.sm .placeholder-icon  { width: 16px; height: 16px; }
+.md .placeholder-icon  { width: 20px; height: 20px; }
+.lg .placeholder-icon  { width: 24px; height: 24px; }
+.xl .placeholder-icon  { width: 28px; height: 28px; }
+.xxl .placeholder-icon { width: 32px; height: 32px; }
+
+/* ——— Online indicator ——— */
+.online {
+  position: absolute;
+  border-radius: var(--radius-full);
+  background-color: var(--color-green-500);
+  border: 2px solid var(--color-white); /* structural */
+}
+
+.xs .online  { width: 8px;  height: 8px;  bottom: -1px; right: -1px; }
+.sm .online  { width: 8px;  height: 8px;  bottom: 0;    right: 0; }
+.md .online  { width: 10px; height: 10px; bottom: 0;    right: 0; }
+.lg .online  { width: 12px; height: 12px; bottom: 0;    right: 0; }
+.xl .online  { width: 14px; height: 14px; bottom: 0;    right: 0; }
+.xxl .online { width: 16px; height: 16px; bottom: 0;    right: 0; }
+
+/* ——— Company badge ——— */
+.company {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--color-white); /* structural */
+  background-color: var(--color-white);
+  overflow: hidden;
+}
+
+.xs .company,
+.sm .company  { width: 16px; height: 16px; }
+.md .company  { width: 18px; height: 18px; }
+.lg .company  { width: 20px; height: 20px; }
+.xl .company  { width: 22px; height: 22px; }
+.xxl .company { width: 24px; height: 24px; }
+
+.company img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

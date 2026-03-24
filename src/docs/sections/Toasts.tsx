@@ -1,9 +1,9 @@
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
 import { toast } from "../../components/Toast";
 import { Button } from "../../components/Button";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import s from "./Toasts.module.css";
 
 const usageCode = `import { toast, Toaster } from "@mdonangelo/bud-ds";
@@ -34,6 +34,36 @@ toast.warning("Alerta!", { duration: 8000 });
 {/* Dismiss programático */}
 const id = toast("Processando...", { duration: Infinity });
 toast.dismiss(id);`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<!-- Adicione o toaster uma vez na página -->
+<bud-toaster></bud-toaster>
+
+<script>
+  // API global — disponível após importar bud-ds.js
+  toast("Mensagem neutra");
+  toast.success("Dados salvos!");
+  toast.error("Erro ao conectar");
+  toast.warning("Sessão expira em 5 min");
+  toast.black("Tema escuro");
+
+  // Com descrição e ação
+  toast.error("Falha no upload", {
+    description: "Arquivo excede o tamanho máximo.",
+    action: {
+      label: "Tentar novamente",
+      onClick: () => retry(),
+    },
+  });
+
+  // Duração personalizada (ms) ou Infinity
+  toast("Persistente", { duration: Infinity });
+
+  // Dispensar
+  toast.dismiss();       // todos
+  toast.dismiss(id);     // específico
+<\/script>`;
 
 export function Toasts() {
   return (
@@ -199,7 +229,10 @@ export function Toasts() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

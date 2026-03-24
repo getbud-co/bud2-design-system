@@ -4,6 +4,8 @@ import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
+import { PropsTable } from "../PropsTable";
 import { Button } from "../../components/Button";
 import { AssistantButton } from "../../components/PageHeader";
 import btnStyles from "../../components/Button.module.css";
@@ -35,6 +37,30 @@ import { Plus, ArrowRight } from "@phosphor-icons/react";
 {/* Icon only — sempre inclua aria-label */}
 <Button variant="tertiary" size="sm" leftIcon={Trash} aria-label="Excluir" />
 <Button variant="secondary" size="md" leftIcon={PencilSimple} aria-label="Editar" />`;
+
+const htmlUsageCode = `<!-- Incluir bud-ds.css + bud-ds.js na página -->
+
+<bud-button variant="primary" size="lg" icon-left="plus">
+  Criar objetivo
+</bud-button>
+
+<bud-button variant="secondary" size="md" icon-right="arrow-right">
+  Ver detalhes
+</bud-button>
+
+<bud-button variant="tertiary" size="sm">Cancelar</bud-button>
+
+<bud-button variant="primary" size="md" loading>
+  Salvando...
+</bud-button>
+
+<bud-button variant="primary" size="md" disabled>
+  Indisponível
+</bud-button>
+
+<!-- Icon only — sempre inclua aria-label -->
+<bud-button variant="tertiary" size="sm" icon-left="x"
+  aria-label="Excluir"></bud-button>`;
 
 const assistantUsageCode = `import { AssistantButton } from "@mdonangelo/bud-ds";
 
@@ -239,8 +265,22 @@ export function Buttons() {
         <AssistantButtonDemo />
       </SubSection>
 
+      <SubSection id="api" title="API">
+        <PropsTable rows={[
+          { prop: "variant", type: '"primary" | "secondary" | "tertiary" | "danger"', default: '"primary"', description: "Estilo visual do botão" },
+          { prop: "size", type: '"sm" | "md" | "lg"', default: '"md"', description: "Tamanho do botão" },
+          { prop: "leftIcon", attr: "icon-left", type: "ComponentType | string", description: "Ícone à esquerda. React: componente Phosphor. HTML: nome registrado." },
+          { prop: "rightIcon", attr: "icon-right", type: "ComponentType | string", description: "Ícone à direita" },
+          { prop: "loading", type: "boolean", default: "false", description: "Mostra spinner e desabilita interação" },
+          { prop: "disabled", type: "boolean", default: "false", description: "Desabilita o botão" },
+        ]} />
+      </SubSection>
+
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
         <div style={{ marginTop: "var(--sp-sm)" }}>
           <CodeSnippet code={assistantUsageCode} language="tsx" />
         </div>

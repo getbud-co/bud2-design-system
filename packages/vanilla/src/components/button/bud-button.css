@@ -1,0 +1,153 @@
+/* ——— Base ——— */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-label);
+  font-weight: 500;
+  line-height: 1.05;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--color-orange-400);
+  outline-offset: 2px;
+}
+
+/* ——— Sizes ——— */
+.sm {
+  height: 24px;
+  padding: 0 var(--sp-2xs);
+  gap: var(--sp-3xs);
+  font-size: var(--text-xs);
+}
+
+.md {
+  height: 32px;
+  padding: 0 var(--sp-xs);
+  gap: var(--sp-3xs);
+  font-size: var(--text-sm);
+}
+
+.lg {
+  height: 40px;
+  padding: 0 var(--sp-sm);
+  gap: var(--sp-2xs);
+  font-size: var(--text-md);
+}
+
+/* ——— Icon-only (square) ——— */
+.icon-only.sm { width: 24px; padding: 0; }
+.icon-only.md { width: 32px; padding: 0; }
+.icon-only.lg { width: 40px; padding: 0; }
+
+/* ——— Optical adjustment: icon side gets less padding ——— */
+.sm.has-left-icon  { padding-left: var(--sp-3xs); }
+.sm.has-right-icon { padding-right: var(--sp-3xs); }
+.md.has-left-icon  { padding-left: var(--sp-2xs); }
+.md.has-right-icon { padding-right: var(--sp-2xs); }
+.lg.has-left-icon  { padding-left: var(--sp-xs); }
+.lg.has-right-icon { padding-right: var(--sp-xs); }
+
+/* ——— Primary ——— */
+.primary {
+  background-color: var(--color-orange-500);
+  border-color: var(--color-orange-600);
+  color: var(--color-white);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--color-orange-600);
+  border-color: var(--color-orange-700);
+}
+
+.primary:active:not(:disabled) {
+  background-color: var(--color-orange-600);
+  border-color: var(--color-orange-700);
+}
+
+/* ——— Secondary ——— */
+.secondary {
+  background-color: var(--color-caramel-100);
+  border-color: var(--color-caramel-300);
+  color: var(--color-neutral-950);
+}
+
+.secondary:hover:not(:disabled) {
+  background-color: var(--color-caramel-200);
+  border-color: var(--color-caramel-300);
+}
+
+.secondary:active:not(:disabled) {
+  background-color: var(--color-caramel-200);
+  border-color: var(--color-caramel-300);
+}
+
+/* ——— Tertiary ——— */
+.tertiary {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--color-neutral-950);
+}
+
+.tertiary:hover:not(:disabled) {
+  background-color: var(--color-caramel-100);
+}
+
+.tertiary:active:not(:disabled) {
+  background-color: var(--color-caramel-100);
+}
+
+/* ——— Danger ——— */
+.danger {
+  background-color: var(--color-red-600);
+  border-color: var(--color-red-700);
+  color: var(--color-white);
+}
+
+.danger:hover:not(:disabled) {
+  background-color: var(--color-red-700);
+  border-color: var(--color-red-800);
+}
+
+.danger:active:not(:disabled) {
+  background-color: var(--color-red-700);
+  border-color: var(--color-red-800);
+}
+
+.danger:focus-visible {
+  outline-color: var(--color-red-400);
+}
+
+/* ——— Disabled (all variants) ——— */
+.button:disabled {
+  background-color: var(--color-neutral-100);
+  border-color: var(--color-neutral-200);
+  color: var(--color-neutral-400);
+  cursor: not-allowed;
+}
+
+.tertiary:disabled {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--color-neutral-400);
+}
+
+/* ——— Loading ——— */
+.loading {
+  pointer-events: none;
+}
+
+.spinner {
+  animation: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

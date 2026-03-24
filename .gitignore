@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+packages/vanilla/dist/
+packages/vanilla/tsconfig.tsbuildinfo
+packages/vanilla/node_modules/
