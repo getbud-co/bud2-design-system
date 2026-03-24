@@ -33,8 +33,9 @@
     "test:run": "vitest run",
     "build:lib": "npm run typecheck && vite build --config vite.config.lib.ts",
     "build:docs": "tsc -b && vite build",
-    "verify": "npm run lint && npm run typecheck && npm run test:run && npm run build:docs && npm run build:lib",
-    "prepublishOnly": "npm run build:lib",
+    "sync-version": "node -e \"const p=require('./package.json');const f=require('fs');const j=JSON.parse(f.readFileSync('public/bud-ds.json','utf8'));j.version=p.version;f.writeFileSync('public/bud-ds.json',JSON.stringify(j,null,2)+'\\n')\"",
+    "verify": "npm run sync-version && npm run lint && npm run typecheck && npm run test:run && npm run build:docs && npm run build:lib",
+    "prepublishOnly": "npm run sync-version && npm run build:lib",
     "lint": "eslint .",
     "preview": "vite preview"
   },

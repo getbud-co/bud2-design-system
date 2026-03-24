@@ -1,7 +1,7 @@
 {
   "$schema": "https://bud-ds.dev/registry-schema.json",
   "name": "Bud Design System",
-  "version": "0.1.24",
+  "version": "0.2.0",
   "description": "Sistema de design para a plataforma Bud — gestão de desempenho contínua",
   "packages": {
     "react": "@mdonangelo/bud-ds",
@@ -9,13 +9,90 @@
   },
   "tokens": {
     "colors": {
-      "neutral": { "0": "#ffffff", "50": "#fafafa", "100": "#f5f5f5", "200": "#e5e5e5", "300": "#d4d4d4", "400": "#a1a1a1", "500": "#737373", "600": "#525252", "700": "#404040", "800": "#262626", "900": "#171717", "950": "#0a0a0a" },
-      "caramel": { "50": "#faf8f2", "100": "#f9f7f0", "200": "#f1edde", "300": "#eae3cd", "400": "#e1d9bb", "500": "#d9ceaa", "600": "#d0c49a", "700": "#c7b98a", "800": "#bdae7a", "900": "#a99656", "950": "#75683d" },
-      "orange": { "50": "#ffefeb", "100": "#ffc5b4", "200": "#ffac92", "300": "#ff936f", "400": "#ff7b4c", "500": "#fd5f28", "600": "#fa4405", "700": "#d23a06", "800": "#ab3007", "900": "#852607", "950": "#601c06" },
-      "wine": { "50": "#ffebf3", "100": "#fdc9de", "200": "#fa94bc", "300": "#f55694", "400": "#c60c54", "500": "#a60c46", "600": "#860b38" },
-      "green": { "50": "#f7fee7", "100": "#ecfcca", "200": "#d8f999", "400": "#9ae600", "500": "#7ccf00", "600": "#5ea500", "700": "#497d00", "800": "#3c6300", "900": "#35530e" },
-      "red": { "50": "#fef2f2", "100": "#ffe2e2", "200": "#ffc9c9", "300": "#ffa2a2", "400": "#ff6467", "500": "#fb2c36", "600": "#e7000b", "700": "#c10007", "800": "#9f0712", "900": "#82181a" },
-      "yellow": { "50": "#fffbeb", "100": "#fef9c2", "200": "#fff085", "300": "#ffdf20", "400": "#ffb900", "500": "#fe9a00", "600": "#e17100", "700": "#bb4d00", "800": "#973c00", "900": "#7b3306" }
+      "neutral": {
+        "0": "#ffffff",
+        "50": "#fafafa",
+        "100": "#f5f5f5",
+        "200": "#e5e5e5",
+        "300": "#d4d4d4",
+        "400": "#a1a1a1",
+        "500": "#737373",
+        "600": "#525252",
+        "700": "#404040",
+        "800": "#262626",
+        "900": "#171717",
+        "950": "#0a0a0a"
+      },
+      "caramel": {
+        "50": "#faf8f2",
+        "100": "#f9f7f0",
+        "200": "#f1edde",
+        "300": "#eae3cd",
+        "400": "#e1d9bb",
+        "500": "#d9ceaa",
+        "600": "#d0c49a",
+        "700": "#c7b98a",
+        "800": "#bdae7a",
+        "900": "#a99656",
+        "950": "#75683d"
+      },
+      "orange": {
+        "50": "#ffefeb",
+        "100": "#ffc5b4",
+        "200": "#ffac92",
+        "300": "#ff936f",
+        "400": "#ff7b4c",
+        "500": "#fd5f28",
+        "600": "#fa4405",
+        "700": "#d23a06",
+        "800": "#ab3007",
+        "900": "#852607",
+        "950": "#601c06"
+      },
+      "wine": {
+        "50": "#ffebf3",
+        "100": "#fdc9de",
+        "200": "#fa94bc",
+        "300": "#f55694",
+        "400": "#c60c54",
+        "500": "#a60c46",
+        "600": "#860b38"
+      },
+      "green": {
+        "50": "#f7fee7",
+        "100": "#ecfcca",
+        "200": "#d8f999",
+        "400": "#9ae600",
+        "500": "#7ccf00",
+        "600": "#5ea500",
+        "700": "#497d00",
+        "800": "#3c6300",
+        "900": "#35530e"
+      },
+      "red": {
+        "50": "#fef2f2",
+        "100": "#ffe2e2",
+        "200": "#ffc9c9",
+        "300": "#ffa2a2",
+        "400": "#ff6467",
+        "500": "#fb2c36",
+        "600": "#e7000b",
+        "700": "#c10007",
+        "800": "#9f0712",
+        "900": "#82181a"
+      },
+      "yellow": {
+        "50": "#fffbeb",
+        "100": "#fef9c2",
+        "200": "#fff085",
+        "300": "#ffdf20",
+        "400": "#ffb900",
+        "500": "#fe9a00",
+        "600": "#e17100",
+        "700": "#bb4d00",
+        "800": "#973c00",
+        "900": "#7b3306"
+      }
     },
     "fonts": {
       "display": "Crimson Pro, serif",
@@ -23,20 +100,68 @@
       "body": "Inter, sans-serif",
       "label": "Inter, sans-serif"
     },
-    "spacing": { "3xs": "4px", "2xs": "8px", "xs": "12px", "sm": "16px", "md": "20px", "lg": "24px", "xl": "32px", "2xl": "40px", "3xl": "48px", "4xl": "64px" },
-    "radius": { "2xs": "4px", "xs": "6px", "sm": "8px", "md": "12px", "lg": "16px", "full": "9999px" }
+    "spacing": {
+      "3xs": "4px",
+      "2xs": "8px",
+      "xs": "12px",
+      "sm": "16px",
+      "md": "20px",
+      "lg": "24px",
+      "xl": "32px",
+      "2xl": "40px",
+      "3xl": "48px",
+      "4xl": "64px"
+    },
+    "radius": {
+      "2xs": "4px",
+      "xs": "6px",
+      "sm": "8px",
+      "md": "12px",
+      "lg": "16px",
+      "full": "9999px"
+    }
   },
   "components": [
     {
-      "name": "Button", "tag": "bud-button", "category": "actions",
+      "name": "Button",
+      "tag": "bud-button",
+      "category": "actions",
       "description": "Botão com 4 variantes visuais, 3 tamanhos, suporte a ícones e estado loading",
       "props": [
-        { "name": "variant", "attr": "variant", "type": "\"primary\" | \"secondary\" | \"tertiary\" | \"danger\"", "default": "\"primary\"" },
-        { "name": "size", "attr": "size", "type": "\"sm\" | \"md\" | \"lg\"", "default": "\"md\"" },
-        { "name": "leftIcon", "attr": "icon-left", "type": "ComponentType | string" },
-        { "name": "rightIcon", "attr": "icon-right", "type": "ComponentType | string" },
-        { "name": "loading", "attr": "loading", "type": "boolean", "default": "false" },
-        { "name": "disabled", "attr": "disabled", "type": "boolean", "default": "false" }
+        {
+          "name": "variant",
+          "attr": "variant",
+          "type": "\"primary\" | \"secondary\" | \"tertiary\" | \"danger\"",
+          "default": "\"primary\""
+        },
+        {
+          "name": "size",
+          "attr": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "default": "\"md\""
+        },
+        {
+          "name": "leftIcon",
+          "attr": "icon-left",
+          "type": "ComponentType | string"
+        },
+        {
+          "name": "rightIcon",
+          "attr": "icon-right",
+          "type": "ComponentType | string"
+        },
+        {
+          "name": "loading",
+          "attr": "loading",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "disabled",
+          "attr": "disabled",
+          "type": "boolean",
+          "default": "false"
+        }
       ],
       "examples": {
         "react": "<Button variant=\"primary\" leftIcon={Plus}>Criar</Button>",
@@ -44,17 +169,53 @@
       }
     },
     {
-      "name": "Input", "tag": "bud-input", "category": "forms",
+      "name": "Input",
+      "tag": "bud-input",
+      "category": "forms",
       "description": "Campo de texto com label, ícones laterais e mensagem de validação",
       "props": [
-        { "name": "size", "attr": "size", "type": "\"sm\" | \"md\" | \"lg\"", "default": "\"md\"" },
-        { "name": "label", "attr": "label", "type": "string" },
-        { "name": "leftIcon", "attr": "icon-left", "type": "ComponentType | string" },
-        { "name": "rightIcon", "attr": "icon-right", "type": "ComponentType | string" },
-        { "name": "message", "attr": "message", "type": "string" },
-        { "name": "messageType", "attr": "message-type", "type": "\"error\" | \"attention\" | \"success\"" },
-        { "name": "placeholder", "attr": "placeholder", "type": "string" },
-        { "name": "disabled", "attr": "disabled", "type": "boolean", "default": "false" }
+        {
+          "name": "size",
+          "attr": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "default": "\"md\""
+        },
+        {
+          "name": "label",
+          "attr": "label",
+          "type": "string"
+        },
+        {
+          "name": "leftIcon",
+          "attr": "icon-left",
+          "type": "ComponentType | string"
+        },
+        {
+          "name": "rightIcon",
+          "attr": "icon-right",
+          "type": "ComponentType | string"
+        },
+        {
+          "name": "message",
+          "attr": "message",
+          "type": "string"
+        },
+        {
+          "name": "messageType",
+          "attr": "message-type",
+          "type": "\"error\" | \"attention\" | \"success\""
+        },
+        {
+          "name": "placeholder",
+          "attr": "placeholder",
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "attr": "disabled",
+          "type": "boolean",
+          "default": "false"
+        }
       ],
       "examples": {
         "react": "<Input label=\"Email\" placeholder=\"seu@email.com\" />",
@@ -62,13 +223,33 @@
       }
     },
     {
-      "name": "Badge", "tag": "bud-badge", "category": "display",
+      "name": "Badge",
+      "tag": "bud-badge",
+      "category": "display",
       "description": "Etiqueta com 7 cores semânticas, 3 tamanhos, suporte a ícones",
       "props": [
-        { "name": "color", "attr": "color", "type": "\"neutral\" | \"orange\" | \"wine\" | \"caramel\" | \"error\" | \"warning\" | \"success\"", "default": "\"neutral\"" },
-        { "name": "size", "attr": "size", "type": "\"sm\" | \"md\" | \"lg\"", "default": "\"sm\"" },
-        { "name": "leftIcon", "attr": "icon-left", "type": "ComponentType | string" },
-        { "name": "rightIcon", "attr": "icon-right", "type": "ComponentType | string" }
+        {
+          "name": "color",
+          "attr": "color",
+          "type": "\"neutral\" | \"orange\" | \"wine\" | \"caramel\" | \"error\" | \"warning\" | \"success\"",
+          "default": "\"neutral\""
+        },
+        {
+          "name": "size",
+          "attr": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "default": "\"sm\""
+        },
+        {
+          "name": "leftIcon",
+          "attr": "icon-left",
+          "type": "ComponentType | string"
+        },
+        {
+          "name": "rightIcon",
+          "attr": "icon-right",
+          "type": "ComponentType | string"
+        }
       ],
       "examples": {
         "react": "<Badge color=\"success\" leftIcon={Check}>Aprovado</Badge>",
@@ -76,155 +257,579 @@
       }
     },
     {
-      "name": "Alert", "tag": "bud-alert", "category": "feedback",
+      "name": "Alert",
+      "tag": "bud-alert",
+      "category": "feedback",
       "description": "Alerta com 4 variantes semânticas, botão dismiss e ação",
       "props": [
-        { "name": "variant", "attr": "variant", "type": "\"info\" | \"success\" | \"warning\" | \"error\"", "default": "\"info\"" },
-        { "name": "title", "attr": "title", "type": "string", "required": true },
-        { "name": "onDismiss", "attr": "dismissible", "type": "() => void | boolean" },
-        { "name": "action", "attr": "action-label", "type": "{ label, onClick } | string" }
+        {
+          "name": "variant",
+          "attr": "variant",
+          "type": "\"info\" | \"success\" | \"warning\" | \"error\"",
+          "default": "\"info\""
+        },
+        {
+          "name": "title",
+          "attr": "title",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "onDismiss",
+          "attr": "dismissible",
+          "type": "() => void | boolean"
+        },
+        {
+          "name": "action",
+          "attr": "action-label",
+          "type": "{ label, onClick } | string"
+        }
       ],
-      "events": ["bud-dismiss", "bud-action"],
+      "events": [
+        "bud-dismiss",
+        "bud-action"
+      ],
       "examples": {
         "react": "<Alert variant=\"success\" title=\"Salvo\">Dados gravados.</Alert>",
         "html": "<bud-alert variant=\"success\" title=\"Salvo\">Dados gravados.</bud-alert>"
       }
     },
     {
-      "name": "Modal", "tag": "bud-modal", "category": "overlay",
+      "name": "Modal",
+      "tag": "bud-modal",
+      "category": "overlay",
       "description": "Modal com focus trap, ESC, scroll lock. Compound: Header, Body, Footer",
       "props": [
-        { "name": "open", "attr": "open", "type": "boolean", "default": "false" },
-        { "name": "onClose", "attr": "bud-close (event)", "type": "() => void" },
-        { "name": "size", "attr": "size", "type": "\"sm\" | \"md\" | \"lg\"", "default": "\"md\"" }
+        {
+          "name": "open",
+          "attr": "open",
+          "type": "boolean",
+          "default": "false"
+        },
+        {
+          "name": "onClose",
+          "attr": "bud-close (event)",
+          "type": "() => void"
+        },
+        {
+          "name": "size",
+          "attr": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "default": "\"md\""
+        }
       ],
-      "subComponents": ["ModalHeader (bud-modal-header)", "ModalBody (bud-modal-body)", "ModalFooter (bud-modal-footer)"],
-      "events": ["bud-close"],
+      "subComponents": [
+        "ModalHeader (bud-modal-header)",
+        "ModalBody (bud-modal-body)",
+        "ModalFooter (bud-modal-footer)"
+      ],
+      "events": [
+        "bud-close"
+      ],
       "examples": {
         "react": "<Modal open={open} onClose={() => setOpen(false)} size=\"md\">\n  <ModalHeader title=\"Editar\" onClose={() => setOpen(false)} />\n  <ModalBody>Conteúdo</ModalBody>\n  <ModalFooter><Button>Salvar</Button></ModalFooter>\n</Modal>",
         "html": "<bud-modal open size=\"md\">\n  <bud-modal-header title=\"Editar\"></bud-modal-header>\n  <bud-modal-body>Conteúdo</bud-modal-body>\n  <bud-modal-footer><bud-button>Salvar</bud-button></bud-modal-footer>\n</bud-modal>"
       }
     },
     {
-      "name": "Card", "tag": "bud-card", "category": "layout",
+      "name": "Card",
+      "tag": "bud-card",
+      "category": "layout",
       "description": "Container com header, body, footer e divider. Padding e shadow configuráveis",
       "props": [
-        { "name": "padding", "attr": "padding", "type": "\"none\" | \"sm\" | \"md\" | \"lg\"", "default": "\"md\"" },
-        { "name": "shadow", "attr": "shadow", "type": "boolean", "default": "false" }
+        {
+          "name": "padding",
+          "attr": "padding",
+          "type": "\"none\" | \"sm\" | \"md\" | \"lg\"",
+          "default": "\"md\""
+        },
+        {
+          "name": "shadow",
+          "attr": "shadow",
+          "type": "boolean",
+          "default": "false"
+        }
       ],
-      "subComponents": ["CardHeader (bud-card-header)", "CardBody (bud-card-body)", "CardFooter (bud-card-footer)", "CardDivider (bud-card-divider)"]
+      "subComponents": [
+        "CardHeader (bud-card-header)",
+        "CardBody (bud-card-body)",
+        "CardFooter (bud-card-footer)",
+        "CardDivider (bud-card-divider)"
+      ]
     },
     {
-      "name": "Select", "tag": "bud-select", "category": "forms",
+      "name": "Select",
+      "tag": "bud-select",
+      "category": "forms",
       "description": "Dropdown de seleção com busca, navegação por teclado, validação",
       "props": [
-        { "name": "options", "attr": "options (JSON)", "type": "SelectOption[]", "required": true },
-        { "name": "value", "attr": "value", "type": "string" },
-        { "name": "searchable", "attr": "searchable", "type": "boolean" },
-        { "name": "size", "attr": "size", "type": "\"sm\" | \"md\" | \"lg\"", "default": "\"md\"" },
-        { "name": "label", "attr": "label", "type": "string" },
-        { "name": "placeholder", "attr": "placeholder", "type": "string", "default": "\"Selecione...\"" }
+        {
+          "name": "options",
+          "attr": "options (JSON)",
+          "type": "SelectOption[]",
+          "required": true
+        },
+        {
+          "name": "value",
+          "attr": "value",
+          "type": "string"
+        },
+        {
+          "name": "searchable",
+          "attr": "searchable",
+          "type": "boolean"
+        },
+        {
+          "name": "size",
+          "attr": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "default": "\"md\""
+        },
+        {
+          "name": "label",
+          "attr": "label",
+          "type": "string"
+        },
+        {
+          "name": "placeholder",
+          "attr": "placeholder",
+          "type": "string",
+          "default": "\"Selecione...\""
+        }
       ],
-      "events": ["bud-change"]
+      "events": [
+        "bud-change"
+      ]
     },
     {
-      "name": "Checkbox", "tag": "bud-checkbox", "category": "forms",
+      "name": "Checkbox",
+      "tag": "bud-checkbox",
+      "category": "forms",
       "description": "Checkbox com 2 tamanhos, indeterminate, label + descrição",
       "props": [
-        { "name": "size", "attr": "size", "type": "\"sm\" | \"md\"", "default": "\"md\"" },
-        { "name": "label", "attr": "label", "type": "string" },
-        { "name": "description", "attr": "description", "type": "string" },
-        { "name": "indeterminate", "attr": "indeterminate", "type": "boolean" },
-        { "name": "checked", "attr": "checked", "type": "boolean" },
-        { "name": "disabled", "attr": "disabled", "type": "boolean" }
+        {
+          "name": "size",
+          "attr": "size",
+          "type": "\"sm\" | \"md\"",
+          "default": "\"md\""
+        },
+        {
+          "name": "label",
+          "attr": "label",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "attr": "description",
+          "type": "string"
+        },
+        {
+          "name": "indeterminate",
+          "attr": "indeterminate",
+          "type": "boolean"
+        },
+        {
+          "name": "checked",
+          "attr": "checked",
+          "type": "boolean"
+        },
+        {
+          "name": "disabled",
+          "attr": "disabled",
+          "type": "boolean"
+        }
       ],
-      "events": ["bud-change"]
-    },
-    {
-      "name": "Radio", "tag": "bud-radio", "category": "forms",
-      "props": [
-        { "name": "size", "attr": "size", "type": "\"sm\" | \"md\"", "default": "\"md\"" },
-        { "name": "label", "attr": "label", "type": "string" },
-        { "name": "name", "attr": "name", "type": "string" },
-        { "name": "value", "attr": "value", "type": "string" }
-      ],
-      "events": ["bud-change"]
-    },
-    {
-      "name": "Toggle", "tag": "bud-toggle", "category": "forms",
-      "props": [
-        { "name": "label", "attr": "label", "type": "string" },
-        { "name": "description", "attr": "description", "type": "string" },
-        { "name": "checked", "attr": "checked", "type": "boolean" }
-      ],
-      "events": ["bud-change"]
-    },
-    {
-      "name": "Textarea", "tag": "bud-textarea", "category": "forms",
-      "props": [
-        { "name": "label", "attr": "label", "type": "string" },
-        { "name": "rows", "attr": "rows", "type": "number", "default": "4" },
-        { "name": "message", "attr": "message", "type": "string" },
-        { "name": "messageType", "attr": "message-type", "type": "\"error\" | \"attention\" | \"success\"" }
+      "events": [
+        "bud-change"
       ]
     },
     {
-      "name": "Avatar", "tag": "bud-avatar", "category": "display",
+      "name": "Radio",
+      "tag": "bud-radio",
+      "category": "forms",
       "props": [
-        { "name": "size", "attr": "size", "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\"", "default": "\"md\"" },
-        { "name": "src", "attr": "src", "type": "string" },
-        { "name": "initials", "attr": "initials", "type": "string" },
-        { "name": "online", "attr": "online", "type": "boolean" },
-        { "name": "companyLogo", "attr": "company-logo", "type": "string" }
-      ]
-    },
-    {
-      "name": "Drawer", "tag": "bud-drawer", "category": "overlay",
-      "props": [
-        { "name": "open", "attr": "open", "type": "boolean" },
-        { "name": "side", "attr": "side", "type": "\"right\" | \"left\"", "default": "\"right\"" },
-        { "name": "size", "attr": "size", "type": "\"sm\" | \"md\" | \"lg\"", "default": "\"md\"" }
+        {
+          "name": "size",
+          "attr": "size",
+          "type": "\"sm\" | \"md\"",
+          "default": "\"md\""
+        },
+        {
+          "name": "label",
+          "attr": "label",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "attr": "name",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "attr": "value",
+          "type": "string"
+        }
       ],
-      "subComponents": ["DrawerHeader (bud-drawer-header)", "DrawerBody (bud-drawer-body)", "DrawerFooter (bud-drawer-footer)"],
-      "events": ["bud-close"]
-    },
-    {
-      "name": "Tooltip", "tag": "bud-tooltip", "category": "overlay",
-      "props": [
-        { "name": "content", "attr": "content", "type": "string" },
-        { "name": "placement", "attr": "placement", "type": "\"top\" | \"bottom\" | \"left\" | \"right\"", "default": "\"top\"" },
-        { "name": "delay", "attr": "delay", "type": "number", "default": "200" }
+      "events": [
+        "bud-change"
       ]
     },
     {
-      "name": "Toast", "tag": "bud-toaster", "category": "feedback",
+      "name": "Toggle",
+      "tag": "bud-toggle",
+      "category": "forms",
+      "props": [
+        {
+          "name": "label",
+          "attr": "label",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "attr": "description",
+          "type": "string"
+        },
+        {
+          "name": "checked",
+          "attr": "checked",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        "bud-change"
+      ]
+    },
+    {
+      "name": "Textarea",
+      "tag": "bud-textarea",
+      "category": "forms",
+      "props": [
+        {
+          "name": "label",
+          "attr": "label",
+          "type": "string"
+        },
+        {
+          "name": "rows",
+          "attr": "rows",
+          "type": "number",
+          "default": "4"
+        },
+        {
+          "name": "message",
+          "attr": "message",
+          "type": "string"
+        },
+        {
+          "name": "messageType",
+          "attr": "message-type",
+          "type": "\"error\" | \"attention\" | \"success\""
+        }
+      ]
+    },
+    {
+      "name": "Avatar",
+      "tag": "bud-avatar",
+      "category": "display",
+      "props": [
+        {
+          "name": "size",
+          "attr": "size",
+          "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\"",
+          "default": "\"md\""
+        },
+        {
+          "name": "src",
+          "attr": "src",
+          "type": "string"
+        },
+        {
+          "name": "initials",
+          "attr": "initials",
+          "type": "string"
+        },
+        {
+          "name": "online",
+          "attr": "online",
+          "type": "boolean"
+        },
+        {
+          "name": "companyLogo",
+          "attr": "company-logo",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Drawer",
+      "tag": "bud-drawer",
+      "category": "overlay",
+      "props": [
+        {
+          "name": "open",
+          "attr": "open",
+          "type": "boolean"
+        },
+        {
+          "name": "side",
+          "attr": "side",
+          "type": "\"right\" | \"left\"",
+          "default": "\"right\""
+        },
+        {
+          "name": "size",
+          "attr": "size",
+          "type": "\"sm\" | \"md\" | \"lg\"",
+          "default": "\"md\""
+        }
+      ],
+      "subComponents": [
+        "DrawerHeader (bud-drawer-header)",
+        "DrawerBody (bud-drawer-body)",
+        "DrawerFooter (bud-drawer-footer)"
+      ],
+      "events": [
+        "bud-close"
+      ]
+    },
+    {
+      "name": "Tooltip",
+      "tag": "bud-tooltip",
+      "category": "overlay",
+      "props": [
+        {
+          "name": "content",
+          "attr": "content",
+          "type": "string"
+        },
+        {
+          "name": "placement",
+          "attr": "placement",
+          "type": "\"top\" | \"bottom\" | \"left\" | \"right\"",
+          "default": "\"top\""
+        },
+        {
+          "name": "delay",
+          "attr": "delay",
+          "type": "number",
+          "default": "200"
+        }
+      ]
+    },
+    {
+      "name": "Toast",
+      "tag": "bud-toaster",
+      "category": "feedback",
       "description": "API global: toast(), toast.success(), toast.error(), toast.warning(), toast.black()",
       "examples": {
         "react": "toast.success(\"Salvo!\", { description: \"Dados gravados.\" })",
         "html": "toast.success(\"Salvo!\", { description: \"Dados gravados.\" })"
       }
     },
-    { "name": "Skeleton", "tag": "bud-skeleton", "category": "feedback", "props": [{ "name": "variant", "attr": "variant", "type": "\"text\" | \"circular\" | \"rectangular\" | \"rounded\"", "default": "\"rectangular\"" }] },
-    { "name": "Breadcrumb", "tag": "bud-breadcrumb", "category": "navigation", "props": [{ "name": "items", "attr": "items (JSON)", "type": "BreadcrumbItem[]" }, { "name": "current", "attr": "current", "type": "number", "default": "0" }] },
-    { "name": "Accordion", "tag": "bud-accordion", "category": "layout", "subComponents": ["AccordionItem (bud-accordion-item)"] },
-    { "name": "TabBar", "tag": "bud-tab-bar", "category": "navigation", "props": [{ "name": "tabs", "attr": "tabs (JSON)", "type": "TabItem[]" }, { "name": "activeTab", "attr": "active-tab", "type": "string" }], "events": ["bud-change"] },
-    { "name": "Pagination", "tag": "bud-pagination", "category": "navigation", "props": [{ "name": "currentPage", "attr": "current-page", "type": "number" }, { "name": "totalPages", "attr": "total-pages", "type": "number" }], "events": ["bud-change"] },
-    { "name": "Table", "tag": "bud-table", "category": "data", "subComponents": ["TableContent", "TableHead", "TableBody", "TableRow", "TableHeaderCell", "TableCell"] },
-    { "name": "Sidebar", "tag": "bud-sidebar", "category": "navigation", "subComponents": ["SidebarHeader", "SidebarNav", "SidebarGroup", "SidebarItem", "SidebarDivider", "SidebarFooter"] },
-    { "name": "Chart", "tag": "bud-chart", "category": "charts", "props": [{ "name": "value", "attr": "value", "type": "number" }, { "name": "variant", "attr": "variant", "type": "\"full\" | \"half\"", "default": "\"full\"" }] },
-    { "name": "Sparkline", "tag": "bud-sparkline", "category": "charts", "props": [{ "name": "data", "attr": "data (JSON)", "type": "number[]" }, { "name": "color", "attr": "color", "type": "\"orange\" | \"green\" | \"red\" | \"neutral\"" }] },
-    { "name": "Heatmap", "tag": "bud-heatmap", "category": "charts" },
-    { "name": "Radar", "tag": "bud-radar", "category": "charts" },
-    { "name": "Funnel", "tag": "bud-funnel", "category": "charts" },
-    { "name": "GoalProgress", "tag": "bud-goal-progress", "category": "charts" },
-    { "name": "DatePicker", "tag": "bud-date-picker", "category": "forms" },
-    { "name": "ScaleInput", "tag": "bud-scale-input", "category": "forms" },
-    { "name": "ChoiceBox", "tag": "bud-choice-box", "category": "forms" },
-    { "name": "DropdownButton", "tag": "bud-dropdown-button", "category": "actions" },
-    { "name": "Popover", "tag": "bud-popover", "category": "overlay" },
-    { "name": "PopoverSelect", "tag": "bud-popover-select", "category": "forms" },
-    { "name": "FilterBar", "tag": "bud-filter-bar", "category": "navigation" },
-    { "name": "SortableList", "tag": "bud-sortable-list", "category": "forms" },
-    { "name": "PageHeader", "tag": "bud-page-header", "category": "layout" }
+    {
+      "name": "Skeleton",
+      "tag": "bud-skeleton",
+      "category": "feedback",
+      "props": [
+        {
+          "name": "variant",
+          "attr": "variant",
+          "type": "\"text\" | \"circular\" | \"rectangular\" | \"rounded\"",
+          "default": "\"rectangular\""
+        }
+      ]
+    },
+    {
+      "name": "Breadcrumb",
+      "tag": "bud-breadcrumb",
+      "category": "navigation",
+      "props": [
+        {
+          "name": "items",
+          "attr": "items (JSON)",
+          "type": "BreadcrumbItem[]"
+        },
+        {
+          "name": "current",
+          "attr": "current",
+          "type": "number",
+          "default": "0"
+        }
+      ]
+    },
+    {
+      "name": "Accordion",
+      "tag": "bud-accordion",
+      "category": "layout",
+      "subComponents": [
+        "AccordionItem (bud-accordion-item)"
+      ]
+    },
+    {
+      "name": "TabBar",
+      "tag": "bud-tab-bar",
+      "category": "navigation",
+      "props": [
+        {
+          "name": "tabs",
+          "attr": "tabs (JSON)",
+          "type": "TabItem[]"
+        },
+        {
+          "name": "activeTab",
+          "attr": "active-tab",
+          "type": "string"
+        }
+      ],
+      "events": [
+        "bud-change"
+      ]
+    },
+    {
+      "name": "Pagination",
+      "tag": "bud-pagination",
+      "category": "navigation",
+      "props": [
+        {
+          "name": "currentPage",
+          "attr": "current-page",
+          "type": "number"
+        },
+        {
+          "name": "totalPages",
+          "attr": "total-pages",
+          "type": "number"
+        }
+      ],
+      "events": [
+        "bud-change"
+      ]
+    },
+    {
+      "name": "Table",
+      "tag": "bud-table",
+      "category": "data",
+      "subComponents": [
+        "TableContent",
+        "TableHead",
+        "TableBody",
+        "TableRow",
+        "TableHeaderCell",
+        "TableCell"
+      ]
+    },
+    {
+      "name": "Sidebar",
+      "tag": "bud-sidebar",
+      "category": "navigation",
+      "subComponents": [
+        "SidebarHeader",
+        "SidebarNav",
+        "SidebarGroup",
+        "SidebarItem",
+        "SidebarDivider",
+        "SidebarFooter"
+      ]
+    },
+    {
+      "name": "Chart",
+      "tag": "bud-chart",
+      "category": "charts",
+      "props": [
+        {
+          "name": "value",
+          "attr": "value",
+          "type": "number"
+        },
+        {
+          "name": "variant",
+          "attr": "variant",
+          "type": "\"full\" | \"half\"",
+          "default": "\"full\""
+        }
+      ]
+    },
+    {
+      "name": "Sparkline",
+      "tag": "bud-sparkline",
+      "category": "charts",
+      "props": [
+        {
+          "name": "data",
+          "attr": "data (JSON)",
+          "type": "number[]"
+        },
+        {
+          "name": "color",
+          "attr": "color",
+          "type": "\"orange\" | \"green\" | \"red\" | \"neutral\""
+        }
+      ]
+    },
+    {
+      "name": "Heatmap",
+      "tag": "bud-heatmap",
+      "category": "charts"
+    },
+    {
+      "name": "Radar",
+      "tag": "bud-radar",
+      "category": "charts"
+    },
+    {
+      "name": "Funnel",
+      "tag": "bud-funnel",
+      "category": "charts"
+    },
+    {
+      "name": "GoalProgress",
+      "tag": "bud-goal-progress",
+      "category": "charts"
+    },
+    {
+      "name": "DatePicker",
+      "tag": "bud-date-picker",
+      "category": "forms"
+    },
+    {
+      "name": "ScaleInput",
+      "tag": "bud-scale-input",
+      "category": "forms"
+    },
+    {
+      "name": "ChoiceBox",
+      "tag": "bud-choice-box",
+      "category": "forms"
+    },
+    {
+      "name": "DropdownButton",
+      "tag": "bud-dropdown-button",
+      "category": "actions"
+    },
+    {
+      "name": "Popover",
+      "tag": "bud-popover",
+      "category": "overlay"
+    },
+    {
+      "name": "PopoverSelect",
+      "tag": "bud-popover-select",
+      "category": "forms"
+    },
+    {
+      "name": "FilterBar",
+      "tag": "bud-filter-bar",
+      "category": "navigation"
+    },
+    {
+      "name": "SortableList",
+      "tag": "bud-sortable-list",
+      "category": "forms"
+    },
+    {
+      "name": "PageHeader",
+      "tag": "bud-page-header",
+      "category": "layout"
+    }
   ]
 }
