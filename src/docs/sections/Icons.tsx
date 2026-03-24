@@ -15,7 +15,7 @@ import {
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import s from "./Icons.module.css";
 
 const sampleIcons = [
@@ -43,6 +43,21 @@ const usageCode = `import { Users, Bell, Target } from "@phosphor-icons/react";
 <Target size={20} />
 
 // Tamanhos recomendados: 16, 20, 24, 32`;
+
+const htmlUsageCode = `<!-- Web Components: ícones via atributo icon-left / icon-right -->
+<bud-button icon-left="plus">Adicionar</bud-button>
+<bud-badge icon-left="check" color="success">OK</bud-badge>
+<bud-input icon-left="magnifying-glass" placeholder="Buscar..."></bud-input>
+
+<!-- Ícones pré-registrados: plus, x, check, minus, caret-down,
+     caret-right, magnifying-glass, warning-circle, check-circle,
+     info, warning, circle-notch, dots-three, arrow-left, arrow-right -->
+
+<!-- Registrar ícone customizado -->
+<script>
+  BudDS.registerIcon("meu-icone", '<path d="M..."/>');
+</script>
+<bud-button icon-left="meu-icone">Custom</bud-button>`;
 
 export function Icons() {
   return (
@@ -83,7 +98,10 @@ export function Icons() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: htmlUsageCode },
+        ]} />
       </SubSection>
     </DocSection>
   );

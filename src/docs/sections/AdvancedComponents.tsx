@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { Bell, CalendarCheck, CheckCircle, Rocket } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { getCategoryForPage } from "../nav-data";
 import { Button } from "../../components/Button";
 import {
@@ -168,7 +168,10 @@ export function AdvancedComponents() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: "<!-- CommandPalette e NotificationPanel são componentes de aplicação,\n     disponíveis apenas na versão React.\n     Para overlays genéricos em HTML, use bud-modal ou bud-popover. -->", comingSoon: true },
+        ]} />
       </SubSection>
     </DocSection>
   );

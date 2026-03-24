@@ -1,6 +1,6 @@
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { getCategoryForPage } from "../nav-data";
 import s from "./OverlayContract.module.css";
 
@@ -128,6 +128,29 @@ useDocumentClickOutside({
 useInitialReposition(open, applyPosition);
 useViewportReposition(open, applyPosition);`;
 
+const htmlOverlayCode = `<!-- Web Components: overlays usam atributo "open" + evento "bud-close" -->
+
+<!-- Modal -->
+<bud-modal id="modal" size="md">
+  <bud-modal-header title="Titulo"></bud-modal-header>
+  <bud-modal-body>Conteúdo</bud-modal-body>
+</bud-modal>
+
+<script>
+  const modal = document.getElementById("modal");
+  modal.setAttribute("open", "");          // abrir
+  modal.addEventListener("bud-close", () => {
+    modal.removeAttribute("open");         // fechar (ESC, overlay, botão X)
+  });
+</script>
+
+<!-- Contrato nos Web Components é automático:
+     - Focus trap: gerenciado internamente
+     - Scroll lock: ativado ao abrir, restaurado ao fechar
+     - ESC: emite bud-close
+     - Click outside: emite bud-close
+     - Posicionamento: calculado automaticamente -->`;
+
 export function OverlayContract() {
   return (
     <DocSection
@@ -228,7 +251,10 @@ export function OverlayContract() {
         title="Hooks oficiais"
         description="Padrao de implementacao recomendado para overlays novos."
       >
-        <CodeSnippet code={hooksCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: hooksCode },
+          { label: "HTML", language: "html", code: htmlOverlayCode },
+        ]} />
       </SubSection>
 
       <SubSection

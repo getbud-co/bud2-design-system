@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
-import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import { AiAssistant, type MissionItem } from "../../components/AiAssistant";
 import s from "./AiAssistant.module.css";
 
@@ -175,7 +175,10 @@ export function AiAssistantSection() {
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">
-        <CodeSnippet code={usageCode} language="tsx" />
+        <FrameworkSwitcher examples={[
+          { label: "React", language: "tsx", code: usageCode },
+          { label: "HTML", language: "html", code: "", comingSoon: true },
+        ]} />
       </SubSection>
     </DocSection>
   );
