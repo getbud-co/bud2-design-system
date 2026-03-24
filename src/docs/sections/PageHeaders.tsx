@@ -18,6 +18,7 @@ import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { PropsTable } from "../PropsTable";
 import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkOnly } from "../FrameworkSwitcher";
 import { FrameworkSwitcher } from "../FrameworkSwitcher";
 import {
   PageHeader,
@@ -640,7 +641,9 @@ export function PageHeaders() {
         <div className={s.demoStack}>
           <TitleOnlyDemo />
         </div>
-        <CodeSnippet code={`<PageHeader title="Configurações da conta" />`} />
+        <FrameworkOnly framework={0}>
+          <CodeSnippet code={`<PageHeader title="Configurações da conta" />`} />
+        </FrameworkOnly>
       </SubSection>
 
       <SubSection id="page-header-partial" title="Ações parciais">
@@ -651,11 +654,13 @@ export function PageHeaders() {
         <div className={s.demoStack}>
           <PartialActionsDemo />
         </div>
-        <CodeSnippet
-          code={`<PageHeader title="Relatório mensal">
+        <FrameworkOnly framework={0}>
+          <CodeSnippet
+            code={`<PageHeader title="Relatório mensal">
   <SearchButton onClick={() => setSearchOpen(true)} />
 </PageHeader>`}
-        />
+          />
+        </FrameworkOnly>
       </SubSection>
 
       {/* ═══ SearchButton ═══ */}
@@ -668,9 +673,11 @@ export function PageHeaders() {
         <div className={s.demoStack}>
           <SearchButtonDemo />
         </div>
-        <CodeSnippet
-          code={`<SearchButton onClick={() => setSearchOpen(true)} />`}
-        />
+        <FrameworkOnly framework={0}>
+          <CodeSnippet
+            code={`<SearchButton onClick={() => setSearchOpen(true)} />`}
+          />
+        </FrameworkOnly>
       </SubSection>
 
       {/* ═══ NotificationButton ═══ */}
@@ -685,8 +692,9 @@ export function PageHeaders() {
         <div className={s.demoStack}>
           <NotificationPanelDemo />
         </div>
-        <CodeSnippet
-          code={`const btnRef = useRef<HTMLButtonElement>(null);
+        <FrameworkOnly framework={0}>
+          <CodeSnippet
+            code={`const btnRef = useRef<HTMLButtonElement>(null);
 
 <NotificationButton
   ref={btnRef}
@@ -703,7 +711,8 @@ export function PageHeaders() {
   onMarkAllRead={markAllRead}
   onViewAll={viewAll}
 />`}
-        />
+          />
+        </FrameworkOnly>
       </SubSection>
 
       {/* ═══ AssistantButton ═══ */}
@@ -718,8 +727,9 @@ export function PageHeaders() {
         <div className={s.demoStack}>
           <AssistantButtonDemo />
         </div>
-        <CodeSnippet
-          code={`const [open, setOpen] = useState(false);
+        <FrameworkOnly framework={0}>
+          <CodeSnippet
+            code={`const [open, setOpen] = useState(false);
 
 <AssistantButton
   active={open}
@@ -728,7 +738,8 @@ export function PageHeaders() {
 
 {/* Label customizado */}
 <AssistantButton label="Copilot" active={open} onClick={toggle} />`}
-        />
+          />
+        </FrameworkOnly>
       </SubSection>
 
       {/* ═══ CommandPalette ═══ */}
@@ -745,8 +756,9 @@ export function PageHeaders() {
           <CommandPaletteCustomDemo />
           <CommandPaletteEmptyDemo />
         </div>
-        <CodeSnippet
-          code={`const groups: CommandGroup[] = [
+        <FrameworkOnly framework={0}>
+          <CodeSnippet
+            code={`const groups: CommandGroup[] = [
   {
     label: "Páginas",
     items: [
@@ -774,7 +786,8 @@ export function PageHeaders() {
   groups={groups}
   placeholder="Buscar páginas, ações..."
 />`}
-        />
+          />
+        </FrameworkOnly>
       </SubSection>
 
       {/* ═══ NotificationPanel ═══ */}
@@ -801,8 +814,9 @@ export function PageHeaders() {
           </div>
           <NotificationPanelEmptyDemo />
         </div>
-        <CodeSnippet
-          code={`const notifications: NotificationItem[] = [
+        <FrameworkOnly framework={0}>
+          <CodeSnippet
+            code={`const notifications: NotificationItem[] = [
   {
     id: "1",
     icon: CheckCircle,
@@ -822,7 +836,8 @@ export function PageHeaders() {
   onMarkAllRead={markAllRead}
   onViewAll={() => navigate("/notifications")}
 />`}
-        />
+          />
+        </FrameworkOnly>
       </SubSection>
 
       {/* ═══ API ═══ */}
