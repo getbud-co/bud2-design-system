@@ -41,6 +41,8 @@ interface AiAssistantProps {
   placeholder?: string;
   onClose?: () => void;
   onMessage?: (text: string) => Promise<string>;
+  /** Called when user clicks "Usar como base" on an assistant message */
+  onUseAsBase?: (messageContent: string) => void;
   allowUpload?: boolean;
   missions?: MissionItem[];
   selectedMissions?: string[];
@@ -63,6 +65,7 @@ export function AiAssistant({
   placeholder = "Pergunte ao bud...",
   onClose,
   onMessage,
+  onUseAsBase,
   allowUpload,
   missions,
   selectedMissions,
@@ -231,7 +234,7 @@ export function AiAssistant({
                   className={s.suggestion}
                   onClick={() => handleSuggestion(text)}
                 >
-                  <Lightning size={12} aria-hidden="true" />
+                  <Lightning size={14} aria-hidden="true" style={{ flexShrink: 0, marginTop: 2 }} />
                   <span>{text}</span>
                 </button>
               ))}
@@ -270,10 +273,22 @@ export function AiAssistant({
               <div key={msg.id} className={s.aiMessage}>
                 <Lightning
                   size={16}
-                                    className={s.aiIcon}
+                  className={s.aiIcon}
                   aria-hidden="true"
                 />
-                <p className={s.aiText}>{msg.content}</p>
+                <div className={s.aiContent}>
+                  <p className={s.aiText}>{msg.content}</p>
+                  {onUseAsBase && (
+                    <button
+                      type="button"
+                      className={s.useAsBaseBtn}
+                      onClick={() => onUseAsBase(msg.content)}
+                    >
+                      <ArrowUp size={12} aria-hidden="true" />
+                      Usar como base
+                    </button>
+                  )}
+                </div>
               </div>
             ),
           )}
