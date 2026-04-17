@@ -431,3 +431,35 @@ export function resolveSideStartOverlayPosition({
 
   return { top, left, side };
 }
+
+/* ——— Placement ——— */
+
+export type Placement =
+  | "bottom-start"
+  | "bottom-end"
+  | "top-start"
+  | "top-end"
+  | "right-start"
+  | "left-start";
+
+export function parsePlacement(placement: Placement): {
+  axis: "vertical" | "horizontal";
+  preferredVertical: "bottom" | "top";
+  horizontalAlign: "start" | "end";
+  preferredSide: "right" | "left";
+} {
+  if (placement === "right-start") {
+    return { axis: "horizontal", preferredVertical: "bottom", horizontalAlign: "start", preferredSide: "right" };
+  }
+  if (placement === "left-start") {
+    return { axis: "horizontal", preferredVertical: "bottom", horizontalAlign: "start", preferredSide: "left" };
+  }
+
+  const [vertical, align] = placement.split("-") as ["top" | "bottom", "start" | "end"];
+  return {
+    axis: "vertical",
+    preferredVertical: vertical,
+    horizontalAlign: align,
+    preferredSide: "right",
+  };
+}

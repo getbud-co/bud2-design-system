@@ -84,6 +84,7 @@ export type { PopoverItem } from "./components/Popover";
 export type { PopoverSelectProps, PopoverSelectOption } from "./components/PopoverSelect/PopoverSelect";
 export type { ScaleInputProps } from "./components/ScaleInput";
 export type { SelectOption } from "./components/Select";
+export type { Placement } from "./components/overlay-utils";
 export type { SortableItem, SortableListProps } from "./components/SortableList";
 export type { TabItem, TabBarProps } from "./components/TabBar";
 

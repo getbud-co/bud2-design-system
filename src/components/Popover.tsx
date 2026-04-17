@@ -9,6 +9,10 @@ import {
 import { createPortal } from "react-dom";
 import { CaretRight } from "@phosphor-icons/react";
 import {
+  type Placement,
+  resolveAnchoredOverlayPosition,
+  resolveSideStartOverlayPosition,
+  parsePlacement,
   useDocumentClickOutside,
   useDocumentEscape,
   useInitialReposition,
@@ -44,6 +48,8 @@ interface PopoverProps {
   onClose: () => void;
   /** Ref do elemento trigger para posicionamento e click-outside */
   anchorRef: React.RefObject<HTMLElement | null>;
+  /** Posicionamento preferido do menu. Default: "top-start" */
+  placement?: Placement;
   /** Rótulo acessível para o menu */
   ariaLabel?: string;
 }
@@ -109,7 +115,7 @@ function adjustSubmenuOverflow(wrapperEl: HTMLElement) {
   }
 }
 
-export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverProps) {
+export function Popover({ items, open, onClose, anchorRef, placement = "top-start", ariaLabel }: PopoverProps) {
   const popoverRef = useRef<HTMLDivElement>(null);
   const [submenuFlip, setSubmenuFlip] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -128,32 +134,56 @@ export function Popover({ items, open, onClose, anchorRef, ariaLabel }: PopoverP
 
     const ar = anchor.getBoundingClientRect();
     const gap = 4;
+    const margin = 8;
 
-    // Step 1: position above, left-aligned (default)
     el.style.position = "fixed";
-    el.style.top = "auto";
+    // Measure before placing
+    el.style.top = "0";
+    el.style.left = "0";
     el.style.right = "auto";
-    el.style.bottom = `${window.innerHeight - ar.top + gap}px`;
-    el.style.left = `${ar.left}px`;
-
-    // Step 2: measure and adjust if overflowing
+    el.style.bottom = "auto";
     const pr = el.getBoundingClientRect();
 
-    // If overflows above viewport → open below
-    if (pr.top < gap) {
-      el.style.bottom = "auto";
-      el.style.top = `${ar.bottom + gap}px`;
-    }
+    const parsed = parsePlacement(placement);
 
-    // If overflows right → shift left
-    if (pr.right > window.innerWidth - gap) {
-      el.style.left = `${Math.max(gap, window.innerWidth - pr.width - gap)}px`;
+    if (parsed.axis === "horizontal") {
+      const { left, top } = resolveSideStartOverlayPosition({
+        anchorTop: ar.top,
+        anchorLeft: ar.left,
+        anchorRight: ar.right,
+        overlayWidth: pr.width,
+        overlayHeight: pr.height,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
+        gap,
+        margin,
+        preferredSide: parsed.preferredSide,
+      });
+      el.style.left = `${left}px`;
+      el.style.top = `${top}px`;
+    } else {
+      const { top, left } = resolveAnchoredOverlayPosition({
+        anchorTop: ar.top,
+        anchorBottom: ar.bottom,
+        anchorLeft: ar.left,
+        anchorRight: ar.right,
+        overlayWidth: pr.width,
+        overlayHeight: pr.height,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
+        gap,
+        margin,
+        horizontalAlign: parsed.horizontalAlign,
+        preferredVertical: parsed.preferredVertical,
+      });
+      el.style.left = `${left}px`;
+      el.style.top = `${top}px`;
     }
 
     // Submenu flip: se não cabe à direita, abre à esquerda
     const updatedPr = el.getBoundingClientRect();
     setSubmenuFlip(updatedPr.right + 220 > window.innerWidth);
-  }, [anchorRef]);
+  }, [anchorRef, placement]);
 
   // Position synchronously after DOM mount (before paint)
   useInitialReposition(open, applyPosition);

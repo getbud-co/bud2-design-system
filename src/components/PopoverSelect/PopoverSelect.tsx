@@ -1,6 +1,7 @@
 import { useState, useMemo, type ReactNode, type RefObject } from "react";
 import { MagnifyingGlass, Plus } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
+import type { Placement } from "../overlay-utils";
 import { FilterDropdown } from "../FilterBar";
 import { Checkbox } from "../Checkbox";
 import { Radio } from "../Radio";
@@ -29,7 +30,7 @@ interface BaseProps {
   /** Anchor element ref for positioning */
   anchorRef: RefObject<HTMLElement | null>;
   /** FilterDropdown placement */
-  placement?: "bottom-start" | "right-start";
+  placement?: Placement;
   /** Skip overlay (useful for nested/sub-panel popovers) */
   noOverlay?: boolean;
   /** Refs to ignore for click-outside (passed to FilterDropdown) */

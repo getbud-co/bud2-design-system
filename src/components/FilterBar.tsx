@@ -18,8 +18,10 @@ import {
   FloppyDisk,
 } from "@phosphor-icons/react";
 import {
+  type Placement,
   resolveAnchoredOverlayPosition,
   resolveSideStartOverlayPosition,
+  parsePlacement,
   useDocumentClickOutside,
   useDocumentEscape,
   useInitialReposition,
@@ -118,7 +120,7 @@ interface FilterDropdownProps {
   children: ReactNode;
   className?: string;
   /** Posicionamento relativo ao âncora. Default: "bottom-start" */
-  placement?: "bottom-start" | "right-start";
+  placement?: Placement;
   /** Refs de elementos que NÃO devem disparar click-outside */
   ignoreRefs?: React.RefObject<HTMLElement | null>[];
   /** Se true, não renderiza overlay de fundo (útil para sub-menus) */
@@ -157,7 +159,9 @@ export function FilterDropdown({
     el.style.position = "fixed";
     const dr = el.getBoundingClientRect();
 
-    if (placement === "right-start") {
+    const parsed = parsePlacement(placement);
+
+    if (parsed.axis === "horizontal") {
       const { left, top } = resolveSideStartOverlayPosition({
         anchorTop: ar.top,
         anchorLeft: ar.left,
@@ -168,7 +172,7 @@ export function FilterDropdown({
         viewportHeight: window.innerHeight,
         gap,
         margin,
-        preferredSide: "right",
+        preferredSide: parsed.preferredSide,
       });
 
       el.style.left = `${left}px`;
@@ -186,8 +190,8 @@ export function FilterDropdown({
         viewportHeight: window.innerHeight,
         gap,
         margin,
-        horizontalAlign: "start",
-        preferredVertical: "bottom",
+        horizontalAlign: parsed.horizontalAlign,
+        preferredVertical: parsed.preferredVertical,
       });
 
       el.style.left = `${left}px`;

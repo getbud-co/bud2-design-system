@@ -19,7 +19,10 @@ import {
 } from "@phosphor-icons/react";
 import { Checkbox } from "./Checkbox";
 import {
-  clampToViewport,
+  type Placement,
+  resolveAnchoredOverlayPosition,
+  resolveSideStartOverlayPosition,
+  parsePlacement,
   useDocumentClickOutside,
   useDocumentEscape,
   useInitialReposition,
@@ -55,6 +58,8 @@ interface SelectBaseProps {
   searchPlaceholder?: string;
   message?: string;
   messageType?: MessageType;
+  /** Posicionamento preferido do dropdown. Default: "bottom-start" */
+  placement?: Placement;
   disabled?: boolean;
   className?: string;
 }
@@ -93,6 +98,7 @@ export function Select(props: SelectProps) {
     multiple = false,
     message,
     messageType,
+    placement = "bottom-start",
     disabled = false,
     className,
   } = props;
@@ -195,24 +201,62 @@ export function Select(props: SelectProps) {
   // ——— Position calculation ———
   const updatePosition = useCallback(() => {
     const trigger = triggerRef.current;
+    const dd = dropdownRef.current;
     if (!trigger) return;
     const rect = trigger.getBoundingClientRect();
     const margin = 8;
     const gap = 4;
-    const spaceBelow = window.innerHeight - rect.bottom - 8;
-    setDropdownStyle({
-      position: "fixed",
-      top: rect.bottom + gap,
-      left: clampToViewport({
-        value: rect.left,
-        size: rect.width,
-        viewportSize: window.innerWidth,
+    const parsed = parsePlacement(placement);
+
+    if (parsed.axis === "horizontal") {
+      const ddHeight = dd ? dd.getBoundingClientRect().height : 240;
+      const { left, top } = resolveSideStartOverlayPosition({
+        anchorTop: rect.top,
+        anchorLeft: rect.left,
+        anchorRight: rect.right,
+        overlayWidth: rect.width,
+        overlayHeight: ddHeight,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
+        gap,
         margin,
-      }),
-      width: rect.width,
-      maxHeight: Math.max(spaceBelow, 120),
-    });
-  }, []);
+        preferredSide: parsed.preferredSide,
+      });
+      setDropdownStyle({
+        position: "fixed",
+        top,
+        left,
+        width: rect.width,
+        maxHeight: Math.max(window.innerHeight - top - margin, 120),
+      });
+    } else {
+      const ddHeight = dd ? dd.getBoundingClientRect().height : 240;
+      const { top, left, verticalPlacement } = resolveAnchoredOverlayPosition({
+        anchorTop: rect.top,
+        anchorBottom: rect.bottom,
+        anchorLeft: rect.left,
+        anchorRight: rect.right,
+        overlayWidth: rect.width,
+        overlayHeight: ddHeight,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
+        gap,
+        margin,
+        horizontalAlign: parsed.horizontalAlign,
+        preferredVertical: parsed.preferredVertical,
+      });
+      const space = verticalPlacement === "bottom"
+        ? window.innerHeight - rect.bottom - gap - margin
+        : rect.top - gap - margin;
+      setDropdownStyle({
+        position: "fixed",
+        top,
+        left,
+        width: rect.width,
+        maxHeight: Math.max(space, 120),
+      });
+    }
+  }, [placement]);
 
   // ——— Open/close helpers ———
   const openDropdown = useCallback(() => {

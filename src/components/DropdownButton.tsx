@@ -11,7 +11,10 @@ import {
 import { createPortal } from "react-dom";
 import { CaretDown, MagnifyingGlass } from "@phosphor-icons/react";
 import {
+  type Placement,
   resolveAnchoredOverlayPosition,
+  resolveSideStartOverlayPosition,
+  parsePlacement,
   useDocumentClickOutside,
   useDocumentEscape,
   useInitialReposition,
@@ -55,6 +58,8 @@ interface DropdownButtonProps {
   children: ReactNode;
   /** Desabilitado */
   disabled?: boolean;
+  /** Posicionamento preferido do menu. Default: "bottom-start" */
+  placement?: Placement;
   /** Classe CSS adicional */
   className?: string;
 }
@@ -74,6 +79,7 @@ export function DropdownButton({
   searchable = false,
   searchPlaceholder = "Buscar...",
   children,
+  placement = "bottom-start",
   disabled = false,
   className,
 }: DropdownButtonProps) {
@@ -107,30 +113,48 @@ export function DropdownButton({
     const gap = 4;
     const margin = 8;
 
-    // Default: open below, left-aligned
     menu.style.position = "fixed";
     menu.style.minWidth = `${tr.width}px`;
     const mr = menu.getBoundingClientRect();
 
-    const { top, left } = resolveAnchoredOverlayPosition({
-      anchorTop: tr.top,
-      anchorBottom: tr.bottom,
-      anchorLeft: tr.left,
-      anchorRight: tr.right,
-      overlayWidth: Math.max(mr.width, tr.width),
-      overlayHeight: mr.height,
-      viewportWidth: window.innerWidth,
-      viewportHeight: window.innerHeight,
-      gap,
-      margin,
-      horizontalAlign: "start",
-      preferredVertical: "bottom",
-    });
+    const parsed = parsePlacement(placement);
 
-    menu.style.left = `${left}px`;
-    menu.style.top = `${top}px`;
-    menu.style.bottom = "auto";
-  }, []);
+    if (parsed.axis === "horizontal") {
+      const { left, top } = resolveSideStartOverlayPosition({
+        anchorTop: tr.top,
+        anchorLeft: tr.left,
+        anchorRight: tr.right,
+        overlayWidth: Math.max(mr.width, tr.width),
+        overlayHeight: mr.height,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
+        gap,
+        margin,
+        preferredSide: parsed.preferredSide,
+      });
+      menu.style.left = `${left}px`;
+      menu.style.top = `${top}px`;
+      menu.style.bottom = "auto";
+    } else {
+      const { top, left } = resolveAnchoredOverlayPosition({
+        anchorTop: tr.top,
+        anchorBottom: tr.bottom,
+        anchorLeft: tr.left,
+        anchorRight: tr.right,
+        overlayWidth: Math.max(mr.width, tr.width),
+        overlayHeight: mr.height,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight,
+        gap,
+        margin,
+        horizontalAlign: parsed.horizontalAlign,
+        preferredVertical: parsed.preferredVertical,
+      });
+      menu.style.left = `${left}px`;
+      menu.style.top = `${top}px`;
+      menu.style.bottom = "auto";
+    }
+  }, [placement]);
 
   useInitialReposition(open, applyPosition);
   useViewportReposition(open, applyPosition);
