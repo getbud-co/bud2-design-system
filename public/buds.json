@@ -1,7 +1,7 @@
 {
   "$schema": "https://buds.dev/registry-schema.json",
   "name": "BUDS",
-  "version": "0.3.0",
+  "version": "0.4.1",
   "description": "Sistema de design para a plataforma Bud — gestão de desempenho contínua",
   "packages": {
     "react": "@getbud-co/buds",
