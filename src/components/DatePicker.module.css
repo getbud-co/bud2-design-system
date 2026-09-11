@@ -448,6 +448,9 @@
   padding: var(--sp-2xs) var(--sp-xs);
   border-top: 1px solid var(--color-caramel-300);
 }
+/* Com a ação de limpar presente, o rodapé reparte: limpar à esquerda,
+   "Hoje" à direita. */
+.popoverFooterSplit { justify-content: space-between; }
 
 /* Override tertiary color for "Hoje" — uses primary color as accent link */
 .todayBtn {

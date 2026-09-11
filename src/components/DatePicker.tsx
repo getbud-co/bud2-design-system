@@ -69,6 +69,25 @@ interface DatePickerBaseProps {
   minDate?: CalendarDate;
   maxDate?: CalendarDate;
   className?: string;
+  /**
+   * Rótulo da ação de limpar no rodapé do popover (ex.: "Sem prazo",
+   * "Usar fim do período"). Sem ela não há como voltar a "sem data" por
+   * dentro — e um botão de limpar FORA do popover é um controle órfão.
+   * Só aparece quando há valor selecionado.
+   */
+  clearLabel?: string;
+  /**
+   * Seta de abrir no gatilho (default: true). Um campo de data que se
+   * apresenta como campo — e não como dropdown — dispensa a seta: o ícone de
+   * calendário já diz o que abre.
+   */
+  chevron?: boolean;
+  /**
+   * Rótulo de categoria que NÃO some quando a escolha entra: com
+   * valueLabel="Prazo", o gatilho mostra "Prazo: 10/09/2026" em vez de só a
+   * data — valor sem categoria deixa o usuário sem saber o que o botão é.
+   */
+  valueLabel?: string;
 }
 
 interface SingleDatePickerProps extends DatePickerBaseProps {
@@ -188,6 +207,9 @@ export function DatePicker(props: DatePickerProps) {
     minDate,
     maxDate,
     className,
+    clearLabel,
+    chevron = true,
+    valueLabel,
   } = props;
 
   const iconSize = ICON_SIZES[size];
@@ -411,6 +433,22 @@ export function DatePicker(props: DatePickerProps) {
   const goNextMonth = useCallback(() => {
     setViewMonth((v) => nextMonth(v));
   }, []);
+
+  // ——— Clear button ———
+  const handleClear = useCallback(() => {
+    if (isRange) {
+      const next: [CalendarDate | null, CalendarDate | null] = [null, null];
+      if (!isRangeControlled) setRangeInternal(next);
+      (props as RangeDatePickerProps).onChange?.(next);
+    } else {
+      if (!isSingleControlled) setSingleInternal(null);
+      (props as SingleDatePickerProps).onChange?.(null);
+    }
+    setOpen(false);
+  }, [isRange, isRangeControlled, isSingleControlled, props]);
+  const hasValue = isRange
+    ? rangeValue[0] !== null || rangeValue[1] !== null
+    : singleValue !== null;
 
   // ——— Today button ———
   const handleToday = useCallback(() => {
@@ -729,10 +767,12 @@ export function DatePicker(props: DatePickerProps) {
               disabled={disabled}
               aria-label="Data final"
             />
-            <CaretDown
-              size={iconSize}
-                            className={`${s.caret} ${open ? s.caretOpen : ""}`}
-            />
+            {chevron && (
+              <CaretDown
+                size={iconSize}
+                className={`${s.caret} ${open ? s.caretOpen : ""}`}
+              />
+            )}
           </div>
         ) : (
           /* ——— Single trigger: button ——— */
@@ -755,12 +795,16 @@ export function DatePicker(props: DatePickerProps) {
           >
             <CalendarBlank size={iconSize} />
             <span className={triggerText ? s.value : s.placeholder}>
-              {triggerText ?? placeholder ?? defaultPlaceholder}
+              {triggerText
+                ? valueLabel ? `${valueLabel}: ${triggerText}` : triggerText
+                : placeholder ?? defaultPlaceholder}
             </span>
-            <CaretDown
-              size={iconSize}
-                            className={`${s.caret} ${open ? s.caretOpen : ""}`}
-            />
+            {chevron && (
+              <CaretDown
+                size={iconSize}
+                className={`${s.caret} ${open ? s.caretOpen : ""}`}
+              />
+            )}
           </button>
         )}
       </div>
@@ -867,8 +911,18 @@ export function DatePicker(props: DatePickerProps) {
               })}
             </div>
 
-            {/* ——— Footer: Today ——— */}
-            <div className={s.popoverFooter}>
+            {/* ——— Footer: Clear (quando há valor) + Today ——— */}
+            <div className={`${s.popoverFooter} ${clearLabel && hasValue ? s.popoverFooterSplit : ""}`}>
+              {clearLabel && hasValue && (
+                <Button
+                  variant="tertiary"
+                  size="sm"
+                  className={s.clearBtn}
+                  onClick={handleClear}
+                >
+                  {clearLabel}
+                </Button>
+              )}
               <Button
                 variant="tertiary"
                 size="sm"
