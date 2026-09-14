@@ -452,12 +452,16 @@
    "Hoje" à direita. */
 .popoverFooterSplit { justify-content: space-between; }
 
-/* Override tertiary color for "Hoje" — uses primary color as accent link */
-.todayBtn {
+/* Override tertiary color for the footer actions — "Hoje" and limpar are both
+   ações textuais, e a tabela de cores semânticas dá a elas o mesmo token de
+   Link/Ação. Uma sozinha em laranja faria a outra parecer texto comum. */
+.todayBtn,
+.clearBtn {
   color: var(--color-orange-500);
 }
 
-.todayBtn:hover:not(:disabled) {
+.todayBtn:hover:not(:disabled),
+.clearBtn:hover:not(:disabled) {
   background-color: var(--color-orange-50);
   color: var(--color-orange-500);
 }

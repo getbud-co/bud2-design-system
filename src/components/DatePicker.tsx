@@ -86,6 +86,10 @@ interface DatePickerBaseProps {
    * Rótulo de categoria que NÃO some quando a escolha entra: com
    * valueLabel="Prazo", o gatilho mostra "Prazo: 10/09/2026" em vez de só a
    * data — valor sem categoria deixa o usuário sem saber o que o botão é.
+   *
+   * Só vale no modo single, onde o gatilho é um botão com texto. No range o
+   * gatilho são dois campos editáveis, e prefixar um valor que a pessoa digita
+   * quebraria a digitação; ali quem nomeia o controle é `label`.
    */
   valueLabel?: string;
 }
@@ -440,6 +444,14 @@ export function DatePicker(props: DatePickerProps) {
       const next: [CalendarDate | null, CalendarDate | null] = [null, null];
       if (!isRangeControlled) setRangeInternal(next);
       (props as RangeDatePickerProps).onChange?.(next);
+      // O texto dos campos do gatilho tem de ser zerado AQUI, como `selectRange`
+      // faz em cada ramo. O efeito de sincronia não cobre este caso: o popover
+      // segura o foco (onMouseDown/preventDefault), e o efeito pula justamente
+      // o campo focado — a data limpa continuava escrita no gatilho.
+      setStartText("");
+      setEndText("");
+      // Quem limpou no meio de uma seleção recomeça pelo início.
+      setRangeStep("start");
     } else {
       if (!isSingleControlled) setSingleInternal(null);
       (props as SingleDatePickerProps).onChange?.(null);

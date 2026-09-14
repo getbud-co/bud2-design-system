@@ -202,6 +202,11 @@ export function DatePickers() {
           { prop: "message", type: "string", description: "Mensagem de feedback" },
           { prop: "messageType", attr: "message-type", type: '"error" | "attention" | "success"', description: "Tipo da mensagem" },
           { prop: "disabled", type: "boolean", default: "false", description: "Desabilita o datepicker" },
+          // Atributo "—": o web component não observa estas três (ver
+          // packages/vanilla/.../bud-date-picker.ts), então são só de React.
+          { prop: "clearLabel", attr: "—", type: "string", description: "Rótulo da ação de limpar, no rodapé do popover. Só aparece quando há valor. Apenas React" },
+          { prop: "valueLabel", attr: "—", type: "string", description: "Categoria que não some diante do valor: \"Prazo: 10/09/2026\". Só no modo single. Apenas React" },
+          { prop: "chevron", attr: "—", type: "boolean", default: "true", description: "Seta de abrir no trigger. Apenas React" },
         ]} />
       </SubSection>
 

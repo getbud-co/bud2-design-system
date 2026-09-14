@@ -70,6 +70,27 @@ describe("DatePicker — clearLabel", () => {
 
     expect(screen.queryByRole("button", { name: "Sem prazo" })).toBeNull();
   });
+
+  // O gatilho do range são dois campos de texto, e o popover segura o foco.
+  // Sem zerar o texto aqui, a data limpa continuava escrita no gatilho enquanto
+  // o valor já era [null, null] — a tela afirmava uma data que o valor não tinha.
+  it("limpa também o texto dos campos do gatilho no modo range", async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <DatePicker
+        mode="range"
+        clearLabel="Limpar"
+        defaultValue={[{ day: 1, month: 9, year: 2026 }, { day: 5, month: 9, year: 2026 }]}
+      />,
+    );
+
+    await user.click(container.querySelectorAll("input")[0] as HTMLInputElement);
+    await user.click(screen.getByRole("button", { name: "Limpar" }));
+
+    const inputs = container.querySelectorAll("input");
+    expect((inputs[0] as HTMLInputElement).value).toBe("");
+    expect((inputs[1] as HTMLInputElement).value).toBe("");
+  });
 });
 
 // Campo de data não é dropdown: sem chevron quando o consumidor o dispensa.
@@ -78,6 +99,14 @@ describe("DatePicker — chevron", () => {
     const { container } = render(<DatePicker chevron={false} value={null} onChange={() => {}} />);
 
     expect(container.querySelector('button[aria-haspopup="dialog"] svg:nth-of-type(2)')).toBeNull();
+  });
+
+  // Controle positivo do seletor acima: sem ele, um seletor que parasse de casar
+  // deixaria o teste passar por engano, afirmando ausência que não se provou.
+  it("desenha a seta por omissão", () => {
+    const { container } = render(<DatePicker value={null} onChange={() => {}} />);
+
+    expect(container.querySelector('button[aria-haspopup="dialog"] svg:nth-of-type(2)')).not.toBeNull();
   });
 });
 
