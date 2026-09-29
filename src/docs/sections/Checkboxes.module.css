@@ -37,6 +37,49 @@
   gap: var(--sp-2xs);
 }
 
+/* ——— Em item clicável ——— */
+
+.clickableList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3xs);
+  width: 100%;
+  max-width: 320px; /* largura de demonstração — sem token */
+  padding: var(--sp-3xs);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-caramel-300); /* border-width estrutural */
+  border-radius: var(--radius-sm);
+}
+
+.clickableItem {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+  width: 100%;
+  padding: var(--sp-2xs);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-2xs);
+  font-family: var(--font-label);
+  font-weight: 500; /* sem token de weight */
+  font-size: var(--text-sm);
+  line-height: 1.05; /* sem token de line-height */
+  color: var(--color-neutral-950);
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 120ms ease; /* timing estrutural — sem token */
+}
+
+.clickableItem:hover {
+  background-color: var(--color-caramel-50);
+}
+
+/* O foco fica no botão, não na caixa decorativa */
+.clickableItem:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-caramel-200); /* focus ring */
+}
+
 @media (max-width: 768px) {
   .statesGrid {
     flex-wrap: wrap;

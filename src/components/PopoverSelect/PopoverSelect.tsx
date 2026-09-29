@@ -188,10 +188,12 @@ export function PopoverSelect(props: PopoverSelectProps) {
             <button
               key={opt.id}
               type="button"
+              role={props.mode === "single" ? "radio" : "checkbox"}
+              aria-checked={active}
               className={`${styles.item} ${active ? styles.itemActive : ""}`}
               onClick={() => handleSelect(opt.id)}
             >
-              <Indicator checked={active} readOnly />
+              <Indicator checked={active} decorative />
               {renderOptionPrefix?.(opt)}
               {!renderOptionPrefix && opt.initials && (
                 <Avatar initials={opt.initials} src={opt.avatarSrc} size="xs" />

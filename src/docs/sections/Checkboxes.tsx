@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { PropsTable } from "../PropsTable";
-import { FrameworkSwitcher } from "../FrameworkSwitcher";
+import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher, FrameworkOnly } from "../FrameworkSwitcher";
 import { Checkbox } from "../../components/Checkbox";
 import cbStyles from "../../components/Checkbox.module.css";
 import s from "./Checkboxes.module.css";
@@ -43,7 +45,56 @@ const htmlUsageCode = `<!-- Incluir buds.css + buds.js na página -->
     });
 </script>`;
 
+const decorativeCode = `import { Checkbox } from "@getbud-co/buds";
+
+<button
+  type="button"
+  role="checkbox"
+  aria-checked={selected}
+  onClick={() => setSelected(!selected)}
+>
+  <Checkbox decorative checked={selected} />
+  Engenharia
+</button>`;
+
 const states = ["Default", "Hover", "Focused", "Disabled"] as const;
+
+const teamOptions = [
+  { id: "engenharia", label: "Engenharia" },
+  { id: "produto", label: "Produto" },
+  { id: "design", label: "Design" },
+];
+
+function DecorativeDemo() {
+  const [selected, setSelected] = useState<string[]>(["produto"]);
+
+  function toggle(id: string) {
+    setSelected((prev) =>
+      prev.includes(id) ? prev.filter((v) => v !== id) : [...prev, id],
+    );
+  }
+
+  return (
+    <div className={s.clickableList} role="group" aria-label="Times">
+      {teamOptions.map((opt) => {
+        const active = selected.includes(opt.id);
+        return (
+          <button
+            key={opt.id}
+            type="button"
+            role="checkbox"
+            aria-checked={active}
+            className={s.clickableItem}
+            onClick={() => toggle(opt.id)}
+          >
+            <Checkbox decorative checked={active} />
+            {opt.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 export function Checkboxes() {
   return (
@@ -222,6 +273,17 @@ export function Checkboxes() {
         </div>
       </SubSection>
 
+      <SubSection
+        id="em-item-clicavel"
+        title="Em item clicável"
+        description="Quando o item inteiro é o controle (um <button>), o checkbox é só indicador: decorative retira o <label> e o <input>, e o estado vai no aria-checked do botão. Um checkbox interativo dentro de um botão dispara o clique duas vezes."
+      >
+        <DecorativeDemo />
+        <FrameworkOnly framework={0}>
+          <CodeSnippet language="tsx" code={decorativeCode} />
+        </FrameworkOnly>
+      </SubSection>
+
       <SubSection id="api-checkbox" title="API">
         <PropsTable rows={[
           { prop: "size", type: '"sm" | "md"', default: '"md"', description: "Tamanho do checkbox (16px / 20px)" },
@@ -230,6 +292,8 @@ export function Checkboxes() {
           { prop: "indeterminate", type: "boolean", default: "false", description: "Estado indeterminado (traço)" },
           { prop: "checked", type: "boolean", description: "Estado marcado" },
           { prop: "disabled", type: "boolean", default: "false", description: "Desabilita o checkbox" },
+          // Atributo "—": o web component bud-checkbox não tem modo decorativo.
+          { prop: "decorative", attr: "—", type: "boolean", default: "false", description: "Só a caixa visual, sem <label> nem <input>, para itens em que um <button> é o controle. Apenas React" },
         ]} />
       </SubSection>
 

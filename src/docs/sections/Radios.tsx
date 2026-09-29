@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { PropsTable } from "../PropsTable";
-import { FrameworkSwitcher } from "../FrameworkSwitcher";
+import { CodeSnippet } from "../CodeSnippet";
+import { FrameworkSwitcher, FrameworkOnly } from "../FrameworkSwitcher";
 import { Radio } from "../../components/Radio";
 import radioStyles from "../../components/Radio.module.css";
 import s from "./Radios.module.css";
@@ -42,7 +44,50 @@ const htmlUsageCode = `<!-- Incluir buds.css + buds.js na página -->
   });
 </script>`;
 
+const decorativeCode = `import { Radio } from "@getbud-co/buds";
+
+<button
+  type="button"
+  role="radio"
+  aria-checked={value === "semanal"}
+  onClick={() => setValue("semanal")}
+>
+  <Radio decorative checked={value === "semanal"} />
+  Semanal
+</button>`;
+
 const states = ["Default", "Hover", "Focused", "Disabled"] as const;
+
+const cadenceOptions = [
+  { id: "semanal", label: "Semanal" },
+  { id: "quinzenal", label: "Quinzenal" },
+  { id: "mensal", label: "Mensal" },
+];
+
+function DecorativeDemo() {
+  const [value, setValue] = useState("semanal");
+
+  return (
+    <div className={s.clickableList} role="radiogroup" aria-label="Cadência">
+      {cadenceOptions.map((opt) => {
+        const active = value === opt.id;
+        return (
+          <button
+            key={opt.id}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            className={s.clickableItem}
+            onClick={() => setValue(opt.id)}
+          >
+            <Radio decorative checked={active} />
+            {opt.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
 
 export function Radios() {
   return (
@@ -209,6 +254,17 @@ export function Radios() {
         </div>
       </SubSection>
 
+      <SubSection
+        id="em-item-clicavel"
+        title="Em item clicável"
+        description="Quando o item inteiro é o controle (um <button>), o radio é só indicador: decorative retira o <label> e o <input>, e o estado vai no aria-checked do botão. Um radio interativo dentro de um botão dispara o clique duas vezes."
+      >
+        <DecorativeDemo />
+        <FrameworkOnly framework={0}>
+          <CodeSnippet language="tsx" code={decorativeCode} />
+        </FrameworkOnly>
+      </SubSection>
+
       <SubSection id="api-radio" title="API">
         <PropsTable rows={[
           { prop: "size", type: '"sm" | "md"', default: '"md"', description: "Tamanho do radio (16px / 20px)" },
@@ -218,6 +274,8 @@ export function Radios() {
           { prop: "value", type: "string", description: "Valor do radio" },
           { prop: "checked", type: "boolean", description: "Estado selecionado" },
           { prop: "disabled", type: "boolean", default: "false", description: "Desabilita o radio" },
+          // Atributo "—": o web component bud-radio não tem modo decorativo.
+          { prop: "decorative", attr: "—", type: "boolean", default: "false", description: "Só a caixa visual, sem <label> nem <input>, para itens em que um <button> é o controle. Apenas React" },
         ]} />
       </SubSection>
 
