@@ -15,6 +15,12 @@
   cursor: not-allowed;
 }
 
+/* Modo decorativo: o elemento pai (um <button>) é o controle. Sem pointer-events,
+   clique e hover caem direto nele. */
+.decorative {
+  pointer-events: none;
+}
+
 /* ——— Hidden input ——— */
 .input {
   position: absolute;
@@ -54,8 +60,10 @@
   /* width/height set inline: 20px */
 }
 
-/* ——— Hover (unchecked) ——— */
-.wrapper:hover:not(.disabled) .box {
+/* ——— Hover (unchecked) ———
+   No modo decorativo o hover é o do controle pai, do qual a caixa é filha direta. */
+.wrapper:hover:not(.disabled) .box,
+:hover > .decorative:not(.disabled) .box {
   border-color: var(--color-caramel-500);
 }
 
@@ -66,16 +74,19 @@
 }
 
 /* ——— Checked ——— */
-.input:checked ~ .box {
+.input:checked ~ .box,
+.decorative.checked .box {
   background-color: var(--color-orange-500);
   border-color: var(--color-orange-600);
 }
 
-.input:checked ~ .box .icon {
+.input:checked ~ .box .icon,
+.decorative.checked .box .icon {
   opacity: 1;
 }
 
-.wrapper:hover:not(.disabled) .input:checked ~ .box {
+.wrapper:hover:not(.disabled) .input:checked ~ .box,
+:hover > .decorative.checked:not(.disabled) .box {
   background-color: var(--color-orange-600);
   border-color: var(--color-orange-600);
 }
@@ -87,16 +98,19 @@
 }
 
 /* ——— Indeterminate ——— */
-.input:indeterminate ~ .box {
+.input:indeterminate ~ .box,
+.decorative.indeterminate .box {
   background-color: var(--color-orange-500);
   border-color: var(--color-orange-600);
 }
 
-.input:indeterminate ~ .box .icon {
+.input:indeterminate ~ .box .icon,
+.decorative.indeterminate .box .icon {
   opacity: 1;
 }
 
-.wrapper:hover:not(.disabled) .input:indeterminate ~ .box {
+.wrapper:hover:not(.disabled) .input:indeterminate ~ .box,
+:hover > .decorative.indeterminate:not(.disabled) .box {
   background-color: var(--color-orange-600);
   border-color: var(--color-orange-600);
 }
@@ -108,13 +122,16 @@
 }
 
 /* ——— Disabled ——— */
-.input:disabled ~ .box {
+.input:disabled ~ .box,
+.decorative.disabled .box {
   background-color: var(--color-neutral-100);
   border-color: var(--color-neutral-300);
 }
 
 .input:disabled:checked ~ .box .icon,
-.input:disabled:indeterminate ~ .box .icon {
+.input:disabled:indeterminate ~ .box .icon,
+.decorative.disabled.checked .box .icon,
+.decorative.disabled.indeterminate .box .icon {
   opacity: 1;
   color: var(--color-neutral-400);
 }

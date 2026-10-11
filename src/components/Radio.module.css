@@ -15,6 +15,12 @@
   cursor: not-allowed;
 }
 
+/* Modo decorativo: o elemento pai (um <button>) é o controle. Sem pointer-events,
+   clique e hover caem direto nele. */
+.decorative {
+  pointer-events: none;
+}
+
 /* ——— Hidden input ——— */
 .input {
   position: absolute;
@@ -57,8 +63,10 @@
   height: 10px;
 }
 
-/* ——— Hover (unchecked) ——— */
-.wrapper:hover:not(.disabled) .box {
+/* ——— Hover (unchecked) ———
+   No modo decorativo o hover é o do controle pai, do qual a caixa é filha direta. */
+.wrapper:hover:not(.disabled) .box,
+:hover > .decorative:not(.disabled) .box {
   border-color: var(--color-caramel-500);
 }
 
@@ -69,16 +77,19 @@
 }
 
 /* ——— Checked ——— */
-.input:checked ~ .box {
+.input:checked ~ .box,
+.decorative.checked .box {
   background-color: var(--color-orange-500);
   border-color: var(--color-orange-600);
 }
 
-.input:checked ~ .box .dot {
+.input:checked ~ .box .dot,
+.decorative.checked .box .dot {
   opacity: 1;
 }
 
-.wrapper:hover:not(.disabled) .input:checked ~ .box {
+.wrapper:hover:not(.disabled) .input:checked ~ .box,
+:hover > .decorative.checked:not(.disabled) .box {
   background-color: var(--color-orange-600);
   border-color: var(--color-orange-600);
 }
@@ -90,17 +101,20 @@
 }
 
 /* ——— Disabled ——— */
-.input:disabled ~ .box {
+.input:disabled ~ .box,
+.decorative.disabled .box {
   background-color: var(--color-neutral-100);
   border-color: var(--color-neutral-300);
 }
 
-.input:disabled:checked ~ .box {
+.input:disabled:checked ~ .box,
+.decorative.disabled.checked .box {
   background-color: var(--color-neutral-100);
   border-color: var(--color-neutral-300);
 }
 
-.input:disabled:checked ~ .box .dot {
+.input:disabled:checked ~ .box .dot,
+.decorative.disabled.checked .box .dot {
   opacity: 1;
   background-color: var(--color-neutral-400);
 }

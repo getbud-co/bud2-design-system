@@ -138,6 +138,11 @@ import { Checkbox, Toggle } from "@getbud-co/buds";
 <Checkbox label="Aceito os termos" checked={agreed} onChange={setAgreed} />
 
 <Toggle label="Notificações" checked={enabled} onChange={setEnabled} />
+
+// Quando o item inteiro é o controle, o checkbox é só indicador
+<button type="button" role="checkbox" aria-checked={selected} onClick={toggle}>
+  <Checkbox decorative checked={selected} /> Engenharia
+</button>
 ```
 
 ### Toast
