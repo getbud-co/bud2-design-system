@@ -37,6 +37,8 @@ const TableContext = createContext<TableContextValue>({
 
 interface TableProps extends HTMLAttributes<HTMLDivElement> {
   variant?: "divider" | "striped";
+  /** Compact spacing and wrapped text for summaries in narrow panels. */
+  density?: "default" | "compact";
   /** Adiciona box-shadow ao container (default: true) */
   elevated?: boolean;
   /** Exibe borda e border-radius no container (default: true). Use false quando a tabela está dentro de um Card. */
@@ -50,6 +52,7 @@ interface TableProps extends HTMLAttributes<HTMLDivElement> {
 
 export function Table({
   variant = "divider",
+  density = "default",
   elevated = true,
   bordered = true,
   selectable = false,
@@ -81,7 +84,7 @@ export function Table({
   return (
     <TableContext.Provider value={ctx}>
       <div
-        className={[s.root, elevated && s.elevated, !bordered && s.borderless, className].filter(Boolean).join(" ")}
+        className={[s.root, density === "compact" && s.compact, elevated && s.elevated, !bordered && s.borderless, className].filter(Boolean).join(" ")}
         {...rest}
       >
         {children}

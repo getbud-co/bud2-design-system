@@ -107,11 +107,17 @@
 /* ——— Message list ——— */
 .messageList {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: var(--sp-sm);
   padding: var(--sp-sm);
+}
+
+.messageList:focus-visible {
+  outline: 2px solid var(--color-wine-400);
+  outline-offset: -2px;
 }
 
 /* ——— User message ——— */
@@ -175,7 +181,7 @@
   display: flex;
   align-items: flex-start;
   gap: var(--sp-2xs);
-  max-width: 80%;
+  max-width: 100%;
 }
 
 .aiIcon {
@@ -184,21 +190,43 @@
   margin-top: 2px;
 }
 
-.aiText {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  color: var(--color-neutral-950);
-  line-height: 1.5;
-  margin: 0;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
 .aiContent {
   display: flex;
   flex-direction: column;
   gap: var(--sp-2xs);
   min-width: 0;
+}
+
+.messageActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2xs);
+}
+
+.newReply {
+  align-self: center;
+  margin: var(--sp-2xs);
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2xs);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-700);
+  line-height: 1.5;
+}
+
+.status:not(:empty) {
+  padding: var(--sp-2xs) var(--sp-sm);
+}
+
+.waiting {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-xs);
 }
 
 .useAsBaseBtn {
@@ -220,6 +248,11 @@
 
 .useAsBaseBtn:hover {
   background: var(--color-orange-100);
+}
+
+.useAsBaseBtn:focus-visible {
+  outline: 2px solid var(--color-orange-400);
+  outline-offset: 2px;
 }
 
 /* ——— Typing indicator ——— */
@@ -252,26 +285,6 @@
   }
   30% {
     transform: translateY(-4px);
-  }
-}
-
-/* ——— Streaming cursor ——— */
-.cursor {
-  display: inline-block;
-  width: 2px;
-  height: 1em;
-  background-color: var(--color-neutral-950);
-  margin-left: 1px;
-  vertical-align: text-bottom;
-  animation: blink 600ms step-end infinite;
-}
-
-@keyframes blink {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
   }
 }
 
@@ -332,11 +345,6 @@
 
 .input::placeholder {
   color: var(--color-neutral-500);
-}
-
-.input:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
 }
 
 .attachButton {
@@ -563,5 +571,13 @@
 
   .suggestions {
     padding: 0 var(--sp-2xs);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .userMessage,
+  .contextBadge,
+  .dot {
+    animation: none;
   }
 }
