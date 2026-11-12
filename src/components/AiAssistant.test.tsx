@@ -294,6 +294,37 @@ describe("AiAssistant — medição sem conteúdo", () => {
     expect(JSON.stringify(events)).not.toMatch(/privad/);
   });
 
+  it.each([
+    ["antes", "copy_succeeded"],
+    ["antes", "copy_failed"],
+    ["depois", "copy_succeeded"],
+    ["depois", "copy_failed"],
+  ] as const)("mantém o observador de origem quando a prop muda %s da resposta (%s)", async (when, copyPhase) => {
+    const pending = deferred<string>();
+    const originalObserver = vi.fn();
+    const nextObserver = vi.fn();
+    const onMessage = () => pending.promise;
+    const writeText = vi.fn(async () => {
+      if (copyPhase === "copy_failed") throw new Error("clipboard detail");
+    });
+    vi.stubGlobal("navigator", { clipboard: { writeText } });
+    const view = render(<AiAssistant onMessage={onMessage} onInteraction={originalObserver} />);
+    send("Pedido original");
+
+    if (when === "antes") view.rerender(<AiAssistant onMessage={onMessage} onInteraction={nextObserver} />);
+    await act(async () => pending.resolve("Resposta original"));
+    if (when === "depois") view.rerender(<AiAssistant onMessage={onMessage} onInteraction={nextObserver} />);
+    await act(async () => { fireEvent.click(screen.getByRole("button", { name: "Copiar resposta" })); });
+
+    const events: AiAssistantInteractionEvent[] = originalObserver.mock.calls.map(([event]) => event);
+    expect(events.map((event) => event.phase)).toEqual([
+      "submitted", "response_received", "response_presented", copyPhase,
+    ]);
+    expect(new Set(events.map((event) => event.requestId)).size).toBe(1);
+    expect(nextObserver).not.toHaveBeenCalled();
+    expect(writeText).toHaveBeenCalledExactlyOnceWith("Resposta original");
+  });
+
   it("não deixa uma falha do observador impedir o recebimento da resposta", async () => {
     render(<AiAssistant onMessage={async () => "Resultado utilizável"} onInteraction={() => { throw new Error("Observador indisponível"); }} />);
     await act(async () => { send(); });

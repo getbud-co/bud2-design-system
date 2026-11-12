@@ -118,7 +118,7 @@ export function AiAssistantSection() {
           Copiar e “Usar como base” preservam o Markdown original.
         </p>
         <p>
-          O texto segue Paragraph / MD (Inter 14 px, entrelinha 140%) e os
+          O texto segue Inter 14 px, com entrelinha de 155%, e os
           títulos usam Title / MD, SM e XS. Tabelas reutilizam o componente
           Table com densidade compacta; listas de verificação usam Checkbox
           desabilitado, com nome acessível para cada item. Blocos de código
@@ -151,6 +151,41 @@ export function AiAssistantSection() {
         </div>
       </SubSection>
 
+      <SubSection id="conversa-inicial" title="Conversa inicial e simulações">
+        <p>
+          <code>initialMessages</code> preenche o histórico na montagem, sem
+          iniciar uma requisição ou emitir eventos de interação. Cada mensagem
+          mantém seu <code>content</code> original para copiar e usar como base.
+          O consumidor pode fornecer <code>richContent</code> em JSX, uma
+          <code> tag</code> e um <code>card</code> com label, value e icon opcional.
+          Respostas do callback continuam usando o renderizador Markdown.
+        </p>
+        <p>
+          <code>inputDisabled</code> impede novos envios; <code>hideInput</code>
+          apenas oculta o formulário. As sugestões abaixo do histórico chamam
+          <code> onInlineSuggestionSelect</code> com o label escolhido, sem
+          enviar mensagens automaticamente. Esse callback continua disponível
+          nas simulações com entrada desabilitada, mas aguarda uma resposta em
+          andamento. Sugestões aceitam texto ou um objeto com label e meta.
+        </p>
+        <div className={s.demoContainer}>
+          <AiAssistant
+            subtitle="Resumo do ciclo"
+            hideInput
+            inputDisabled
+            initialMessages={[{
+              role: "assistant",
+              content: "Seu ciclo está em 70%. Revise os próximos passos.",
+              richContent: <p>Seu ciclo está em <strong>70%</strong>. Revise os próximos passos.</p>,
+              tag: "Visão geral",
+              card: { label: "Progresso", value: "70%" },
+            }]}
+            inlineSuggestions={["Revisar objetivos", { label: "Planejar", meta: "Próximo ciclo" }]}
+            onInlineSuggestionSelect={(label) => setLastAction(`Sugestão selecionada: ${label}`)}
+          />
+        </div>
+      </SubSection>
+
       <SubSection
         id="sem-sugestoes"
         title="Sem sugestões"
@@ -173,7 +208,7 @@ export function AiAssistantSection() {
           </li>
           <li>
             <strong>Chat</strong> — mensagens do usuário (bolha à direita,
-            caramel-100) e da IA (texto à esquerda com ícone Lightning fill)
+            caramel-100) e da IA (conteúdo formatado à esquerda)
           </li>
           <li>
             <strong>Input</strong> — campo com borda wine-300, glow em gradiente
@@ -247,7 +282,7 @@ export function AiAssistantSection() {
           <li><code>response_presented</code>: resposta completa no DOM, sem bloqueio do próximo envio.</li>
           <li><code>request_failed</code>: a chamada rejeitou; não comprova que uma operação deixou de ocorrer.</li>
           <li><code>response_not_presented</code>: o painel foi desmontado antes da apresentação.</li>
-          <li><code>copy_succeeded</code> e <code>copy_failed</code>: resultado da cópia da resposta.</li>
+          <li><code>copy_succeeded</code> e <code>copy_failed</code>: resultado da cópia de uma resposta recebida nesta instância; mensagens iniciais não geram esses eventos.</li>
         </ul>
         <p>
           <code>allowUpload</code> permanece por compatibilidade visual, mas

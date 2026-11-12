@@ -5,6 +5,7 @@ import {
   X,
   Plus,
   ArrowUp,
+  ArrowRight,
   ArrowDown,
   Copy,
   FileArrowUp,
@@ -13,6 +14,7 @@ import {
   File as FileIcon,
 } from "@phosphor-icons/react";
 import { Button } from "./Button";
+import { Card, CardBody } from "./Card";
 import { Checkbox } from "./Checkbox";
 import { Popover, type PopoverItem } from "./Popover";
 import { AiAssistantResponse } from "./AiAssistantResponse";
@@ -23,13 +25,38 @@ interface MessageContext {
   missionCount: number;
 }
 
+interface AiCardData {
+  label: string;
+  value: string;
+  icon?: React.ComponentType<{ size?: number; className?: string }>;
+}
+
 interface Message {
   id: string;
-  requestId: string;
+  requestId?: string;
+  observer?: InteractionObserver;
   role: "user" | "assistant";
   content: string;
+  richContent?: React.ReactNode;
+  tag?: string;
+  card?: AiCardData;
   context?: MessageContext;
 }
+
+export interface AiAssistantInitialMessage {
+  role: "user" | "assistant";
+  content: string;
+  /** Optional rich JSX rendered in place of `content` (for paragraphs, emphasis, etc.) */
+  richContent?: React.ReactNode;
+  /** Small label rendered above the message bubble (assistant only) */
+  tag?: string;
+  /** Featured card rendered above the message body (assistant only) */
+  card?: AiCardData;
+}
+
+export type AiAssistantInlineSuggestion =
+  | string
+  | { label: string; meta?: string };
 
 export interface AiAssistantInteractionEvent {
   phase: "submitted" | "response_received" | "response_presented" | "request_failed" | "response_not_presented" | "copy_succeeded" | "copy_failed";
@@ -69,6 +96,7 @@ export interface MissionItem {
 
 export interface AiAssistantProps {
   title?: string;
+  subtitle?: string;
   heading?: string;
   suggestions?: string[];
   placeholder?: string;
@@ -85,6 +113,16 @@ export interface AiAssistantProps {
   missions?: MissionItem[];
   selectedMissions?: string[];
   onMissionsChange?: (ids: string[]) => void;
+  /** Pre-seeded conversation messages shown before any user interaction */
+  initialMessages?: AiAssistantInitialMessage[];
+  /** Disable input (read-only mode for static simulations) */
+  inputDisabled?: boolean;
+  /** Hide the input area entirely */
+  hideInput?: boolean;
+  /** Selectable suggestions rendered after the messages, as a list */
+  inlineSuggestions?: AiAssistantInlineSuggestion[];
+  /** Called when the user selects an inline suggestion */
+  onInlineSuggestionSelect?: (label: string) => void;
 }
 
 let nextId = 0;
@@ -94,6 +132,7 @@ function uid() {
 
 export function AiAssistant({
   title = "Assistente de criação",
+  subtitle,
   heading = "Tenha ajuda na criação das suas missões",
   suggestions = [
     "Faça uma revisão do meu Q1",
@@ -110,9 +149,16 @@ export function AiAssistant({
   missions,
   selectedMissions,
   onMissionsChange,
+  initialMessages,
+  inputDisabled,
+  hideInput,
+  inlineSuggestions,
+  onInlineSuggestionSelect,
 }: AiAssistantProps) {
   const [value, setValue] = useState("");
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(() =>
+    (initialMessages ?? []).map((message) => ({ ...message, id: uid() })),
+  );
   const [busy, setBusy] = useState(false);
   const [feedback, setFeedback] = useState("");
   const [hasUnreadReply, setHasUnreadReply] = useState(false);
@@ -167,7 +213,7 @@ export function AiAssistant({
 
   async function sendMessage(text: string) {
     // React may batch two clicks before busy is committed to the DOM.
-    if (activeRequestRef.current) return;
+    if (inputDisabled || activeRequestRef.current) return;
     const fileCount = attachedFiles.length;
     const missionCount = selectedMissionCount;
     const context: MessageContext | undefined =
@@ -204,7 +250,9 @@ export function AiAssistant({
         activeRequestRef.current = null;
         return;
       }
-      const aiMsg: Message = { id: uid(), requestId: request.id, role: "assistant", content: response };
+      const aiMsg: Message = {
+        id: uid(), requestId: request.id, observer: request.observer, role: "assistant", content: response,
+      };
       setMessages((prev) => [...prev, aiMsg]);
     } catch (error) {
       activeRequestRef.current = null;
@@ -228,10 +276,10 @@ export function AiAssistant({
     setFeedback("");
     try {
       await navigator.clipboard.writeText(message.content);
-      reportInteraction(onInteraction, message.requestId, "copy_succeeded");
+      if (message.requestId) reportInteraction(message.observer, message.requestId, "copy_succeeded");
       if (mountedRef.current) setFeedback("Resposta copiada.");
     } catch {
-      reportInteraction(onInteraction, message.requestId, "copy_failed");
+      if (message.requestId) reportInteraction(message.observer, message.requestId, "copy_failed");
       if (mountedRef.current) setFeedback("Não foi possível copiar. Selecione o texto da resposta e copie manualmente.");
     }
   }
@@ -303,7 +351,10 @@ export function AiAssistant({
     <div className={s.container} role="region" aria-label={title}>
       <div className={s.header}>
         <Lightning size={16}  className={s.headerIcon} />
-        <h2 className={s.title}>{title}</h2>
+        <div className={s.headerTitles}>
+          <h2 className={s.title}>{title}</h2>
+          {subtitle && <span className={s.subtitle}>{subtitle}</span>}
+        </div>
         {onClose && (
           <Button
             variant="tertiary"
@@ -328,6 +379,7 @@ export function AiAssistant({
                   key={text}
                   type="button"
                   className={s.suggestion}
+                  disabled={inputDisabled}
                   onClick={() => handleSuggestion(text)}
                 >
                   <Lightning size={14} aria-hidden="true" style={{ flexShrink: 0, marginTop: 2 }} />
@@ -371,13 +423,31 @@ export function AiAssistant({
               </div>
             ) : (
               <div key={msg.id} className={s.aiMessage}>
-                <Lightning
-                  size={16}
-                  className={s.aiIcon}
-                  aria-hidden="true"
-                />
                 <div className={s.aiContent}>
-                  <AiAssistantResponse content={msg.content} />
+                  {msg.tag && <span className={s.aiTag}>{msg.tag}</span>}
+                  {msg.card && (() => {
+                    const CardIcon = msg.card.icon;
+                    return (
+                      <Card padding="md" className={s.aiCard}>
+                        <CardBody className={s.aiCardBody}>
+                          {CardIcon && (
+                            <div className={s.aiCardIcon}>
+                              <CardIcon size={20} />
+                            </div>
+                          )}
+                          <div className={s.aiCardText}>
+                            <span className={s.aiCardLabel}>{msg.card.label}</span>
+                            <span className={s.aiCardValue}>{msg.card.value}</span>
+                          </div>
+                        </CardBody>
+                      </Card>
+                    );
+                  })()}
+                  {msg.richContent ? (
+                    <div className={s.aiRich}>{msg.richContent}</div>
+                  ) : (
+                    <AiAssistantResponse content={msg.content} />
+                  )}
                   <div className={s.messageActions}>
                     <Button variant="tertiary" size="sm" leftIcon={Copy} onClick={() => { void copyResponse(msg); }}>
                       Copiar resposta
@@ -396,6 +466,37 @@ export function AiAssistant({
                 </div>
               </div>
             ),
+          )}
+          {inlineSuggestions && inlineSuggestions.length > 0 && (
+            <div className={s.inlineSuggestions} role="list">
+              {inlineSuggestions.map((sug) => {
+                const label = typeof sug === "string" ? sug : sug.label;
+                const meta = typeof sug === "string" ? undefined : sug.meta;
+                return (
+                  <div key={label} role="listitem">
+                    <button
+                      type="button"
+                      className={s.inlineSuggestion}
+                      onClick={() => {
+                        if (!busy) onInlineSuggestionSelect?.(label);
+                      }}
+                    >
+                      <span className={s.inlineSuggestionContent}>
+                        <span className={s.inlineSuggestionLabel}>{label}</span>
+                        {meta && (
+                          <span className={s.inlineSuggestionMeta}>{meta}</span>
+                        )}
+                      </span>
+                      <ArrowRight
+                        size={14}
+                        className={s.inlineSuggestionArrow}
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           )}
         </div>
       )}
@@ -419,150 +520,153 @@ export function AiAssistant({
         {feedback && <span>{feedback}</span>}
       </div>
 
-      <form className={s.inputArea} onSubmit={handleSubmit}>
-        <div className={s.inputGlow} aria-hidden="true" />
-        {allowUpload && (
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            className={s.fileInput}
-            onChange={handleFileChange}
-            tabIndex={-1}
-          />
-        )}
-        <div className={s.inputBox}>
-          {hasContext && (
-            <div className={s.contextStrip}>
-              {attachedFiles.length > 0 && (
-                <span className={s.contextBadge}>
-                  <FileIcon size={12} className={s.contextBadgeIcon} />
-                  <span className={s.contextBadgeLabel}>
-                    {attachedFiles.length} {attachedFiles.length === 1 ? "arquivo" : "arquivos"}
-                  </span>
-                  <button
-                    type="button"
-                    className={s.contextBadgeRemove}
-                    onClick={() => setAttachedFiles([])}
-                    aria-label="Remover todos os arquivos"
-                  >
-                    <X size={10} />
-                  </button>
-                </span>
-              )}
-              {selectedMissionCount > 0 && (
-                <span className={s.contextBadge}>
-                  <Link size={12} className={s.contextBadgeIcon} />
-                  <span className={s.contextBadgeLabel}>
-                    {selectedMissionCount} {selectedMissionCount === 1 ? "missão / pesquisa" : "missões / pesquisas"}
-                  </span>
-                  <button
-                    type="button"
-                    className={s.contextBadgeRemove}
-                    onClick={() => onMissionsChange?.([])}
-                    aria-label="Remover todas as missões e pesquisas"
-                  >
-                    <X size={10} />
-                  </button>
-                </span>
-              )}
-            </div>
-          )}
-          <div className={s.inputRow}>
+      {!hideInput && (
+        <form className={s.inputArea} onSubmit={handleSubmit}>
+          <div className={s.inputGlow} aria-hidden="true" />
+          {allowUpload && (
             <input
-              ref={inputRef}
-              className={s.input}
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              placeholder={placeholder}
-              aria-label={placeholder}
+              ref={fileInputRef}
+              type="file"
+              multiple
+              className={s.fileInput}
+              onChange={handleFileChange}
+              tabIndex={-1}
             />
-            {hasAttach && (
-              <>
-                <button
-                  type="button"
-                  className={s.attachButton}
-                  ref={attachButtonRef}
-                  onClick={handleToggleAttach}
-                  aria-label="Opções de anexo"
-                  disabled={busy}
-                >
-                  <Plus size={14} />
-                </button>
-                <Popover
-                  items={(() => {
-                    const menuItems: PopoverItem[] = [];
-                    if (allowUpload) {
-                      menuItems.push({
-                        id: "upload",
-                        label: "Enviar arquivo",
-                        icon: FileArrowUp,
-                        onClick: () => setPendingUpload(true),
-                      });
-                    }
-                    if (missions && missions.length > 0) {
-                      menuItems.push({
-                        id: "missions",
-                        label: "Missão / Pesquisa",
-                        icon: Link,
-                        badge: selectedMissionCount,
-                        submenu: (
-                          <>
-                            <div className={s.missionSearchBox}>
-                              <MagnifyingGlass
-                                size={14}
-                                className={s.missionSearchIcon}
-                              />
-                              <input
-                                className={s.missionSearchInput}
-                                value={missionSearch}
-                                onChange={(e) => setMissionSearch(e.target.value)}
-                                placeholder="Buscar missão..."
-                                aria-label="Buscar missão"
-                              />
-                            </div>
-                            <div className={s.missionList}>
-                              {filteredMissions?.map((m) => (
-                                <label key={m.id} className={s.missionListItem}>
-                                  <Checkbox
-                                    size="sm"
-                                    checked={
-                                      selectedMissions?.includes(m.id) ?? false
-                                    }
-                                    onChange={() => handleMissionToggle(m.id)}
-                                  />
-                                  <span className={s.missionLabel}>
-                                    {m.label}
-                                  </span>
-                                </label>
-                              ))}
-                            </div>
-                          </>
-                        ),
-                      });
-                    }
-                    return menuItems;
-                  })()}
-                  open={attachOpen}
-                  onClose={() => {
-                    setAttachOpen(false);
-                    setMissionSearch("");
-                  }}
-                  anchorRef={attachButtonRef}
-                />
-              </>
+          )}
+          <div className={s.inputBox}>
+            {hasContext && (
+              <div className={s.contextStrip}>
+                {attachedFiles.length > 0 && (
+                  <span className={s.contextBadge}>
+                    <FileIcon size={12} className={s.contextBadgeIcon} />
+                    <span className={s.contextBadgeLabel}>
+                      {attachedFiles.length} {attachedFiles.length === 1 ? "arquivo" : "arquivos"}
+                    </span>
+                    <button
+                      type="button"
+                      className={s.contextBadgeRemove}
+                      onClick={() => setAttachedFiles([])}
+                      aria-label="Remover todos os arquivos"
+                    >
+                      <X size={10} />
+                    </button>
+                  </span>
+                )}
+                {selectedMissionCount > 0 && (
+                  <span className={s.contextBadge}>
+                    <Link size={12} className={s.contextBadgeIcon} />
+                    <span className={s.contextBadgeLabel}>
+                      {selectedMissionCount} {selectedMissionCount === 1 ? "missão / pesquisa" : "missões / pesquisas"}
+                    </span>
+                    <button
+                      type="button"
+                      className={s.contextBadgeRemove}
+                      onClick={() => onMissionsChange?.([])}
+                      aria-label="Remover todas as missões e pesquisas"
+                    >
+                      <X size={10} />
+                    </button>
+                  </span>
+                )}
+              </div>
             )}
-            <button
-              type="submit"
-              className={s.submitButton}
-              aria-label="Enviar mensagem"
-              disabled={!value.trim() || busy}
-            >
-              <ArrowUp size={14} />
-            </button>
+            <div className={s.inputRow}>
+              <input
+                ref={inputRef}
+                className={s.input}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder={placeholder}
+                aria-label={placeholder}
+                disabled={inputDisabled}
+              />
+              {hasAttach && (
+                <>
+                  <button
+                    type="button"
+                    className={s.attachButton}
+                    ref={attachButtonRef}
+                    onClick={handleToggleAttach}
+                    aria-label="Opções de anexo"
+                    disabled={busy}
+                  >
+                    <Plus size={14} />
+                  </button>
+                  <Popover
+                    items={(() => {
+                      const menuItems: PopoverItem[] = [];
+                      if (allowUpload) {
+                        menuItems.push({
+                          id: "upload",
+                          label: "Enviar arquivo",
+                          icon: FileArrowUp,
+                          onClick: () => setPendingUpload(true),
+                        });
+                      }
+                      if (missions && missions.length > 0) {
+                        menuItems.push({
+                          id: "missions",
+                          label: "Missão / Pesquisa",
+                          icon: Link,
+                          badge: selectedMissionCount,
+                          submenu: (
+                            <>
+                              <div className={s.missionSearchBox}>
+                                <MagnifyingGlass
+                                  size={14}
+                                  className={s.missionSearchIcon}
+                                />
+                                <input
+                                  className={s.missionSearchInput}
+                                  value={missionSearch}
+                                  onChange={(e) => setMissionSearch(e.target.value)}
+                                  placeholder="Buscar missão..."
+                                  aria-label="Buscar missão"
+                                />
+                              </div>
+                              <div className={s.missionList}>
+                                {filteredMissions?.map((m) => (
+                                  <label key={m.id} className={s.missionListItem}>
+                                    <Checkbox
+                                      size="sm"
+                                      checked={
+                                        selectedMissions?.includes(m.id) ?? false
+                                      }
+                                      onChange={() => handleMissionToggle(m.id)}
+                                    />
+                                    <span className={s.missionLabel}>
+                                      {m.label}
+                                    </span>
+                                  </label>
+                                ))}
+                              </div>
+                            </>
+                          ),
+                        });
+                      }
+                      return menuItems;
+                    })()}
+                    open={attachOpen}
+                    onClose={() => {
+                      setAttachOpen(false);
+                      setMissionSearch("");
+                    }}
+                    anchorRef={attachButtonRef}
+                  />
+                </>
+              )}
+              <button
+                type="submit"
+                className={s.submitButton}
+                aria-label="Enviar mensagem"
+                disabled={!value.trim() || busy || inputDisabled}
+              >
+                <ArrowUp size={14} />
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      )}
     </div>
   );
 }
