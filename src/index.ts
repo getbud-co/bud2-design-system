@@ -67,7 +67,13 @@ export { Tooltip } from "./components/Tooltip";
 export type { LoadingScreenProps } from "./components/LoadingScreen";
 export type { DrawerProps } from "./components/Drawer";
 export type { ModalProps } from "./components/Modal";
-export type { MissionItem } from "./components/AiAssistant";
+export type {
+  MissionItem,
+  AiAssistantProps,
+  AiAssistantInteractionEvent,
+  AiAssistantInitialMessage,
+  AiAssistantInlineSuggestion,
+} from "./components/AiAssistant";
 export type { AvatarSize } from "./components/Avatar";
 export type { AvatarGroupSize, AvatarGroupItem } from "./components/AvatarGroup";
 export type { AvatarLabelGroupSize } from "./components/AvatarLabelGroup";

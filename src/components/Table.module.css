@@ -253,6 +253,20 @@
   padding: var(--sp-sm) var(--sp-sm) var(--sp-sm) var(--sp-lg);
 }
 
+/* Compact summaries keep the same surfaces and separators as the data table. */
+.compact .table { line-height: 1.4; }
+.compact .th {
+  padding: var(--sp-2xs) var(--sp-xs);
+  height: var(--sp-2xl);
+}
+.compact .td {
+  padding: var(--sp-xs);
+  height: auto;
+  vertical-align: top;
+  min-width: 8em;
+  overflow-wrap: normal;
+}
+
 /* ——— Pagination (inside table) ——— */
 
 .pagination {

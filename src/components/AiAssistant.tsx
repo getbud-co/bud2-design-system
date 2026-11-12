@@ -1,18 +1,23 @@
-import { useState, useRef, useEffect, useLayoutEffect, useCallback, type FormEvent } from "react";
+import { useState, useRef, useLayoutEffect, type FormEvent } from "react";
 import {
   Lightning,
   SidebarSimple,
   X,
   Plus,
   ArrowUp,
+  ArrowRight,
+  ArrowDown,
+  Copy,
   FileArrowUp,
   Link,
   MagnifyingGlass,
   File as FileIcon,
 } from "@phosphor-icons/react";
 import { Button } from "./Button";
+import { Card, CardBody } from "./Card";
 import { Checkbox } from "./Checkbox";
 import { Popover, type PopoverItem } from "./Popover";
+import { AiAssistantResponse } from "./AiAssistantResponse";
 import s from "./AiAssistant.module.css";
 
 interface MessageContext {
@@ -20,33 +25,104 @@ interface MessageContext {
   missionCount: number;
 }
 
+interface AiCardData {
+  label: string;
+  value: string;
+  icon?: React.ComponentType<{ size?: number; className?: string }>;
+}
+
 interface Message {
   id: string;
+  requestId?: string;
+  observer?: InteractionObserver;
   role: "user" | "assistant";
   content: string;
+  richContent?: React.ReactNode;
+  tag?: string;
+  card?: AiCardData;
   context?: MessageContext;
 }
 
-type ChatStatus = "idle" | "thinking" | "streaming";
+export interface AiAssistantInitialMessage {
+  role: "user" | "assistant";
+  content: string;
+  /** Optional rich JSX rendered in place of `content` (for paragraphs, emphasis, etc.) */
+  richContent?: React.ReactNode;
+  /** Small label rendered above the message bubble (assistant only) */
+  tag?: string;
+  /** Featured card rendered above the message body (assistant only) */
+  card?: AiCardData;
+}
+
+export type AiAssistantInlineSuggestion =
+  | string
+  | { label: string; meta?: string };
+
+export interface AiAssistantInteractionEvent {
+  phase: "submitted" | "response_received" | "response_presented" | "request_failed" | "response_not_presented" | "copy_succeeded" | "copy_failed";
+  requestId: string;
+  /** Monotonic browser time (performance.now), in milliseconds. No message content. */
+  timestampMs: number;
+}
+
+type InteractionPhase = AiAssistantInteractionEvent["phase"];
+type InteractionObserver = (event: AiAssistantInteractionEvent) => void;
+
+interface PendingRequest {
+  id: string;
+  observer?: InteractionObserver;
+  received: boolean;
+  presentationReported: boolean;
+}
+
+function reportInteraction(observer: InteractionObserver | undefined, requestId: string, phase: InteractionPhase) {
+  try {
+    observer?.({ phase, requestId, timestampMs: performance.now() });
+  } catch {
+    // Optional instrumentation must not interrupt the conversation.
+  }
+}
+
+function reportPresentation(request: PendingRequest, phase: "response_presented" | "response_not_presented") {
+  if (request.presentationReported) return;
+  request.presentationReported = true;
+  reportInteraction(request.observer, request.id, phase);
+}
 
 export interface MissionItem {
   id: string;
   label: string;
 }
 
-interface AiAssistantProps {
+export interface AiAssistantProps {
   title?: string;
+  subtitle?: string;
   heading?: string;
   suggestions?: string[];
   placeholder?: string;
   onClose?: () => void;
+  /** Returns a complete Markdown response (CommonMark + GFM). Raw HTML is not rendered. */
   onMessage?: (text: string) => Promise<string>;
+  /** Maps transport failures to safe user guidance; never renders raw errors by default. */
+  getErrorMessage?: (error: unknown) => string;
+  /** Optional lifecycle/copy events. Includes only an ephemeral request ID and local time. */
+  onInteraction?: InteractionObserver;
   /** Called when user clicks "Usar como base" on an assistant message */
   onUseAsBase?: (messageContent: string) => void;
   allowUpload?: boolean;
   missions?: MissionItem[];
   selectedMissions?: string[];
   onMissionsChange?: (ids: string[]) => void;
+  /** Pre-seeded conversation messages shown before any user interaction */
+  initialMessages?: AiAssistantInitialMessage[];
+  /** Disable input (read-only mode for static simulations) */
+  inputDisabled?: boolean;
+  /** Hide the input area entirely */
+  hideInput?: boolean;
+  /** Selectable suggestions rendered after the messages, as a list */
+  inlineSuggestions?: AiAssistantInlineSuggestion[];
+  /** Called when the user selects an inline suggestion */
+  onInlineSuggestionSelect?: (label: string) => void;
 }
 
 let nextId = 0;
@@ -56,6 +132,7 @@ function uid() {
 
 export function AiAssistant({
   title = "Assistente de criação",
+  subtitle,
   heading = "Tenha ajuda na criação das suas missões",
   suggestions = [
     "Faça uma revisão do meu Q1",
@@ -65,45 +142,67 @@ export function AiAssistant({
   placeholder = "Pergunte ao bud...",
   onClose,
   onMessage,
+  getErrorMessage,
+  onInteraction,
   onUseAsBase,
   allowUpload,
   missions,
   selectedMissions,
   onMissionsChange,
+  initialMessages,
+  inputDisabled,
+  hideInput,
+  inlineSuggestions,
+  onInlineSuggestionSelect,
 }: AiAssistantProps) {
   const [value, setValue] = useState("");
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [status, setStatus] = useState<ChatStatus>("idle");
-  const [streamingText, setStreamingText] = useState("");
+  const [messages, setMessages] = useState<Message[]>(() =>
+    (initialMessages ?? []).map((message) => ({ ...message, id: uid() })),
+  );
+  const [busy, setBusy] = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [hasUnreadReply, setHasUnreadReply] = useState(false);
   const [attachOpen, setAttachOpen] = useState(false);
   const [missionSearch, setMissionSearch] = useState("");
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [pendingUpload, setPendingUpload] = useState(false);
   const messageListRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const attachButtonRef = useRef<HTMLButtonElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const busy = status !== "idle";
+  const mountedRef = useRef(false);
+  const activeRequestRef = useRef<PendingRequest | null>(null);
+  const followMessagesRef = useRef(true);
 
   const hasAttach = !!(allowUpload || missions);
 
-  const scrollToBottom = useCallback(() => {
+  function scrollToBottom() {
     const el = messageListRef.current;
-    if (el) {
-      el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
-    }
+    el?.scrollTo({ top: el.scrollHeight, behavior: "auto" });
+  }
+
+  useLayoutEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      const request = activeRequestRef.current;
+      if (request?.received) reportPresentation(request, "response_not_presented");
+    };
   }, []);
 
-  useEffect(() => {
-    if (messages.length > 0) {
+  useLayoutEffect(() => {
+    if (followMessagesRef.current) {
       scrollToBottom();
+    } else if (messages.at(-1)?.role === "assistant") {
+      setHasUnreadReply(true);
     }
-  }, [messages, scrollToBottom]);
 
-  useEffect(() => {
-    if (status === "streaming") {
-      scrollToBottom();
+    const request = activeRequestRef.current;
+    if (!busy && request?.received && messages.at(-1)?.requestId === request.id) {
+      activeRequestRef.current = null;
+      reportPresentation(request, "response_presented");
     }
-  }, [streamingText, status, scrollToBottom]);
+  }, [messages, busy]);
 
   useLayoutEffect(() => {
     if (pendingUpload) {
@@ -113,6 +212,8 @@ export function AiAssistant({
   }, [pendingUpload]);
 
   async function sendMessage(text: string) {
+    // React may batch two clicks before busy is committed to the DOM.
+    if (inputDisabled || activeRequestRef.current) return;
     const fileCount = attachedFiles.length;
     const missionCount = selectedMissionCount;
     const context: MessageContext | undefined =
@@ -120,39 +221,82 @@ export function AiAssistant({
         ? { fileCount, missionCount }
         : undefined;
 
-    const userMsg: Message = { id: uid(), role: "user", content: text, context };
+    const request: PendingRequest = { id: uid(), observer: onInteraction, received: false, presentationReported: false };
+    if (onMessage) activeRequestRef.current = request;
+    followMessagesRef.current = true;
+    setHasUnreadReply(false);
+    setFeedback("");
+    const userMsg: Message = { id: request.id, requestId: request.id, role: "user", content: text, context };
     setMessages((prev) => [...prev, userMsg]);
     setValue("");
     setAttachedFiles([]);
-    if (missionCount > 0) onMissionsChange?.([]);
+    inputRef.current?.focus({ preventScroll: true });
 
-    if (!onMessage) return;
+    if (!onMessage) {
+      if (missionCount > 0) onMissionsChange?.([]);
+      return;
+    }
 
-    setStatus("thinking");
+    setBusy(true);
+    reportInteraction(request.observer, request.id, "submitted");
 
     try {
+      if (missionCount > 0) onMissionsChange?.([]);
       const response = await onMessage(text);
-      setStatus("streaming");
-      setStreamingText("");
-
-      await new Promise<void>((resolve) => {
-        let i = 0;
-        const interval = setInterval(() => {
-          i++;
-          setStreamingText(response.slice(0, i));
-          if (i >= response.length) {
-            clearInterval(interval);
-            resolve();
-          }
-        }, 30);
-      });
-
-      const aiMsg: Message = { id: uid(), role: "assistant", content: response };
+      request.received = true;
+      reportInteraction(request.observer, request.id, "response_received");
+      if (!mountedRef.current) {
+        reportPresentation(request, "response_not_presented");
+        activeRequestRef.current = null;
+        return;
+      }
+      const aiMsg: Message = {
+        id: uid(), requestId: request.id, observer: request.observer, role: "assistant", content: response,
+      };
       setMessages((prev) => [...prev, aiMsg]);
+    } catch (error) {
+      activeRequestRef.current = null;
+      reportInteraction(request.observer, request.id, "request_failed");
+      if (mountedRef.current) {
+        setValue((draft) => draft || text);
+        let message = "Não foi possível receber a resposta. Confira os dados antes de repetir uma alteração.";
+        try {
+          message = getErrorMessage?.(error) || message;
+        } catch {
+          // A consumer's formatter must not hide the failure or block recovery.
+        }
+        setFeedback(message);
+      }
     } finally {
-      setStatus("idle");
-      setStreamingText("");
+      if (mountedRef.current) setBusy(false);
     }
+  }
+
+  async function copyResponse(message: Message) {
+    setFeedback("");
+    try {
+      await navigator.clipboard.writeText(message.content);
+      if (message.requestId) reportInteraction(message.observer, message.requestId, "copy_succeeded");
+      if (mountedRef.current) setFeedback("Resposta copiada.");
+    } catch {
+      if (message.requestId) reportInteraction(message.observer, message.requestId, "copy_failed");
+      if (mountedRef.current) setFeedback("Não foi possível copiar. Selecione o texto da resposta e copie manualmente.");
+    }
+  }
+
+  function handleMessageScroll() {
+    const el = messageListRef.current;
+    if (!el) return;
+    const nearBottom = el.scrollHeight - el.clientHeight - el.scrollTop <= 32;
+    followMessagesRef.current = nearBottom;
+    if (nearBottom) setHasUnreadReply(false);
+  }
+
+  function revealReply() {
+    followMessagesRef.current = true;
+    scrollToBottom();
+    setHasUnreadReply(false);
+    messageListRef.current?.focus({ preventScroll: true });
   }
 
   function handleSubmit(e: FormEvent) {
@@ -207,7 +351,10 @@ export function AiAssistant({
     <div className={s.container} role="region" aria-label={title}>
       <div className={s.header}>
         <Lightning size={16}  className={s.headerIcon} />
-        <h2 className={s.title}>{title}</h2>
+        <div className={s.headerTitles}>
+          <h2 className={s.title}>{title}</h2>
+          {subtitle && <span className={s.subtitle}>{subtitle}</span>}
+        </div>
         {onClose && (
           <Button
             variant="tertiary"
@@ -232,6 +379,7 @@ export function AiAssistant({
                   key={text}
                   type="button"
                   className={s.suggestion}
+                  disabled={inputDisabled}
                   onClick={() => handleSuggestion(text)}
                 >
                   <Lightning size={14} aria-hidden="true" style={{ flexShrink: 0, marginTop: 2 }} />
@@ -246,7 +394,11 @@ export function AiAssistant({
           className={s.messageList}
           ref={messageListRef}
           role="log"
+          aria-label="Conversa com o assistente"
           aria-live="polite"
+          aria-relevant="additions"
+          tabIndex={0}
+          onScroll={handleMessageScroll}
         >
           {messages.map((msg) =>
             msg.role === "user" ? (
@@ -271,204 +423,250 @@ export function AiAssistant({
               </div>
             ) : (
               <div key={msg.id} className={s.aiMessage}>
-                <Lightning
-                  size={16}
-                  className={s.aiIcon}
-                  aria-hidden="true"
-                />
                 <div className={s.aiContent}>
-                  <p className={s.aiText}>{msg.content}</p>
-                  {onUseAsBase && (
-                    <button
-                      type="button"
-                      className={s.useAsBaseBtn}
-                      onClick={() => onUseAsBase(msg.content)}
-                    >
-                      <ArrowUp size={12} aria-hidden="true" />
-                      Usar como base
-                    </button>
+                  {msg.tag && <span className={s.aiTag}>{msg.tag}</span>}
+                  {msg.card && (() => {
+                    const CardIcon = msg.card.icon;
+                    return (
+                      <Card padding="md" className={s.aiCard}>
+                        <CardBody className={s.aiCardBody}>
+                          {CardIcon && (
+                            <div className={s.aiCardIcon}>
+                              <CardIcon size={20} />
+                            </div>
+                          )}
+                          <div className={s.aiCardText}>
+                            <span className={s.aiCardLabel}>{msg.card.label}</span>
+                            <span className={s.aiCardValue}>{msg.card.value}</span>
+                          </div>
+                        </CardBody>
+                      </Card>
+                    );
+                  })()}
+                  {msg.richContent ? (
+                    <div className={s.aiRich}>{msg.richContent}</div>
+                  ) : (
+                    <AiAssistantResponse content={msg.content} />
                   )}
+                  <div className={s.messageActions}>
+                    <Button variant="tertiary" size="sm" leftIcon={Copy} onClick={() => { void copyResponse(msg); }}>
+                      Copiar resposta
+                    </Button>
+                    {onUseAsBase && (
+                      <button
+                        type="button"
+                        className={s.useAsBaseBtn}
+                        onClick={() => onUseAsBase(msg.content)}
+                      >
+                        <ArrowUp size={12} aria-hidden="true" />
+                        Usar como base
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             ),
           )}
-          {status === "thinking" && (
-            <div
-              className={s.aiMessage}
-              aria-label="Assistente está digitando"
-            >
-              <Lightning
-                size={16}
-                                className={s.aiIcon}
-                aria-hidden="true"
-              />
-              <div className={s.typingDots}>
-                <span className={s.dot} />
-                <span className={s.dot} />
-                <span className={s.dot} />
-              </div>
-            </div>
-          )}
-          {status === "streaming" && (
-            <div className={s.aiMessage}>
-              <Lightning
-                size={16}
-                                className={s.aiIcon}
-                aria-hidden="true"
-              />
-              <p className={s.aiText}>
-                {streamingText}
-                <span className={s.cursor} aria-hidden="true" />
-              </p>
+          {inlineSuggestions && inlineSuggestions.length > 0 && (
+            <div className={s.inlineSuggestions} role="list">
+              {inlineSuggestions.map((sug) => {
+                const label = typeof sug === "string" ? sug : sug.label;
+                const meta = typeof sug === "string" ? undefined : sug.meta;
+                return (
+                  <div key={label} role="listitem">
+                    <button
+                      type="button"
+                      className={s.inlineSuggestion}
+                      onClick={() => {
+                        if (!busy) onInlineSuggestionSelect?.(label);
+                      }}
+                    >
+                      <span className={s.inlineSuggestionContent}>
+                        <span className={s.inlineSuggestionLabel}>{label}</span>
+                        {meta && (
+                          <span className={s.inlineSuggestionMeta}>{meta}</span>
+                        )}
+                      </span>
+                      <ArrowRight
+                        size={14}
+                        className={s.inlineSuggestionArrow}
+                        aria-hidden="true"
+                      />
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
       )}
 
-      <form className={s.inputArea} onSubmit={handleSubmit}>
-        <div className={s.inputGlow} aria-hidden="true" />
-        {allowUpload && (
-          <input
-            ref={fileInputRef}
-            type="file"
-            multiple
-            className={s.fileInput}
-            onChange={handleFileChange}
-            tabIndex={-1}
-          />
+      {hasUnreadReply && (
+        <Button variant="tertiary" size="sm" leftIcon={ArrowDown} className={s.newReply} onClick={revealReply}>
+          Ver nova resposta
+        </Button>
+      )}
+      <div className={s.status} role="status" aria-live="polite" aria-atomic="true">
+        {busy && (
+          <span className={s.waiting}>
+            <span className={s.typingDots} aria-hidden="true">
+              <span className={s.dot} />
+              <span className={s.dot} />
+              <span className={s.dot} />
+            </span>
+            Analisando…
+          </span>
         )}
-        <div className={s.inputBox}>
-          {hasContext && (
-            <div className={s.contextStrip}>
-              {attachedFiles.length > 0 && (
-                <span className={s.contextBadge}>
-                  <FileIcon size={12} className={s.contextBadgeIcon} />
-                  <span className={s.contextBadgeLabel}>
-                    {attachedFiles.length} {attachedFiles.length === 1 ? "arquivo" : "arquivos"}
-                  </span>
-                  <button
-                    type="button"
-                    className={s.contextBadgeRemove}
-                    onClick={() => setAttachedFiles([])}
-                    aria-label="Remover todos os arquivos"
-                  >
-                    <X size={10} />
-                  </button>
-                </span>
-              )}
-              {selectedMissionCount > 0 && (
-                <span className={s.contextBadge}>
-                  <Link size={12} className={s.contextBadgeIcon} />
-                  <span className={s.contextBadgeLabel}>
-                    {selectedMissionCount} {selectedMissionCount === 1 ? "missão / pesquisa" : "missões / pesquisas"}
-                  </span>
-                  <button
-                    type="button"
-                    className={s.contextBadgeRemove}
-                    onClick={() => onMissionsChange?.([])}
-                    aria-label="Remover todas as missões e pesquisas"
-                  >
-                    <X size={10} />
-                  </button>
-                </span>
-              )}
-            </div>
-          )}
-          <div className={s.inputRow}>
+        {feedback && <span>{feedback}</span>}
+      </div>
+
+      {!hideInput && (
+        <form className={s.inputArea} onSubmit={handleSubmit}>
+          <div className={s.inputGlow} aria-hidden="true" />
+          {allowUpload && (
             <input
-              className={s.input}
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              placeholder={placeholder}
-              aria-label={placeholder}
-              disabled={busy}
+              ref={fileInputRef}
+              type="file"
+              multiple
+              className={s.fileInput}
+              onChange={handleFileChange}
+              tabIndex={-1}
             />
-            {hasAttach && (
-              <>
-                <button
-                  type="button"
-                  className={s.attachButton}
-                  ref={attachButtonRef}
-                  onClick={handleToggleAttach}
-                  aria-label="Opções de anexo"
-                  disabled={busy}
-                >
-                  <Plus size={14} />
-                </button>
-                <Popover
-                  items={(() => {
-                    const menuItems: PopoverItem[] = [];
-                    if (allowUpload) {
-                      menuItems.push({
-                        id: "upload",
-                        label: "Enviar arquivo",
-                        icon: FileArrowUp,
-                        onClick: () => setPendingUpload(true),
-                      });
-                    }
-                    if (missions && missions.length > 0) {
-                      menuItems.push({
-                        id: "missions",
-                        label: "Missão / Pesquisa",
-                        icon: Link,
-                        badge: selectedMissionCount,
-                        submenu: (
-                          <>
-                            <div className={s.missionSearchBox}>
-                              <MagnifyingGlass
-                                size={14}
-                                className={s.missionSearchIcon}
-                              />
-                              <input
-                                className={s.missionSearchInput}
-                                value={missionSearch}
-                                onChange={(e) => setMissionSearch(e.target.value)}
-                                placeholder="Buscar missão..."
-                                aria-label="Buscar missão"
-                              />
-                            </div>
-                            <div className={s.missionList}>
-                              {filteredMissions?.map((m) => (
-                                <label key={m.id} className={s.missionListItem}>
-                                  <Checkbox
-                                    size="sm"
-                                    checked={
-                                      selectedMissions?.includes(m.id) ?? false
-                                    }
-                                    onChange={() => handleMissionToggle(m.id)}
-                                  />
-                                  <span className={s.missionLabel}>
-                                    {m.label}
-                                  </span>
-                                </label>
-                              ))}
-                            </div>
-                          </>
-                        ),
-                      });
-                    }
-                    return menuItems;
-                  })()}
-                  open={attachOpen}
-                  onClose={() => {
-                    setAttachOpen(false);
-                    setMissionSearch("");
-                  }}
-                  anchorRef={attachButtonRef}
-                />
-              </>
+          )}
+          <div className={s.inputBox}>
+            {hasContext && (
+              <div className={s.contextStrip}>
+                {attachedFiles.length > 0 && (
+                  <span className={s.contextBadge}>
+                    <FileIcon size={12} className={s.contextBadgeIcon} />
+                    <span className={s.contextBadgeLabel}>
+                      {attachedFiles.length} {attachedFiles.length === 1 ? "arquivo" : "arquivos"}
+                    </span>
+                    <button
+                      type="button"
+                      className={s.contextBadgeRemove}
+                      onClick={() => setAttachedFiles([])}
+                      aria-label="Remover todos os arquivos"
+                    >
+                      <X size={10} />
+                    </button>
+                  </span>
+                )}
+                {selectedMissionCount > 0 && (
+                  <span className={s.contextBadge}>
+                    <Link size={12} className={s.contextBadgeIcon} />
+                    <span className={s.contextBadgeLabel}>
+                      {selectedMissionCount} {selectedMissionCount === 1 ? "missão / pesquisa" : "missões / pesquisas"}
+                    </span>
+                    <button
+                      type="button"
+                      className={s.contextBadgeRemove}
+                      onClick={() => onMissionsChange?.([])}
+                      aria-label="Remover todas as missões e pesquisas"
+                    >
+                      <X size={10} />
+                    </button>
+                  </span>
+                )}
+              </div>
             )}
-            <button
-              type="submit"
-              className={s.submitButton}
-              aria-label="Enviar mensagem"
-              disabled={!value.trim() || busy}
-            >
-              <ArrowUp size={14} />
-            </button>
+            <div className={s.inputRow}>
+              <input
+                ref={inputRef}
+                className={s.input}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder={placeholder}
+                aria-label={placeholder}
+                disabled={inputDisabled}
+              />
+              {hasAttach && (
+                <>
+                  <button
+                    type="button"
+                    className={s.attachButton}
+                    ref={attachButtonRef}
+                    onClick={handleToggleAttach}
+                    aria-label="Opções de anexo"
+                    disabled={busy}
+                  >
+                    <Plus size={14} />
+                  </button>
+                  <Popover
+                    items={(() => {
+                      const menuItems: PopoverItem[] = [];
+                      if (allowUpload) {
+                        menuItems.push({
+                          id: "upload",
+                          label: "Enviar arquivo",
+                          icon: FileArrowUp,
+                          onClick: () => setPendingUpload(true),
+                        });
+                      }
+                      if (missions && missions.length > 0) {
+                        menuItems.push({
+                          id: "missions",
+                          label: "Missão / Pesquisa",
+                          icon: Link,
+                          badge: selectedMissionCount,
+                          submenu: (
+                            <>
+                              <div className={s.missionSearchBox}>
+                                <MagnifyingGlass
+                                  size={14}
+                                  className={s.missionSearchIcon}
+                                />
+                                <input
+                                  className={s.missionSearchInput}
+                                  value={missionSearch}
+                                  onChange={(e) => setMissionSearch(e.target.value)}
+                                  placeholder="Buscar missão..."
+                                  aria-label="Buscar missão"
+                                />
+                              </div>
+                              <div className={s.missionList}>
+                                {filteredMissions?.map((m) => (
+                                  <label key={m.id} className={s.missionListItem}>
+                                    <Checkbox
+                                      size="sm"
+                                      checked={
+                                        selectedMissions?.includes(m.id) ?? false
+                                      }
+                                      onChange={() => handleMissionToggle(m.id)}
+                                    />
+                                    <span className={s.missionLabel}>
+                                      {m.label}
+                                    </span>
+                                  </label>
+                                ))}
+                              </div>
+                            </>
+                          ),
+                        });
+                      }
+                      return menuItems;
+                    })()}
+                    open={attachOpen}
+                    onClose={() => {
+                      setAttachOpen(false);
+                      setMissionSearch("");
+                    }}
+                    anchorRef={attachButtonRef}
+                  />
+                </>
+              )}
+              <button
+                type="submit"
+                className={s.submitButton}
+                aria-label="Enviar mensagem"
+                disabled={!value.trim() || busy || inputDisabled}
+              >
+                <ArrowUp size={14} />
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      )}
     </div>
   );
 }

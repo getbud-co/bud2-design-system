@@ -27,6 +27,9 @@ export default defineConfig({
         "react-dom",
         "react/jsx-runtime",
         "@phosphor-icons/react",
+        "react-markdown",
+        "remark-breaks",
+        "remark-gfm",
       ],
       output: {
         assetFileNames: (assetInfo) => {

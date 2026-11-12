@@ -1,0 +1,88 @@
+.response {
+  min-width: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  color: var(--color-neutral-950);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.response :where(p, ul, ol, blockquote, pre, h1, h2, h3, h4, h5, h6) {
+  margin: 0;
+}
+
+.response > * + * {
+  margin-block-start: var(--sp-xs);
+}
+
+.response :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.response h1 { font-size: var(--text-lg); line-height: 1.15; letter-spacing: -0.005em; }
+.response h2 { font-size: var(--text-md); }
+.response :is(h3, h4, h5, h6) { font-size: var(--text-sm); }
+.response strong { font-weight: 600; }
+
+.response ul { list-style: disc; }
+.response ol { list-style: decimal; }
+.response :is(ul, ol) { padding-inline-start: var(--sp-lg); }
+.response ul ul { list-style: circle; }
+.response li + li,
+.response li > :is(ul, ol, p) { margin-block-start: var(--sp-3xs); }
+
+.response :global(.contains-task-list) { list-style: none; padding-inline-start: 0; }
+.response :is(ul, ol) :global(.contains-task-list) { padding-inline-start: var(--sp-lg); }
+.taskCheckbox { margin-inline-end: var(--sp-3xs); vertical-align: text-bottom; }
+
+.response a {
+  color: var(--color-wine-600);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.response blockquote {
+  border-inline-start: var(--sp-3xs) solid var(--color-caramel-300);
+  padding-inline-start: var(--sp-xs);
+  color: var(--color-neutral-700);
+}
+
+.response hr {
+  border: 0;
+  border-block-start: 1px solid var(--color-caramel-200);
+}
+
+.response code {
+  font-family: ui-monospace, "Cascadia Code", "Fira Code", monospace;
+  font-size: var(--text-xs);
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-2xs);
+  padding: 0 var(--sp-3xs);
+}
+
+.response pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: var(--sp-sm);
+  background: var(--color-neutral-950);
+  color: var(--color-neutral-300);
+  border: 1px solid var(--color-neutral-800);
+  border-radius: var(--radius-md);
+  white-space: pre;
+  overflow-wrap: normal;
+}
+
+.response pre code { padding: 0; border: 0; background: transparent; }
+
+.response a:focus-visible {
+  outline: 2px solid var(--color-wine-400);
+  outline-offset: -2px;
+}
+
+.response pre:focus-visible {
+  outline: 2px solid var(--color-orange-400);
+  outline-offset: -2px;
+}

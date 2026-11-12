@@ -11,13 +11,16 @@ const usageCode = `import { AiAssistant } from "@getbud-co/buds";
 {/* Interativo — com resposta da IA */}
 <AiAssistant
   onClose={() => setOpen(false)}
-  allowUpload
   missions={missions}
   selectedMissions={selected}
   onMissionsChange={setSelected}
   onMessage={async (text) => {
     await delay(800);
     return "Resposta da IA aqui...";
+  }}
+  onInteraction={(event) => {
+    // event: { phase, requestId, timestampMs } — sem conteúdo da conversa.
+    recordAssistantTiming(event);
   }}
 />
 
@@ -32,6 +35,20 @@ const usageCode = `import { AiAssistant } from "@getbud-co/buds";
 />`;
 
 const MOCK_RESPONSES: Record<string, string> = {
+  "Ver resposta formatada": [
+    "# Plano do ciclo",
+    "Um exemplo com **destaques**, *ênfase* e ~~um prazo anterior~~.",
+    "## Próximos passos",
+    "- **Lançar o MVP da bud 3.0**\n  - Validar com clientes\n- Medir adoção",
+    "1. Preparar o lançamento\n2. Acompanhar os resultados",
+    "> Revise os responsáveis antes de confirmar as alterações.",
+    "| Entrega | Progresso |\n| :--- | ---: |\n| MVP | 70% |\n| Pesquisa | 40% |",
+    "- [x] Planejamento\n- [ ] Lançamento",
+    "Use `status: em andamento` para descrever o progresso.",
+    '```json\n{\n  "missão": "MVP",\n  "progresso": 70\n}\n```',
+    "---",
+    "[Conheça a Bud](https://getbud.co)\nEsta resposta usa dados ilustrativos.",
+  ].join("\n\n"),
   "Faça uma revisão do meu Q1":
     "Analisando seus objetivos do Q1... Você completou 3 de 5 key results. O KR de 'Aumentar NPS para 75' está em 68 — progresso de 90%. Sugiro focar nesse KR nas próximas 2 semanas para fechar o gap.",
   "Dê sugestões de OKR":
@@ -64,20 +81,20 @@ export function AiAssistantSection() {
     <DocSection
       id="ai-assistant"
       title="AI Assistant"
-      description="Assistente de IA com experiência de chat completa: mensagens do usuário, indicador de typing, streaming simulado da resposta e auto-scroll. Usado como copiloto de IA da plataforma."
+      description="Assistente de IA com resposta completa assim que disponível, rascunho durante a espera, cópia e leitura do histórico sem interrupções."
       category={getCategoryForPage("ai-assistant")}
     >
       <SubSection id="interativo" title="Interativo">
         <p>
           Demo funcional com respostas simuladas. Digite uma mensagem ou clique
-          numa sugestão para ver o fluxo completo: bolha do usuário, typing
-          indicator, streaming da resposta. Clique no <code>+</code> para ver o
-          menu de anexos com flyout de missões.
+          numa sugestão para ver a espera e a resposta completa. Durante a espera,
+          prepare a próxima mensagem; o novo envio só fica disponível ao final.
+          Clique no <code>+</code> para selecionar missões e pesquisas.
         </p>
         <div className={s.demoContainer}>
           <AiAssistant
+            suggestions={["Ver resposta formatada", "Faça uma revisão do meu Q1", "Dê sugestões de OKR"]}
             onClose={() => setLastAction("Fechar clicado")}
-            allowUpload
             missions={MOCK_MISSIONS}
             selectedMissions={selectedMissions}
             onMissionsChange={(ids) => {
@@ -92,10 +109,35 @@ export function AiAssistantSection() {
         )}
       </SubSection>
 
+      <SubSection id="formatacao" title="Formatação das respostas">
+        <p>
+          Respostas aceitam Markdown: títulos, parágrafos, quebras de linha,
+          listas aninhadas e numeradas, negrito, itálico, texto riscado, links,
+          citações, separadores, tabelas, listas de verificação, notas e código.
+          Tabelas e blocos de código largos podem ser rolados pelo teclado.
+          Copiar e “Usar como base” preservam o Markdown original.
+        </p>
+        <p>
+          O texto segue Inter 14 px, com entrelinha de 155%, e os
+          títulos usam Title / MD, SM e XS. Tabelas reutilizam o componente
+          Table com densidade compacta; listas de verificação usam Checkbox
+          desabilitado, com nome acessível para cada item. Blocos de código
+          seguem o tratamento escuro e monoespaçado da documentação.
+          Consumidores devem carregar Inter nos pesos 400 e 600, incluindo
+          as variantes em itálico.
+        </p>
+        <p>
+          HTML não é executado. Imagens aparecem como links, sem carregamento
+          automático de URLs da resposta. Mensagens do usuário preservam seu
+          texto literal. A sugestão “Ver resposta formatada” demonstra o resultado.
+        </p>
+      </SubSection>
+
       <SubSection id="customizado" title="Customizado">
         <p>
           Título, heading e sugestões são configuráveis. Sem{" "}
-          <code>onMessage</code>, o assistente mostra apenas o estado vazio.
+          <code>onMessage</code>, as mensagens digitadas aparecem na conversa,
+          mas não há chamada ao agente nem resposta automática.
         </p>
         <div className={s.demoContainer}>
           <AiAssistant
@@ -105,6 +147,41 @@ export function AiAssistantSection() {
               "Resuma o desempenho do Q1",
               "Sugira pontos de melhoria",
             ]}
+          />
+        </div>
+      </SubSection>
+
+      <SubSection id="conversa-inicial" title="Conversa inicial e simulações">
+        <p>
+          <code>initialMessages</code> preenche o histórico na montagem, sem
+          iniciar uma requisição ou emitir eventos de interação. Cada mensagem
+          mantém seu <code>content</code> original para copiar e usar como base.
+          O consumidor pode fornecer <code>richContent</code> em JSX, uma
+          <code> tag</code> e um <code>card</code> com label, value e icon opcional.
+          Respostas do callback continuam usando o renderizador Markdown.
+        </p>
+        <p>
+          <code>inputDisabled</code> impede novos envios; <code>hideInput</code>
+          apenas oculta o formulário. As sugestões abaixo do histórico chamam
+          <code> onInlineSuggestionSelect</code> com o label escolhido, sem
+          enviar mensagens automaticamente. Esse callback continua disponível
+          nas simulações com entrada desabilitada, mas aguarda uma resposta em
+          andamento. Sugestões aceitam texto ou um objeto com label e meta.
+        </p>
+        <div className={s.demoContainer}>
+          <AiAssistant
+            subtitle="Resumo do ciclo"
+            hideInput
+            inputDisabled
+            initialMessages={[{
+              role: "assistant",
+              content: "Seu ciclo está em 70%. Revise os próximos passos.",
+              richContent: <p>Seu ciclo está em <strong>70%</strong>. Revise os próximos passos.</p>,
+              tag: "Visão geral",
+              card: { label: "Progresso", value: "70%" },
+            }]}
+            inlineSuggestions={["Revisar objetivos", { label: "Planejar", meta: "Próximo ciclo" }]}
+            onInlineSuggestionSelect={(label) => setLastAction(`Sugestão selecionada: ${label}`)}
           />
         </div>
       </SubSection>
@@ -131,16 +208,18 @@ export function AiAssistantSection() {
           </li>
           <li>
             <strong>Chat</strong> — mensagens do usuário (bolha à direita,
-            caramel-100) e da IA (texto à esquerda com ícone Lightning fill)
+            caramel-100) e da IA (conteúdo formatado à esquerda)
           </li>
           <li>
             <strong>Input</strong> — campo com borda wine-300, glow em gradiente
             (wine → orange), botão de anexo (+) com menu popover e botão de
-            envio (seta). Desabilitado durante thinking/streaming.
+            envio (seta). O campo permanece editável durante a espera; apenas
+            o envio e a seleção de contexto ficam bloqueados.
           </li>
           <li>
-            <strong>Menu de anexo</strong> — Enviar arquivo e
-            Missão / Pesquisa (com flyout lateral de busca + checkboxes)
+            <strong>Uso da resposta</strong> — copiar preserva o texto completo.
+            “Usar como base” só aparece com <code>onUseAsBase</code> e mantém seu
+            conteúdo original; copiar não aplica a resposta em um formulário.
           </li>
         </ul>
       </SubSection>
@@ -155,15 +234,17 @@ export function AiAssistantSection() {
             <code>aria-live="polite"</code>
           </li>
           <li>
-            Typing indicator com{" "}
-            <code>aria-label="Assistente está digitando"</code>
+            Espera, erro e resultado da cópia em <code>role="status"</code>,
+            sem anunciar caracteres individualmente
           </li>
           <li>
             Menu de anexo com <code>role="menu"</code> e{" "}
             <code>aria-label="Opções de anexo"</code>
           </li>
           <li>
-            Input e botões desabilitados durante thinking/streaming
+            O foco permanece onde a pessoa está trabalhando. A chegada da
+            resposta não desloca quem está lendo mensagens anteriores;
+            “Ver nova resposta” permite ir ao final pelo teclado.
           </li>
           <li>
             ESC fecha o menu de anexo
@@ -171,7 +252,45 @@ export function AiAssistantSection() {
           <li>
             Todos os botões com <code>:focus-visible</code> ring
           </li>
+          <li>
+            Animações decorativas respeitam <code>prefers-reduced-motion</code>;
+            o scroll automático é imediato.
+          </li>
         </ul>
+      </SubSection>
+
+      <SubSection id="integracao" title="Integração e medição">
+        <p>
+          <code>onMessage(text): Promise&lt;string&gt;</code> continua sendo o
+          contrato. Rejeições liberam o envio e preservam o rascunho, sem repetir
+          a chamada. Fechar ou desmontar o painel não cancela operações do
+          consumidor. Uma resposta que chega após desmontagem não é apresentada.
+        </p>
+        <p>
+          O callback opcional <code>onInteraction</code> recebe somente
+          <code> phase</code>, <code>requestId</code> efêmero e
+          <code> timestampMs</code>, medido por <code>performance.now()</code>.
+          Compare os marcos correlacionados para separar espera da requisição
+          e apresentação. O evento de apresentação indica que o texto foi
+          inserido no DOM e o turno foi liberado; não prova que a pessoa leu a
+          resposta. O consumidor continua responsável por telemetria e
+          classificação de erros de transporte.
+        </p>
+        <ul className={s.anatomyList}>
+          <li><code>submitted</code>: início do envio ao callback.</li>
+          <li><code>response_received</code>: o callback devolveu a resposta.</li>
+          <li><code>response_presented</code>: resposta completa no DOM, sem bloqueio do próximo envio.</li>
+          <li><code>request_failed</code>: a chamada rejeitou; não comprova que uma operação deixou de ocorrer.</li>
+          <li><code>response_not_presented</code>: o painel foi desmontado antes da apresentação.</li>
+          <li><code>copy_succeeded</code> e <code>copy_failed</code>: resultado da cópia de uma resposta recebida nesta instância; mensagens iniciais não geram esses eventos.</li>
+        </ul>
+        <p>
+          <code>allowUpload</code> permanece por compatibilidade visual, mas
+          arquivos não são transportados pelo callback de texto. Não habilite
+          essa opção como uma integração de documentos. Os exemplos usam o
+          seletor de registros; o consumidor deve incluir os IDs selecionados
+          no contexto que envia e validar acesso no backend.
+        </p>
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">

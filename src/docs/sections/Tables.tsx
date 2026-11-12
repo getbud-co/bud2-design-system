@@ -301,9 +301,9 @@ function StripedDemo() {
   );
 }
 
-function SimpleDemo() {
+function SimpleDemo({ density = "default" }: { density?: "default" | "compact" }) {
   return (
-    <Table variant="divider">
+    <Table variant="divider" density={density}>
       <TableContent>
         <TableHead>
           <TableRow>
@@ -383,6 +383,7 @@ export function Tables() {
       <SubSection id="api-table" title="API">
         <PropsTable rows={[
           { prop: "variant", type: '"divider" | "striped"', default: '"divider"', description: "Estilo visual das linhas" },
+          { prop: "density", type: '"default" | "compact"', default: '"default"', description: "Compact reduz os espaçamentos e permite leitura de células com múltiplas linhas em painéis estreitos" },
           { prop: "elevated", type: "boolean", default: "true", description: "Aplica sombra" },
           { prop: "bordered", type: "boolean", default: "true", description: "Aplica borda e border-radius" },
           { prop: "selectable", type: "boolean", default: "false", description: "Habilita seleção de linhas" },
@@ -390,6 +391,10 @@ export function Tables() {
           { prop: "sortDirection", attr: "sort-direction (HeaderCell)", type: '"asc" | "desc"', description: "Direção da ordenação" },
           { prop: "align", attr: "align (Cell/HeaderCell)", type: '"left" | "center" | "right"', description: "Alinhamento do conteúdo" },
         ]} />
+      </SubSection>
+
+      <SubSection id="tabela-compacta" title="Tabela compacta" description="Para resumos e respostas do assistente. Mantém cores, cabeçalhos, divisores e foco da tabela padrão, com menos espaço entre as células e texto que pode ocupar várias linhas.">
+        <div style={{ maxWidth: 420 }}><SimpleDemo density="compact" /></div>
       </SubSection>
 
       <SubSection id="como-usar" title="Como usar">

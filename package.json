@@ -1,6 +1,6 @@
 {
   "name": "@getbud-co/buds",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "type": "module",
   "repository": {
     "type": "git",
@@ -76,6 +76,9 @@
     "vitest": "^4.0.8"
   },
   "dependencies": {
-    "recharts": "^3.8.0"
+    "react-markdown": "^10.1.0",
+    "recharts": "^3.8.0",
+    "remark-breaks": "^4.0.0",
+    "remark-gfm": "^4.0.1"
   }
 }

@@ -27,6 +27,11 @@ jobs:
 
       - run: npm run typecheck
 
+      - run: npm run test:run
+
       - run: npm run build:docs
 
       - run: npm run build:lib
+
+      - name: Verify package import without a DOM
+        run: node -e 'import("./dist/index.js")'
