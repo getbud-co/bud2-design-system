@@ -3,6 +3,7 @@ import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { getCategoryForPage } from "../nav-data";
 import { FrameworkSwitcher } from "../FrameworkSwitcher";
+import { CodeSnippet } from "../CodeSnippet";
 import { AiAssistant, type MissionItem } from "../../components/AiAssistant";
 import s from "./AiAssistant.module.css";
 
@@ -290,6 +291,47 @@ export function AiAssistantSection() {
           essa opção como uma integração de documentos. Os exemplos usam o
           seletor de registros; o consumidor deve incluir os IDs selecionados
           no contexto que envia e validar acesso no backend.
+        </p>
+      </SubSection>
+
+      <SubSection id="idioma" title="Textos e idioma do consumidor">
+        <p>
+          Use <code>labels: Partial&lt;AiAssistantLabels&gt;</code> para traduzir
+          controles, feedback e nomes acessíveis do Markdown. Campos omitidos
+          mantêm o português. O consumidor escolhe o idioma e continua fornecendo
+          título, sugestões e placeholder pelas propriedades existentes; o BUDS
+          não detecta idioma nem traduz as respostas.
+        </p>
+        <p>
+          <code>fileCount</code> e <code>missionCount</code> recebem o número e
+          retornam o texto completo, permitindo regras de plural do consumidor.
+          Trocar os rótulos não reinicia a conversa nem apaga o rascunho.
+          <code>getErrorMessage</code> tem prioridade sobre
+          <code> labels.requestFailed</code>; se falhar ou retornar texto vazio,
+          o componente usa essa mensagem segura.
+        </p>
+        <CodeSnippet language="tsx" code={`<AiAssistant
+  title="Assistant"
+  heading="How can I help?"
+  placeholder="Ask bud..."
+  suggestions={[]}
+  labels={{
+    send: "Send message",
+    waiting: "Thinking…",
+    copy: "Copy response",
+    copied: "Response copied.",
+    requestFailed: "Check the result before repeating a change.",
+    conversation: "Assistant conversation",
+    responseTable: "Response table",
+    codeBlock: "Code block",
+    missionCount: count => count + " selected items",
+  }}
+  onMessage={sendMessage}
+/>`} />
+        <p>
+          O exemplo sobrescreve parte dos rótulos. Para uma tradução completa,
+          forneça todos os campos do tipo exportado <code>AiAssistantLabels</code>,
+          incluindo anexos, notas, links de retorno e mensagens de cópia.
         </p>
       </SubSection>
 

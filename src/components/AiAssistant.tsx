@@ -1,4 +1,4 @@
-import { useState, useRef, useLayoutEffect, type FormEvent } from "react";
+import { useState, useRef, useLayoutEffect, useMemo, type FormEvent } from "react";
 import {
   Lightning,
   SidebarSimple,
@@ -18,6 +18,7 @@ import { Card, CardBody } from "./Card";
 import { Checkbox } from "./Checkbox";
 import { Popover, type PopoverItem } from "./Popover";
 import { AiAssistantResponse } from "./AiAssistantResponse";
+import { defaultAiAssistantLabels, type AiAssistantLabels } from "./AiAssistant.labels";
 import s from "./AiAssistant.module.css";
 
 interface MessageContext {
@@ -95,6 +96,8 @@ export interface MissionItem {
 }
 
 export interface AiAssistantProps {
+  /** Optional UI translations. Omitted labels retain their Portuguese defaults. */
+  labels?: Partial<AiAssistantLabels>;
   title?: string;
   subtitle?: string;
   heading?: string;
@@ -131,6 +134,7 @@ function uid() {
 }
 
 export function AiAssistant({
+  labels,
   title = "Assistente de criação",
   subtitle,
   heading = "Tenha ajuda na criação das suas missões",
@@ -155,6 +159,7 @@ export function AiAssistant({
   inlineSuggestions,
   onInlineSuggestionSelect,
 }: AiAssistantProps) {
+  const copy = useMemo(() => ({ ...defaultAiAssistantLabels, ...labels }), [labels]);
   const [value, setValue] = useState("");
   const [messages, setMessages] = useState<Message[]>(() =>
     (initialMessages ?? []).map((message) => ({ ...message, id: uid() })),
@@ -259,7 +264,7 @@ export function AiAssistant({
       reportInteraction(request.observer, request.id, "request_failed");
       if (mountedRef.current) {
         setValue((draft) => draft || text);
-        let message = "Não foi possível receber a resposta. Confira os dados antes de repetir uma alteração.";
+        let message = copy.requestFailed;
         try {
           message = getErrorMessage?.(error) || message;
         } catch {
@@ -277,10 +282,10 @@ export function AiAssistant({
     try {
       await navigator.clipboard.writeText(message.content);
       if (message.requestId) reportInteraction(message.observer, message.requestId, "copy_succeeded");
-      if (mountedRef.current) setFeedback("Resposta copiada.");
+      if (mountedRef.current) setFeedback(copy.copied);
     } catch {
       if (message.requestId) reportInteraction(message.observer, message.requestId, "copy_failed");
-      if (mountedRef.current) setFeedback("Não foi possível copiar. Selecione o texto da resposta e copie manualmente.");
+      if (mountedRef.current) setFeedback(copy.copyFailed);
     }
   }
 
@@ -361,7 +366,7 @@ export function AiAssistant({
             size="md"
             leftIcon={SidebarSimple}
             onClick={onClose}
-            aria-label="Recolher assistente"
+            aria-label={copy.close}
           />
         )}
       </div>
@@ -394,7 +399,7 @@ export function AiAssistant({
           className={s.messageList}
           ref={messageListRef}
           role="log"
-          aria-label="Conversa com o assistente"
+          aria-label={copy.conversation}
           aria-live="polite"
           aria-relevant="additions"
           tabIndex={0}
@@ -408,13 +413,13 @@ export function AiAssistant({
                     {msg.context.fileCount > 0 && (
                       <span className={s.userContextBadge}>
                         <FileIcon size={10} aria-hidden="true" />
-                        {msg.context.fileCount} {msg.context.fileCount === 1 ? "arquivo" : "arquivos"}
+                        {copy.fileCount(msg.context.fileCount)}
                       </span>
                     )}
                     {msg.context.missionCount > 0 && (
                       <span className={s.userContextBadge}>
                         <Link size={10} aria-hidden="true" />
-                        {msg.context.missionCount} {msg.context.missionCount === 1 ? "missão / pesquisa" : "missões / pesquisas"}
+                        {copy.missionCount(msg.context.missionCount)}
                       </span>
                     )}
                   </div>
@@ -446,11 +451,11 @@ export function AiAssistant({
                   {msg.richContent ? (
                     <div className={s.aiRich}>{msg.richContent}</div>
                   ) : (
-                    <AiAssistantResponse content={msg.content} />
+                    <AiAssistantResponse content={msg.content} labels={copy} />
                   )}
                   <div className={s.messageActions}>
                     <Button variant="tertiary" size="sm" leftIcon={Copy} onClick={() => { void copyResponse(msg); }}>
-                      Copiar resposta
+                      {copy.copy}
                     </Button>
                     {onUseAsBase && (
                       <button
@@ -459,7 +464,7 @@ export function AiAssistant({
                         onClick={() => onUseAsBase(msg.content)}
                       >
                         <ArrowUp size={12} aria-hidden="true" />
-                        Usar como base
+                        {copy.useAsBase}
                       </button>
                     )}
                   </div>
@@ -503,7 +508,7 @@ export function AiAssistant({
 
       {hasUnreadReply && (
         <Button variant="tertiary" size="sm" leftIcon={ArrowDown} className={s.newReply} onClick={revealReply}>
-          Ver nova resposta
+          {copy.newReply}
         </Button>
       )}
       <div className={s.status} role="status" aria-live="polite" aria-atomic="true">
@@ -514,7 +519,7 @@ export function AiAssistant({
               <span className={s.dot} />
               <span className={s.dot} />
             </span>
-            Analisando…
+            {copy.waiting}
           </span>
         )}
         {feedback && <span>{feedback}</span>}
@@ -540,13 +545,13 @@ export function AiAssistant({
                   <span className={s.contextBadge}>
                     <FileIcon size={12} className={s.contextBadgeIcon} />
                     <span className={s.contextBadgeLabel}>
-                      {attachedFiles.length} {attachedFiles.length === 1 ? "arquivo" : "arquivos"}
+                      {copy.fileCount(attachedFiles.length)}
                     </span>
                     <button
                       type="button"
                       className={s.contextBadgeRemove}
                       onClick={() => setAttachedFiles([])}
-                      aria-label="Remover todos os arquivos"
+                      aria-label={copy.removeFiles}
                     >
                       <X size={10} />
                     </button>
@@ -556,13 +561,13 @@ export function AiAssistant({
                   <span className={s.contextBadge}>
                     <Link size={12} className={s.contextBadgeIcon} />
                     <span className={s.contextBadgeLabel}>
-                      {selectedMissionCount} {selectedMissionCount === 1 ? "missão / pesquisa" : "missões / pesquisas"}
+                      {copy.missionCount(selectedMissionCount)}
                     </span>
                     <button
                       type="button"
                       className={s.contextBadgeRemove}
                       onClick={() => onMissionsChange?.([])}
-                      aria-label="Remover todas as missões e pesquisas"
+                      aria-label={copy.removeMissions}
                     >
                       <X size={10} />
                     </button>
@@ -587,7 +592,7 @@ export function AiAssistant({
                     className={s.attachButton}
                     ref={attachButtonRef}
                     onClick={handleToggleAttach}
-                    aria-label="Opções de anexo"
+                    aria-label={copy.attachments}
                     disabled={busy}
                   >
                     <Plus size={14} />
@@ -598,7 +603,7 @@ export function AiAssistant({
                       if (allowUpload) {
                         menuItems.push({
                           id: "upload",
-                          label: "Enviar arquivo",
+                          label: copy.upload,
                           icon: FileArrowUp,
                           onClick: () => setPendingUpload(true),
                         });
@@ -606,7 +611,7 @@ export function AiAssistant({
                       if (missions && missions.length > 0) {
                         menuItems.push({
                           id: "missions",
-                          label: "Missão / Pesquisa",
+                          label: copy.missions,
                           icon: Link,
                           badge: selectedMissionCount,
                           submenu: (
@@ -620,8 +625,8 @@ export function AiAssistant({
                                   className={s.missionSearchInput}
                                   value={missionSearch}
                                   onChange={(e) => setMissionSearch(e.target.value)}
-                                  placeholder="Buscar missão..."
-                                  aria-label="Buscar missão"
+                                  placeholder={copy.searchMissionsPlaceholder}
+                                  aria-label={copy.searchMissions}
                                 />
                               </div>
                               <div className={s.missionList}>
@@ -658,7 +663,7 @@ export function AiAssistant({
               <button
                 type="submit"
                 className={s.submitButton}
-                aria-label="Enviar mensagem"
+                aria-label={copy.send}
                 disabled={!value.trim() || busy || inputDisabled}
               >
                 <ArrowUp size={14} />

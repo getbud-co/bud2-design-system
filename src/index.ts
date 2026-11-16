@@ -3,6 +3,7 @@ import "./styles/lib.css";
 // Components
 export { Accordion, AccordionItem } from "./components/Accordion";
 export { AiAssistant } from "./components/AiAssistant";
+export type { AiAssistantLabels } from "./components/AiAssistant.labels";
 export { Alert } from "./components/Alert";
 export { Avatar } from "./components/Avatar";
 export { AvatarGroup } from "./components/AvatarGroup";
