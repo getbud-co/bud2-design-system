@@ -184,6 +184,12 @@
 
 /* ——— Sort button ——— */
 
+.headerContent {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2xs);
+}
+
 .sortButton {
   display: inline-flex;
   align-items: center;

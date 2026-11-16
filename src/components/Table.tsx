@@ -228,6 +228,8 @@ interface TableHeaderCellProps extends ThHTMLAttributes<HTMLTableCellElement> {
   isCheckbox?: boolean;
   selectAllLabel?: string;
   sortLabel?: string;
+  /** Content beside the label/sort button, e.g. an independently focusable help trigger. */
+  accessory?: ReactNode;
 }
 
 export function TableHeaderCell({
@@ -237,6 +239,7 @@ export function TableHeaderCell({
   isCheckbox = false,
   selectAllLabel,
   sortLabel,
+  accessory,
   children,
   className,
   ...rest
@@ -279,6 +282,20 @@ export function TableHeaderCell({
           : "Clique para ordenar"
     : undefined;
 
+  const heading = sortable ? (
+    <button
+      type="button"
+      className={s.sortButton}
+      onClick={onSort}
+      aria-label={sortAriaLabel}
+    >
+      <span>{children}</span>
+      {sortDirection === "asc" && <ArrowUp size={12} />}
+      {sortDirection === "desc" && <ArrowDown size={12} />}
+      {!sortDirection && <ArrowDown size={12} className={s.sortIconIdle} />}
+    </button>
+  ) : children;
+
   return (
     <th
       className={[s.th, className ?? ""].filter(Boolean).join(" ")}
@@ -294,21 +311,7 @@ export function TableHeaderCell({
       }
       {...rest}
     >
-      {sortable ? (
-        <button
-          type="button"
-          className={s.sortButton}
-          onClick={onSort}
-          aria-label={sortAriaLabel}
-        >
-          <span>{children}</span>
-          {sortDirection === "asc" && <ArrowUp size={12} />}
-          {sortDirection === "desc" && <ArrowDown size={12} />}
-          {!sortDirection && <ArrowDown size={12} className={s.sortIconIdle} />}
-        </button>
-      ) : (
-        children
-      )}
+      {accessory != null ? <span className={s.headerContent}>{heading}{accessory}</span> : heading}
     </th>
   );
 }
