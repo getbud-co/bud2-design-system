@@ -1,5 +1,8 @@
 import {
   type ReactNode,
+  type ReactElement,
+  type HTMLAttributes,
+  cloneElement,
   useCallback,
   useEffect,
   useId,
@@ -17,7 +20,7 @@ import s from "./Tooltip.module.css";
 
 type Placement = "top" | "bottom" | "left" | "right";
 
-interface TooltipProps {
+interface TooltipOptions {
   /** Conteúdo do tooltip (texto ou ReactNode). */
   content: ReactNode;
   /** Posição preferida. O tooltip reposiciona se não couber. */
@@ -26,21 +29,25 @@ interface TooltipProps {
   delay?: number;
   /** Desabilita o tooltip sem removê-lo da árvore. */
   disabled?: boolean;
-  /** Elemento filho que ativa o tooltip. */
-  children: ReactNode;
 }
+
+type TooltipProps = TooltipOptions & (
+  | { asChild: true; children: ReactElement<HTMLAttributes<HTMLElement>> }
+  | { asChild?: false; children: ReactNode }
+);
 
 const ARROW_SIZE = 6;
 const GAP = 8;
 const VIEWPORT_MARGIN = 8;
 
-export function Tooltip({
-  content,
-  placement = "top",
-  delay = 200,
-  disabled = false,
-  children,
-}: TooltipProps) {
+export function Tooltip(props: TooltipProps) {
+  const {
+    content,
+    placement = "top",
+    delay = 200,
+    disabled = false,
+    asChild = false,
+  } = props;
   const id = useId();
   const tooltipId = `tooltip-${id}`;
   const wrapperRef = useRef<HTMLSpanElement>(null);
@@ -154,9 +161,14 @@ export function Tooltip({
         onMouseLeave={hide}
         onFocus={show}
         onBlur={hide}
-        aria-describedby={visible ? tooltipId : undefined}
+        aria-describedby={!asChild && visible ? tooltipId : undefined}
       >
-        {children}
+        {props.asChild ? cloneElement(props.children, {
+          "aria-describedby": [
+            props.children.props["aria-describedby"],
+            visible ? tooltipId : undefined,
+          ].filter(Boolean).join(" ") || undefined,
+        }) : props.children}
       </span>
       {visible &&
         createPortal(

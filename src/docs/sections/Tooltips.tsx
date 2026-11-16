@@ -195,13 +195,16 @@ export function Tooltips() {
 
       <SubSection id="acessibilidade" title="Acessibilidade">
         <p>
-          O tooltip usa <code>role="tooltip"</code> e{" "}
-          <code>aria-describedby</code> no elemento trigger. Pressione{" "}
+          O tooltip usa <code>role="tooltip"</code>. Com <code>asChild</code>,
+          associa <code>aria-describedby</code> ao filho focável, preservando
+          descrições e handlers existentes. O filho deve aceitar e encaminhar
+          essa propriedade ao elemento DOM (como o <code>Button</code> do BUDS).
+          Sem essa opção, a descrição permanece no wrapper. Pressione{" "}
           <strong>ESC</strong> para fechar. O trigger é focável via Tab,
           ativando o tooltip por focus/blur além de hover.
         </p>
         <div className={s.row}>
-          <Tooltip content="Focável via Tab — pressione ESC para fechar">
+          <Tooltip asChild content="Focável via Tab — pressione ESC para fechar">
             <button type="button" className={s.inlineLink}>
               Foque com Tab
             </button>
@@ -215,6 +218,7 @@ export function Tooltips() {
           { prop: "placement", type: '"top" | "bottom" | "left" | "right"', default: '"top"', description: "Posição preferida" },
           { prop: "delay", type: "number", default: "200", description: "Delay em ms antes de mostrar" },
           { prop: "disabled", type: "boolean", default: "false", description: "Desabilita o tooltip" },
+          { prop: "asChild", type: "boolean", default: "false", description: "Associa a descrição a um único filho que encaminhe aria-describedby ao elemento focável" },
         ]} />
       </SubSection>
 

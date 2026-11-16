@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { DotsThreeVertical, Circle, PencilSimple, Trash } from "@phosphor-icons/react";
+import { DotsThreeVertical, Circle, PencilSimple, Trash, Info } from "@phosphor-icons/react";
 import { DocSection } from "../DocSection";
 import { SubSection } from "../SubSection";
 import { PropsTable } from "../PropsTable";
@@ -23,6 +23,7 @@ import {
   TablePagination,
 } from "../../components/Table";
 import { Button } from "../../components/Button";
+import { Tooltip } from "../../components/Tooltip";
 import { Export } from "@phosphor-icons/react";
 import s from "./Tables.module.css";
 
@@ -380,6 +381,24 @@ export function Tables() {
         <SimpleDemo />
       </SubSection>
 
+      <SubSection id="ajuda-no-cabecalho" title="Ajuda no cabeçalho ordenável">
+        <p>
+          Passe o gatilho em <code>accessory</code> para mantê-lo fora do botão
+          de ordenação. Use <code>Tooltip asChild</code> para associar a descrição
+          ao botão que recebe foco. A ordenação e a ajuda têm paradas de Tab
+          independentes; abrir a ajuda não ordena a coluna.
+        </p>
+        <HeaderHelpDemo />
+        <CodeSnippet language="tsx" code={`<TableHeaderCell sortable onSort={sortByPerformance} accessory={
+  <Tooltip asChild content="Média dos resultados da equipe.">
+    <Button variant="tertiary" size="sm" leftIcon={Info}
+      aria-label="Como medimos performance" />
+  </Tooltip>
+}>
+  Performance
+</TableHeaderCell>`} />
+      </SubSection>
+
       <SubSection id="api-table" title="API">
         <PropsTable rows={[
           { prop: "variant", type: '"divider" | "striped"', default: '"divider"', description: "Estilo visual das linhas" },
@@ -388,6 +407,7 @@ export function Tables() {
           { prop: "selectable", type: "boolean", default: "false", description: "Habilita seleção de linhas" },
           { prop: "sortable", attr: "sortable (HeaderCell)", type: "boolean", description: "Habilita ordenação na coluna" },
           { prop: "sortDirection", attr: "sort-direction (HeaderCell)", type: '"asc" | "desc"', description: "Direção da ordenação" },
+          { prop: "accessory", attr: "React: TableHeaderCell", type: "ReactNode", description: "Conteúdo ao lado do rótulo ou botão de ordenação, com interação independente" },
           { prop: "align", attr: "align (Cell/HeaderCell)", type: '"left" | "center" | "right"', description: "Alinhamento do conteúdo" },
         ]} />
       </SubSection>
@@ -529,4 +549,17 @@ function RowActionsDemo() {
       </Table>
     </div>
   );
+}
+
+function HeaderHelpDemo() {
+  const [direction, setDirection] = useState<"asc" | "desc">("asc");
+  return <Table><TableContent><TableHead><TableRow>
+    <TableHeaderCell sortable sortDirection={direction}
+      onSort={() => setDirection(current => current === "asc" ? "desc" : "asc")}
+      accessory={<Tooltip asChild content="Média dos resultados da equipe.">
+        <Button variant="tertiary" size="sm" leftIcon={Info} aria-label="Como medimos performance" />
+      </Tooltip>}>
+      Performance
+    </TableHeaderCell>
+  </TableRow></TableHead><TableBody><TableRow><TableCell>80%</TableCell></TableRow></TableBody></TableContent></Table>;
 }
